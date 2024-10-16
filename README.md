@@ -1,1 +1,1 @@
-This is the final project for CS 5610 made by Yun Ma, Yiqian Li, Jiashu Qian.
+This is the final project for CS 5610 made by Yun Ma, Yiqian Li, Jiashu Qian. Updated time: 10/16/2024
