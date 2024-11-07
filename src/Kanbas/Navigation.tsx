@@ -79,16 +79,6 @@ const KanbasNavigation: React.FC = () => {
         <FaInbox className="fs-1" /><br />
         Inbox
       </Link>
-      <Link
-        to="/Labs/*"
-        id="wd-labs-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Labs') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <LiaCogSolid className="fs-1" /><br />
-        Labs
-      </Link>
     </div>
   );
 };
