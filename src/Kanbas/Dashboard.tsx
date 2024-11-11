@@ -24,8 +24,10 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
     }
     const handleEnrollment = () => {
       if (enrolled === "Enrollment") {
+        console.log("enrollment clicked");
         setEnrolled("Enrolled")
       } else if (enrolled === "Enrolled") {
+        console.log("enrolled clicked");
         setEnrolled("Enrollment")
       }
     }
@@ -34,7 +36,7 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
         const addCourse = courses.filter((c) => c._id === e.target.name)
         setEnrolledCourses(prev => [...prev!, ...addCourse])
         const newEnrollment = {
-          _id: getRandomInt(1000),
+          _id: Date.now(),
           user: currentUser._id,
           course: e.target.name
         }
@@ -62,11 +64,8 @@ export default function Dashboard({ courses, course, setCourse, addNewCourse,
                 enrollment.user === currentUser._id && enrollment.course === course._id
             )
         ));}
-      }
+      },[]
     )
-
-    console.log("enrolled courses: ", enrolledCourses)
-
 
     return (
       <div id="wd-dashboard">

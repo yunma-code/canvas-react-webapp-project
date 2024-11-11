@@ -29,9 +29,9 @@ export default function Assignments() {
             Assignments
             <ModuleControlButtons haveEditAccess={haveEditAccess} />
             <div className="float-end">
-            <button id="wd-title" className="btn me-1 rounded-btn">
-              40% of Total
-            </button>
+              <button id="wd-title" className="btn me-1 rounded-btn">
+                40% of Total
+              </button>
             </div>
           </div>
 
@@ -46,7 +46,7 @@ export default function Assignments() {
                   </div>
                   <div className="ms-2 d-flex flex-column">
                     <Link to={pathname + '/' + assignment._id} className="fw-bold">
-                    {assignment._id} - {assignment.title}
+                      {assignment._id} - {assignment.title}
                     </Link>
                     <div className="d-flex flex-column">
                       <div className="d-flex justify-content-between align-items-center">
