@@ -15,14 +15,12 @@ export default function LessonControlButtons({hasEditAccess, assignmentId, delet
   const handleDeleteClick = () => {
     setShowConfirmation(true);
   };
+
   return (
     <div className="float-end">
       {
         hasEditAccess &&
-        <FaTrash
-                    style={{ marginLeft: "10px", cursor: "pointer", color: "red" }}
-                    onClick={handleDeleteClick}
-                  />
+        <FaTrash className="text-danger me-2 mb-1" onClick={handleDeleteClick} />
       }
       <GreenCheckmark />
       <IoEllipsisVertical className="fs-4" />
