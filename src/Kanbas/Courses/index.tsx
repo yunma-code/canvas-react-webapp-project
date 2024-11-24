@@ -8,6 +8,9 @@ import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import AssignmentPreview from "./Assignments/Preview";
 
+import Quizzes from "./Quizzes/QuizDetails";
+import QuizEditor from "./Quizzes/QuizDetails/QuizEditor";
+
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
@@ -30,11 +33,17 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="/" element={<Navigate to="Home" />} />
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
+            
             <Route path="Assignments" element={<Assignments />} />
             <Route path="Assignments/Editor/:assignmentId" element={<AssignmentEditor />} />
             <Route path="Assignments/:aid" element={<AssignmentPreview />} />
             <Route path="Assignments/:aid/Edit" element={<AssignmentEditor />} />
             <Route path="Assignments/AddAssignment" element={<AssignmentEditor />} />
+
+            <Route path="Quizzes" element={<Quizzes />} />
+            <Route path="Quizzes/New" element={<QuizEditor />} />
+            <Route path="Quizzes/:quizID" element={<QuizEditor />} />
+
             <Route path="People" element={<PeopleTable />} />
           </Routes>
         </div></div>
