@@ -7,6 +7,7 @@ import { deleteQuiz } from "../reducer";
 import QuizzesControls from "./QuizzesControls";
 import LessonControlButtons from "../../Modules/LessonControlButtons";
 
+
 export default function Quizzes() {
   const { cid } = useParams();
   const dispatch = useDispatch();
@@ -52,7 +53,7 @@ export default function Quizzes() {
               <strong className="fs-4">Assignment Quizzes</strong>
             </div>
           </div>
-          
+
           <ul className="wd-quiz-details list-group rounded-0">
             {courseQuizzes.map((quiz: any) => (
               <li

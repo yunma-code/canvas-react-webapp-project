@@ -14,6 +14,7 @@ import QuizEditor from "./Quizzes/QuizDetails/QuizEditor";
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
+  const courseName = course?.name || "Unnamed Course";
   const { pathname } = useLocation();
 
   // get current page from pathname

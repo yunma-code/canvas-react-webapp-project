@@ -1,7 +1,6 @@
 <h2 style="text-align:center; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">Discussion Note</h2>
 
 Project DDL：12/08
-Expected DDL: 11/22
 
 
 ###### TASK DIVISION
