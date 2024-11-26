@@ -9,7 +9,7 @@ import PeopleTable from "./People/Table";
 import AssignmentPreview from "./Assignments/Preview";
 
 import Quizzes from "./Quizzes/QuizDetails";
-import QuizEditor from "./Quizzes/QuizDetails/QuizEditor";
+import QuizEditor from "./Quizzes/QuizEditor";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();

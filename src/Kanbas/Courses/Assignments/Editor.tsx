@@ -59,6 +59,7 @@ export default function AssignmentEditor() {
           <label id="wd-name" className="form-label">Assignment Name</label>
           <input
             id="wd-name"
+            name="title"
             value={assignment?.title}
             onChange={handleInputChange}
             className="form-control"
@@ -209,7 +210,7 @@ export default function AssignmentEditor() {
 
               <div className="row mb-4 w-100">
                 <div className="col-md-6">
-                  <label id="wd-due-date" className="form-label">Due</label>
+                  <label id="wd-due-date" className="form-label">Due</label><br/>
                   <input type="date" id="wd-due-date" onChange={handleInputChange} value={(isEditing && assignment?.due) ? assignment?.due.split('T')[0] : ""} />
                 </div>
               </div>
@@ -217,11 +218,11 @@ export default function AssignmentEditor() {
               {/* Available From and Until */}
               <div className="row mb-4 justify-content-end w-100">
                 <div className="col-md-6">
-                  <label id="wd-available-from" className="form-label">Available from</label>
+                  <label id="wd-available-from" className="form-label">Available from</label><br/>
                   <input type="date" id="wd-available-from" onChange={handleInputChange} value={(isEditing && assignment?.available) ? assignment?.available.split('T')[0] : ""} />
                 </div>
                 <div className="col-md-6">
-                  <label id="wd-available-until" className="form-label">Until</label>
+                  <label id="wd-available-until" className="form-label">Until</label><br/>
                   <input type="date" id="wd-available-until" onChange={handleInputChange} value={(isEditing && assignment?.available) ? assignment?.available.split('T')[0] : ""} />
                 </div>
               </div>

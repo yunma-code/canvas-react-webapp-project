@@ -57,7 +57,7 @@ export default function Quizzes() {
           <ul className="wd-quiz-details list-group rounded-0">
             {courseQuizzes.map((quiz: any) => (
               <li
-                key={quiz._id}
+                key={quiz.id}
                 className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
               >
                 <div className="d-flex align-items-center">
@@ -69,7 +69,7 @@ export default function Quizzes() {
 
                   <div>
                     <strong className="fs-4">
-                      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
+                      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz.id}`}>
                         {quiz.title}
                       </Link>
                     </strong>
@@ -95,7 +95,7 @@ export default function Quizzes() {
                   {currentUser?.role === "FACULTY" && (
                     <button
                       className="btn btn-danger btn-sm me-3"
-                      onClick={() => handleDelete(quiz._id)}
+                      onClick={() => handleDelete(quiz.id)}
                       title="Delete Quiz"
                     >
                       <FaTrash />
