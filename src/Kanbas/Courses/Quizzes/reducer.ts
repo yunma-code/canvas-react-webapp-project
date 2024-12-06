@@ -69,13 +69,27 @@ const quizzesSlice = createSlice({
         (a: any) => a._id !== quizId);
     },
     updateQuiz: (state, { payload: quiz }) => {
-      state.quizzes = state.quizzes.map((a: any) =>
-        a._id === quiz._id ? quiz : a
-      ) as any;
+      console.log('quiz',quiz)
+      return { 
+        ...state,
+        quizzes:state.quizzes.map((a: any) =>{
+          console.log('a',a)
+          if(a.id === quiz.id){
+            return quiz
+          }
+          else{
+            return a
+          }
+          
+        } ) as any
+      }
+      
     },
     editQuiz: (state, { payload: moduleId }) => {
       state.quizzes = state.quizzes.map((a: any) =>
+        
         a._id === moduleId ? { ...a, editing: true } : a
+
       ) as any;
     },
   },

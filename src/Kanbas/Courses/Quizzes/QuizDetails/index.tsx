@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsGripVertical, BsRocket } from "react-icons/bs";
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -35,7 +35,11 @@ export default function Quizzes() {
       return "Closed";
     }
   };
-
+  useEffect(
+    ()=>{
+      console.log(courseQuizzes)
+    }, []
+  )
 
   return (
     <div className="container">
@@ -69,7 +73,7 @@ export default function Quizzes() {
 
                   <div>
                     <strong className="fs-4">
-                      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz.id}`}>
+                      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz.id}/Edit`}>
                         {quiz.title}
                       </Link>
                     </strong>

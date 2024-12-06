@@ -1,14 +1,52 @@
-import { useState } from "react";
-import { Tabs, Tab } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import QuizDetailsEditor from "./QuizDetailsEditor";
 import QuizQuestionsEditor from "./QuizQuestionsEditor";
-
-
+import { quizzes } from "../../../Database";
+import { useParams } from "react-router-dom";
 
 export default function QuizEditor() {
 
     const [isEditingDetails, setIsEditingDetails] = useState(true);
+    const [quiz, setQuiz] = useState<any>();
+    const { qid } = useParams();
     
+
+    const onUpdateQuestionList = (question: any) => {
+        setQuiz((prevQuiz: any) => {
+            const existingQuestionIndex = prevQuiz.questions.findIndex((q: any) => q.id === question.id);
+            const updatedQuiz = { ...prevQuiz };
+            if (existingQuestionIndex !== -1) {
+                updatedQuiz.questions[existingQuestionIndex] = { ...updatedQuiz.questions[existingQuestionIndex], ...question };
+            } else {
+                updatedQuiz.questions = [...updatedQuiz.questions, question];
+            }
+            return updatedQuiz;
+        });
+    };
+    const onUpdateQuizDetails = (details: Partial<typeof quiz>) => {
+        setQuiz((prevQuiz: any) => ({
+            ...prevQuiz,
+            ...Object.fromEntries(Object.entries(details).filter(([_, v]) => v !== undefined)),
+        }));
+    };
+
+    useEffect(
+        ()=>{
+            try{
+                const quiz = quizzes.find( (quiz) => quiz.id === qid);
+                console.log("quiz:",quiz);
+                if(quiz){
+                    setQuiz(quiz);
+                }
+            }catch(error){
+                console.log(error);
+            }
+            
+            
+        },[quiz]
+    );
+    
+
 
     return (
         <div>
@@ -36,14 +74,14 @@ export default function QuizEditor() {
             <div className="tab-content" id="content">
                 {isEditingDetails ? (
                     <div className="tab-pane fade show active">
-                        <QuizDetailsEditor />
+                        <QuizDetailsEditor quiz={quiz} onUpdateQuizDetails={onUpdateQuizDetails}/>
                     </div>
                 ) : (
                     <div className="tab-pane fade show active">
-                        <QuizQuestionsEditor />
+                        <QuizQuestionsEditor questionList={quiz?.questions} onUpdateQuestionList={onUpdateQuestionList}/>
                     </div>
                 )}
-            </div> 
+            </div>
 
         </div>
     )

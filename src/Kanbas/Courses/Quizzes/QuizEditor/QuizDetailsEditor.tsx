@@ -4,11 +4,10 @@ import { addQuiz, updateQuiz } from "../reducer";
 import { useDispatch, useSelector } from "react-redux";
 import QuillEditor from './QuillEditor';
 import "quill/dist/quill.snow.css";
-import { table } from "console";
 
 
-export default function QuizDetailsEditor() {
-  const { cid, quizID } = useParams();
+export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?: any; onUpdateQuizDetails: (quiz: any) => void; }) {
+  const { cid, qid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
@@ -18,6 +17,15 @@ export default function QuizDetailsEditor() {
 
   const [showTimeLimit, setShowTimeLimit] = useState<any>(true); //display purpose only
 
+  const formatDateToLocalDatetime = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   const [id, setId] = useState<string>(new Date().getTime().toString());
   const [course, setCourse] = useState<string>(cid!);
   const [title, setTitle] = useState<string>();
@@ -25,7 +33,8 @@ export default function QuizDetailsEditor() {
   const [quizType, setQuizType] = useState<string>("Graded Quiz");
   const [assignmentGroup, setAssignmentGroup] = useState<string>("Quizzes");
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
-  const [multipleAttempts, setMultipleAttempts] = useState<boolean>(false);
+  const [allowMultipleAttempts, setAllowMultipleAttempts] = useState<boolean>(false);
+  const [multipleAttempts, setMultipleAttempts] = useState<number>(1);
   const [showCorrectAnswers, setShowCorrectAnswers] = useState<boolean>();
   const [oneQuestionAtATime, setOneQuestionAtATime] = useState<boolean>(true);
   const [accessCode, setAccessCode] = useState<string | undefined>();
@@ -36,22 +45,21 @@ export default function QuizDetailsEditor() {
   const [unlockAt, setUnlockAt] = useState<Date>(); //Available date
   const [lockAt, setLockAt] = useState<Date>(); //until date
   const [description, setDescription] = useState<string>();
-  const [timeLimit, setTimeLimit] = useState<number>(20);
+  const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>();
+  const [timeLimit, setTimeLimit] = useState<number>();
   const [published, setPublished] = useState(false);
   const [assignTo, setAssignTo] = useState<string[]>()
   const readOnly = false;
 
   useEffect(() => {
     // load quiz data if editing an existing quiz
-    console.log(quizzes)
-    if (quizID) {
-      //edit existing quiz
-      const quiz = quizzes.find((q: any) => q.id === quizID);
+    if (qid) {
+      console.log('in quizDetailsEditor', quiz);
       if (!quiz) {
         //shoud not happen normally
-        console.log('quiz not exist,shoud not happen normally',quizID)
+        console.log('quiz not exist,shoud not happen normally', qid)
         const quiz = {
-          _id: quizID || new Date().getTime().toString(),
+          _id: qid || new Date().getTime().toString(),
           course: cid,
         };
       }
@@ -63,17 +71,26 @@ export default function QuizDetailsEditor() {
         setPointsPossible(quiz.points_possible)
         setAssignmentGroup(quiz.assignment_group_id)
         setShuffleAnswers(quiz.shuffle_answers)
-        setMultipleAttempts(prev => {
-          if (quiz.allowed_attempts === '1') {
+        setAllowMultipleAttempts(prev => {
+          if (quiz.allowed_attempts > 1) {
             return true
           }
           else {
             return false
           }
         })
+        setMultipleAttempts(quiz.allowed_attempts)
         setShowCorrectAnswers(quiz.show_correct_answers)
         setAccessCode(quiz.access_code)
         setWebcamRequired(false)
+        setHaveTimeLimit(prev => {
+          if (quiz.time_limit <= 0) {
+            return true
+          }
+          else {
+            return false
+          }
+        })
         setTimeLimit(quiz.time_limit)
         setShowTimeLimit(() => {
           if (quiz.time_limit !== 0) {
@@ -85,9 +102,9 @@ export default function QuizDetailsEditor() {
         })
         setOneQuestionAtATime(quiz.oneQuestionAtATime)
         setCantGoBack(quiz.cant_go_back)
-        setDueAt(quiz.due_at)
-        setUnlockAt(quiz.unlock_at)
-        setLockAt(quiz.lock_at)
+        setDueAt(new Date(quiz.due_at))
+        setUnlockAt(new Date(quiz.unlock_at))
+        setLockAt(new Date(quiz.lock_at))
         setDescription(quiz.description)
         setTimeLimit(quiz.time_limit)
         setPublished(quiz.published)
@@ -95,7 +112,7 @@ export default function QuizDetailsEditor() {
 
     }
 
-  }, []);
+  }, [quiz]);
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
   //   console.log(e)
   //   const { name, value } = e.target;
@@ -141,16 +158,16 @@ export default function QuizDetailsEditor() {
       published,
       assignTo,
     }
-    console.log(quizDetails)
-    if (quizID) {
-      console.log('have quizId')
+    console.log('quizDetails:', quizDetails)
+    if (qid) {
+      console.log('have qid')
 
       dispatch(updateQuiz(quizDetails));
     } else {
-      console.log('dont have quizId', quizDetails)
+      console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-
+    // onUpdateQuizDetails(quizDetails);
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
@@ -183,7 +200,7 @@ export default function QuizDetailsEditor() {
         {/* description */}
         <div className="mb-3">
           <label htmlFor="description" className="form-label">Description</label>
-          <QuillEditor onContentChange={(e) => setDescription(e)} />
+          <QuillEditor initialValue={description} onContentChange={(e) => setDescription(e)} />
 
         </div>
 
@@ -261,25 +278,34 @@ export default function QuizDetailsEditor() {
               </div>
               {/* time limit */}
               <div className="mb-2">
-                <input type="checkbox" id="timeLimit" />
+                <input type="checkbox" id="timeLimit" checked={haveTimeLimit}
+                  onChange={e => {
+                    setHaveTimeLimit(e.target.checked);
+                    if (e.target.checked) setTimeLimit(10);
+                    else setTimeLimit(-1);
+                  }} />
                 <label htmlFor="timeLimit" className="form-label m-1">Time Limit</label>
 
-                <input type="number" className="col-1 ms-4 me-1"
-                  value={timeLimit}
-                  onChange={(e) => e.target.value} />
-                Minutes
+                {haveTimeLimit && <>
+                  <input type="number" className="col-2 ms-4 me-2"
+                    value={timeLimit}
+                    onChange={(e) => e.target.value} />
+                  Minutes
+                </>
+                }
+
                 {/* multiple attempts */}
                 <div >
-                  <input type="checkbox" id="multipleAttempts" checked={multipleAttempts} onClick={e => { setMultipleAttempts(prev => !prev) }} />
-                  <label htmlFor="multipleAttempts" className="form-label m-1">Allow Muliple Attempts</label>
-                  {/* {multipleAttempts &&
+                  <input type="checkbox" id="allowMultipleAttempts" checked={allowMultipleAttempts} onClick={e => { setAllowMultipleAttempts(prev => !prev) }} />
+                  <label htmlFor="allowMultipleAttempts" className="form-label m-1">Allow Muliple Attempts</label>
+                  {allowMultipleAttempts &&
                     <>
-                      <input type="number" className="col-1 ms-4 me-1"
+                      <input type="number" className="col-2 ms-4 me-1"
                         value={multipleAttempts}
-                        onChange={handleInputChange} />
+                        onChange={(e) => e.target.value} />
                       Attempts
                     </>
-                  } */}
+                  }
 
                 </div>
                 <div>
@@ -414,7 +440,7 @@ export default function QuizDetailsEditor() {
                 <div className="row mb-4 w-100">
                   <div className="col-md-6">
                     <label id="wd-due-date" className="form-label">Due</label><br />
-                    <input className="form-control" type="date" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? dueAt.toLocaleString() : ""} />
+                    <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} />
                   </div>
                 </div>
 
@@ -422,11 +448,12 @@ export default function QuizDetailsEditor() {
                 <div className="row mb-4 justify-content-end w-100">
                   <div className="col-md-6">
                     <label id="wd-available-from" className="form-label">Available from</label><br />
-                    <input className="form-control" type="date" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? unlockAt.toLocaleDateString() : ""} />
+                    <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} />
                   </div>
+                  
                   <div className="col-md-6">
                     <label id="wd-available-until" className="form-label">Until</label><br />
-                    <input className="form-control" type="date" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? lockAt?.toLocaleDateString() : ""} />
+                    <input className="form-control" type="datetime-local" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? formatDateToLocalDatetime(lockAt) : ""} />
                   </div>
                 </div>
               </div>
