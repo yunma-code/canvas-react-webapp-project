@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FaTrash } from "react-icons/fa6";
 import { deleteQuiz } from "../reducer";
 import QuizzesControls from "./QuizzesControls";
-import LessonControlButtons from "../../Modules/LessonControlButtons";
+import QuizControlButtons from "./QuizControlButtons";
 
 
 export default function Quizzes() {
@@ -13,14 +13,31 @@ export default function Quizzes() {
   const dispatch = useDispatch();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+  
   const courseQuizzes = quizzes.filter(
       (quiz: { course: string | undefined; }) => quiz.course === cid);
 
+
+  const handleEdit = (quizId: string) => {
+    console.log(`Editing Quiz ID: ${quizId}`);
+    // link to the Edit Quiz page
+  };
+
+  
   const handleDelete = (quizId: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
       dispatch(deleteQuiz(quizId));
     }
   };
+
+  const handlePublish = (quizId: string) => {
+    console.log(`Publishing Quiz ID: ${quizId}`);
+  };
+
+  const handleCopy = (quizId: string) => {
+    console.log(`Copying Quiz ID: ${quizId}`);
+  };
+
 
   const getAvailability = (quiz: any) => {
     const now = new Date();
@@ -58,7 +75,8 @@ export default function Quizzes() {
             {courseQuizzes.map((quiz: any) => (
               <li
                 key={quiz._id}
-                className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
+                className="wd-detail list-group-item d-flex 
+                           justify-content-between align-items-center p-3 ps-1"
               >
                 <div className="d-flex align-items-center">
                   <BsGripVertical className="me-3 fs-3" />
@@ -69,9 +87,7 @@ export default function Quizzes() {
 
                   <div>
                     <strong className="fs-4">
-                      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${quiz._id}`}>
-                        {quiz.title}
-                      </Link>
+                      <Link to={`./${quiz._id}`}> {quiz.title} </Link>
                     </strong>
 
                     <div className="text-muted">
@@ -102,7 +118,14 @@ export default function Quizzes() {
                     </button>
                   )}
 
-                  <LessonControlButtons />
+                  <QuizControlButtons
+                    quizId={quiz._id}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onPublish={handlePublish}
+                    onCopy={handleCopy}
+                  />
+                  
                 </div>
               </li>
             ))}

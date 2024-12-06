@@ -5,7 +5,7 @@ import { MdAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
-import './QuizControls.css';
+import './Quiz.css';
 
 export default function QuizControls() {
   const navigate = useNavigate();
@@ -19,27 +19,6 @@ export default function QuizControls() {
       setMenuOpen(!menuOpen);
     };
   
-    const handleEdit = () => {
-      navigate(`/Kanbas/Courses/${cid}/Quizzes/Edit`);
-      setMenuOpen(false);
-    };
-  
-    const handleDelete = () => {
-      if (window.confirm("Are you sure you want to delete this quiz?")) {
-        console.log("Quiz Deleted");
-      }
-      setMenuOpen(false);
-    };
-  
-    const handlePublish = () => {
-      console.log("Quiz Published/Unpublished");
-      setMenuOpen(false);
-    };
-  
-    const handleCopy = () => {
-      console.log("Quiz Copied");
-      setMenuOpen(false);
-    };
   
     const handleSort = (criteria: string) => {
       console.log(`Sorted by ${criteria}`);
@@ -96,18 +75,8 @@ export default function QuizControls() {
                     zIndex: 1,
                   }}
                 >
-                  <button className="dropdown-item" onClick={handleEdit}>
-                    Edit
-                  </button>
-                  <button className="dropdown-item" onClick={handleDelete}>
-                    Delete
-                  </button>
-                  <button className="dropdown-item" onClick={handlePublish}>
-                    Publish/Unpublish
-                  </button>
-                  <button className="dropdown-item" onClick={handleCopy}>
-                    Copy
-                  </button>
+                  
+                  {/* Sort logic */}
                   <button
                     className="dropdown-item"
                     onClick={() => handleSort("name")}
@@ -126,6 +95,7 @@ export default function QuizControls() {
                   >
                     Sort by Available Date
                   </button>
+
                 </div>
               )}
             </div>

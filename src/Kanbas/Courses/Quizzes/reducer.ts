@@ -8,6 +8,7 @@ const initialState = {
 const quizzesSlice = createSlice({
   name: "quizzes",
   initialState,
+
   reducers: {
     addQuiz: (state, { payload: quiz }) => {
       const newquiz: any = {
@@ -24,15 +25,18 @@ const quizzesSlice = createSlice({
       };
       state.quizzes = [...state.quizzes, newquiz] as any;
     },
+
     deleteQuiz: (state, { payload: quizId }) => {
       state.quizzes = state.quizzes.filter(
         (a: any) => a._id !== quizId);
     },
+
     updateQuiz: (state, { payload: quiz }) => {
       state.quizzes = state.quizzes.map((a: any) =>
         a._id === quiz._id ? quiz : a
       ) as any;
     },
+    
     editQuiz: (state, { payload: moduleId }) => {
       state.quizzes = state.quizzes.map((a: any) =>
         a._id === moduleId ? { ...a, editing: true } : a
