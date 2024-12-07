@@ -15,11 +15,13 @@ export default[{
 	"due_at": "2024-09-20T23:59:00-04:00",
 	"unlock_at": "2024-09-16T00:00:00-04:00",
 	"lock_at": "2024-09-20T23:59:00-04:00",
-	"description": "An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.",
+
+	"description": "<p>An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.</p>",
 	"time_limit": 15,
 	"published": true,
 	"questions": [{
 		"id": "1",
+
 		"question_text": "What does HTML stand for?",
 		"question_type": "multiple_choice",
 		"options": [
@@ -76,6 +78,7 @@ export default[{
 	"published": true,
 	"questions": [{
 		"id": "1",
+
 		"question_text": "What does HTML stand for?",
 		"question_type": "multiple_choice",
 		"options": [

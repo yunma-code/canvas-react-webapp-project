@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 type QuestionOption = {
@@ -22,6 +22,7 @@ type Quiz = {
 
 const SubmitScreen = () => {
   const location = useLocation();
+  const {cid, qid} = useParams();
   const { state } = location;
   const { score, totalQuestions, quiz, userAnswers } = state || {};
 
@@ -30,7 +31,7 @@ const SubmitScreen = () => {
       <div className="container">
         <h2 className="text-danger">Error</h2>
         <p>There was an error retrieving your quiz data. Please try again.</p>
-        <Link to="/Kanbas/Courses/:cid/Quizzes" className="btn btn-primary">
+        <Link to={`Kanbas/Courses/${cid}/Quizzes`} className="btn btn-primary">
           Back to Quizzes
         </Link>
       </div>

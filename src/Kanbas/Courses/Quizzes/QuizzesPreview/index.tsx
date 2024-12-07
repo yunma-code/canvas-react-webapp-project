@@ -29,7 +29,7 @@ type Quiz = {
 };
 
 const QuizPreview = () => {
-  const { quizId } = useParams<{ quizId: string }>();
+  const {cid, qid } = useParams<{cid:string; qid: string }>();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const navigate = useNavigate();
 
@@ -40,9 +40,9 @@ const QuizPreview = () => {
 
   useEffect(() => {
     // Fetch the quiz without conditionally using hooks
-    const fetchedQuiz = quizzes.find((q: Quiz) => q.id === quizId) || null;
+    const fetchedQuiz = quizzes.find((q: Quiz) => q.id === qid) || null;
     setQuiz(fetchedQuiz);
-  }, [quizId, quizzes]);
+  }, [qid, quizzes]);
 
   if (!quiz) {
     return (
@@ -94,7 +94,7 @@ const QuizPreview = () => {
     const score = calculateScore();
     const totalQuestions = quiz.questions.length;
   
-    navigate("/Kanbas/Courses/:cid/Quizzes/Submit", {
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit` , {
       state: {
         score,
         totalQuestions,
@@ -212,7 +212,7 @@ const QuizPreview = () => {
       </div>
 
       <div className="mt-3">
-        <Link to="/Kanbas/Courses/:cid/Quizzes" className="btn btn-link">
+        <Link to={`/Kanbas/Courses/${cid}/Quizzes`} className="btn btn-link">
           Back to Quizzes
         </Link>
       </div>
