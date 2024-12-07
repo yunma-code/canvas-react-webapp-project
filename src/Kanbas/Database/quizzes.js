@@ -39,7 +39,13 @@ export default [{
 				{ "id": "3", "answer_text": "<href>", "is_correct": false },
 				{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
 			]
-		},]
+		},{
+			"id": "3",
+			"question_text": "The <div> tag is used to create hyperlinks in HTML.",
+			"question_type": "true_false",
+			"answer": false
+		   }
+	]
 },
 {
 "id": "2",
