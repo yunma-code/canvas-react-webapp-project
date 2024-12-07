@@ -1,4 +1,4 @@
-export default [{
+export default[{
 	"id": "1",
 	"course": "RS101",
 	"title": "HTML Quiz",
@@ -15,40 +15,49 @@ export default [{
 	"due_at": "2024-09-20T23:59:00-04:00",
 	"unlock_at": "2024-09-16T00:00:00-04:00",
 	"lock_at": "2024-09-20T23:59:00-04:00",
+
 	"description": "<p>An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.</p>",
 	"time_limit": 15,
 	"published": true,
 	"questions": [{
 		"id": "1",
-			"question_text": "What does HTML stand for?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
-				{ "id": "2", "answer_text": "Hyperlinks and Text Markup Language", "is_correct": false },
-				{ "id": "3", "answer_text": "Home Tool Markup Language", "is_correct": false },
-				{ "id": "4", "answer_text": "Hyper Tool Markup Language", "is_correct": false }
-			]
-		},
-		{
-			"id": "2",
-			"question_text": "Which tag is used to define a hyperlink in HTML?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "<link>", "is_correct": false },
-				{ "id": "2", "answer_text": "<a>", "is_correct": true },
-				{ "id": "3", "answer_text": "<href>", "is_correct": false },
-				{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
-			]
-		},{
-			"id": "3",
-			"question_text": "The <div> tag is used to create hyperlinks in HTML.",
-			"question_type": "true_false",
-			"answer": false
-		   }
-	]
+
+		"question_text": "What does HTML stand for?",
+		"question_type": "multiple_choice",
+		"options": [
+			{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
+			{ "id": "2", "answer_text": "Hyperlinks and Text Markup Language", "is_correct": false },
+			{ "id": "3", "answer_text": "Home Tool Markup Language", "is_correct": false },
+			{ "id": "4", "answer_text": "Hyper Tool Markup Language", "is_correct": false }
+		]
+	},
+	{
+		"id": "2",
+		"question_text": "Which tag is used to define a hyperlink in HTML?",
+		"question_type": "multiple_choice",
+		"options": [
+			{ "id": "1", "answer_text": "<link>", "is_correct": false },
+			{ "id": "2", "answer_text": "<a>", "is_correct": true },
+			{ "id": "3", "answer_text": "<href>", "is_correct": false },
+			{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
+		]
+	},
+	{
+		"id": "3",
+		"question_text": "The <title> element specifies a title for the HTML document that appears in the browser's title bar or tab.",
+		"question_type": "true_false",
+		"answer": false
+	},
+	{
+		"id": "4",
+		"question_text": "The <div> tag is used to create hyperlinks in HTML.",
+		"question_type": "true_false",
+		"answer": false
+	}
+]
 },
 {
-"id": "2",
+	"id": "2",
 	"course": "RS102",
 	"title": "HTML Quiz2",
 	"points_possible": 29.0,
@@ -69,29 +78,42 @@ export default [{
 	"published": true,
 	"questions": [{
 		"id": "1",
-			"question_text": "What does HTML stand for?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
-				{ "id": "2", "answer_text": "Hyperlinks and Text Markup Language", "is_correct": false },
-				{ "id": "3", "answer_text": "Home Tool Markup Language", "is_correct": false },
-				{ "id": "4", "answer_text": "Hyper Tool Markup Language", "is_correct": false }
-			]
-		},
-		{
-			"id": "2",
-			"question_text": "Which tag is used to define a hyperlink in HTML?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "<link>", "is_correct": false },
-				{ "id": "2", "answer_text": "<a>", "is_correct": true },
-				{ "id": "3", "answer_text": "<href>", "is_correct": false },
-				{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
-			]
-		},]
-	}
-]
-// export default [{
+
+		"question_text": "What does HTML stand for?",
+		"question_type": "multiple_choice",
+		"options": [
+			{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
+			{ "id": "2", "answer_text": "Hyperlinks and Text Markup Language", "is_correct": false },
+			{ "id": "3", "answer_text": "Home Tool Markup Language", "is_correct": false },
+			{ "id": "4", "answer_text": "Hyper Tool Markup Language", "is_correct": false }
+		]
+	},
+	{
+		"id": "2",
+		"question_text": "Which tag is used to define a hyperlink in HTML?",
+		"question_type": "multiple_choice",
+		"options": [
+			{ "id": "1", "answer_text": "<link>", "is_correct": false },
+			{ "id": "2", "answer_text": "<a>", "is_correct": true },
+			{ "id": "3", "answer_text": "<href>", "is_correct": false },
+			{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
+		]
+	},
+	{
+		"id": "3",
+		"question_text": "The <title> element specifies a title for the HTML document that appears in the browser's title bar or tab.",
+		"question_type": "true_false",
+		"answer": true
+	},
+	{
+		"id": "4",
+		"question_text": "The <div> tag is used to create hyperlinks in HTML.",
+		"question_type": "true_false",
+		"answer": false
+	}]
+}]
+
+// [{
 // 	"id": "633305",
 // 	"title": "Q1",
 // 	"html_url": "https://northeastern.instructure.com/courses/192544/quizzes/633305",

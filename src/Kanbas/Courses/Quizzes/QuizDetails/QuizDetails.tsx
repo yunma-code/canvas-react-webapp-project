@@ -16,11 +16,15 @@ const QuizDetails = () => {
   const handleEdit = () => {
     navigate(`${pathname}/Edit`);
   };
+  const handlePreview = () => {
+    navigate(`${pathname}/preview`);
+    
+  }
 
   return (
     <div className="quiz-details-container">
       <div className="button-group">
-        <button className="btn">Preview</button>
+        <button className="btn" onClick={handlePreview}>Preview</button>
         {hasEditAccess && (
           <button className="btn" onClick={handleEdit}>Edit</button>
         )}
