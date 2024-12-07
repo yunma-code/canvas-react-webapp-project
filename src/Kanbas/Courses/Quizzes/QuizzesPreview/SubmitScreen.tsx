@@ -31,8 +31,8 @@ const SubmitScreen = () => {
       <div className="container">
         <h2 className="text-danger">Error</h2>
         <p>There was an error retrieving your quiz data. Please try again.</p>
-        <Link to={`Kanbas/Courses/${cid}/Quizzes`} className="btn btn-primary">
-          Back to Quizzes
+        <Link to={`Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-primary">
+          Keep editing this quiz
         </Link>
       </div>
     );
@@ -105,8 +105,8 @@ const SubmitScreen = () => {
         </ul>
       </div>
 
-      <Link to="/Kanbas/Courses/:cid/Quizzes" className="btn btn-primary mt-5">
-        Back to Quizzes
+      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-primary mt-5">
+        Keep Editing this quiz
       </Link>
     </div>
   );

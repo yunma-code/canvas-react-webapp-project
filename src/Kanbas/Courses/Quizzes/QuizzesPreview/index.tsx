@@ -212,8 +212,8 @@ const QuizPreview = () => {
       </div>
 
       <div className="mt-3">
-        <Link to={`/Kanbas/Courses/${cid}/Quizzes`} className="btn btn-link">
-          Back to Quizzes
+        <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-link">
+          Keep editing this quiz
         </Link>
       </div>
 
