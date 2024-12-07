@@ -99,8 +99,8 @@ export default function Quizzes() {
                       <span className="fw-bold">Availability:</span>{" "}
                         {getAvailability(quiz)} | 
                       <span className="fw-bold"> Due:</span>{" "}
-                      {quiz.dueDate ? new Date(quiz.dueDate).toLocaleString() : "N/A"} | 
-                      <span className="fw-bold"> Points:</span> {quiz.points} | 
+                      {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} | 
+                      <span className="fw-bold"> Points:</span> {quiz.points_possible} | 
                       <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
                       {currentUser.role === "STUDENT" && quiz.score !== undefined && (
                         <>
