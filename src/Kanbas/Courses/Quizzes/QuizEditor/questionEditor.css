@@ -1,0 +1,11 @@
+.answer-container{
+    display: flex;
+    flex-direction: column;
+}
+.answer-selection-container{
+    display: flex;
+    flex-direction: row;
+    
+    align-items: center;
+    margin-bottom: 1rem;
+}

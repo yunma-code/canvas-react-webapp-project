@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BsGripVertical, BsRocket } from "react-icons/bs";
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -52,7 +52,11 @@ export default function Quizzes() {
       return "Closed";
     }
   };
-
+  useEffect(
+    ()=>{
+      console.log(courseQuizzes)
+    }, []
+  )
 
   return (
     <div className="container">
@@ -74,9 +78,9 @@ export default function Quizzes() {
           <ul className="wd-quiz-details list-group rounded-0">
             {courseQuizzes.map((quiz: any) => (
               <li
-                key={quiz._id}
-                className="wd-detail list-group-item d-flex 
-                           justify-content-between align-items-center p-3 ps-1"
+                key={quiz.id}
+                className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
+
               >
                 <div className="d-flex align-items-center">
                   <BsGripVertical className="me-3 fs-3" />
@@ -87,7 +91,7 @@ export default function Quizzes() {
 
                   <div>
                     <strong className="fs-4">
-                      <Link to={`./${quiz._id}`}> {quiz.title} </Link>
+                      <Link to={`./${quiz.id}`}> {quiz.title} </Link>
                     </strong>
 
                     <div className="text-muted">
@@ -111,7 +115,7 @@ export default function Quizzes() {
                   {currentUser?.role === "FACULTY" && (
                     <button
                       className="btn btn-danger btn-sm me-3"
-                      onClick={() => handleDelete(quiz._id)}
+                      onClick={() => handleDelete(quiz.id)}
                       title="Delete Quiz"
                     >
                       <FaTrash />
