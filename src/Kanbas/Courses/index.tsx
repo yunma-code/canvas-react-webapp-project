@@ -7,9 +7,11 @@ import { Navigate, Route, Routes, useParams, useLocation } from "react-router";
 import { FaAlignJustify } from "react-icons/fa";
 import PeopleTable from "./People/Table";
 import AssignmentPreview from "./Assignments/Preview";
+import QuizzesPreview from "./Quizzes/QuizzesPreview";
 
 import Quizzes from "./Quizzes/QuizDetails";
 import QuizEditor from "./Quizzes/QuizDetails/QuizEditor";
+// import SubmitScreen from "./Quizzes/QuizzesPreview/SubmitScreen";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
@@ -44,8 +46,12 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Quizzes" element={<Quizzes />} />
             <Route path="Quizzes/New" element={<QuizEditor />} />
             <Route path="Quizzes/:quizID" element={<QuizEditor />} />
+            {/* <Route path="Quizzes/preview/:quizId" element={<QuizzesPreview />} />
+            <Route path="Quizzes/Submit" element={<SubmitScreen />} /> */}
 
             <Route path="People" element={<PeopleTable />} />
+
+
           </Routes>
         </div></div>
     </div>
