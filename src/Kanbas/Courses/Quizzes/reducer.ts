@@ -36,6 +36,7 @@ export type QuestionT = {
 const quizzesSlice = createSlice({
   name: "quizzes",
   initialState,
+
   reducers: {
     addQuiz: (state, { payload: quiz }) => {
       const newquiz: QuizT = {
@@ -64,10 +65,12 @@ const quizzesSlice = createSlice({
       console.log("add quiz triggerd",newquiz)
       state.quizzes = [...state.quizzes, newquiz] as any;
     },
+
     deleteQuiz: (state, { payload: quizId }) => {
       state.quizzes = state.quizzes.filter(
         (a: any) => a._id !== quizId);
     },
+
     updateQuiz: (state, { payload: quiz }) => {
       console.log('quiz',quiz)
       return { 
@@ -85,6 +88,7 @@ const quizzesSlice = createSlice({
       }
       
     },
+    
     editQuiz: (state, { payload: moduleId }) => {
       state.quizzes = state.quizzes.map((a: any) =>
         
