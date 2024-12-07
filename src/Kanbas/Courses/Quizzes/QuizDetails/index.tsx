@@ -17,24 +17,24 @@ export default function Quizzes() {
   const courseQuizzes = quizzes.filter(
       (quiz: { course: string | undefined; }) => quiz.course === cid);
       
-  const handleEdit = (quizId: string) => {
-    console.log(`Editing Quiz ID: ${quizId}`);
-    navigate(`/Kanbas/Courses/${cid}/Quizzes/${quizId}/Edit`);
+  const handleEdit = (qid: string) => {
+    console.log(`Editing Quiz ID: ${qid}`);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);
   };
 
   
-  const handleDelete = (quizId: any) => {
+  const handleDelete = (qid: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
-      dispatch(deleteQuiz(quizId));
+      dispatch(deleteQuiz(qid));
     }
   };
 
-  const handlePublish = (quizId: string) => {
-    console.log(`Publishing Quiz ID: ${quizId}`);
+  const handlePublish = (qid: string) => {
+    console.log(`Publishing Quiz ID: ${qid}`);
   };
 
-  const handleCopy = (quizId: string) => {
-    console.log(`Copying Quiz ID: ${quizId}`);
+  const handleCopy = (qid: string) => {
+    console.log(`Copying Quiz ID: ${qid}`);
   };
 
 
@@ -117,7 +117,7 @@ export default function Quizzes() {
                 <div className="d-flex align-items-center ms-auto">
                   {currentUser?.role === "FACULTY" && (
                      <QuizControlButtons
-                      quizId={quiz._id}
+                      qid={quiz._id}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                       onPublish={handlePublish}
