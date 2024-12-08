@@ -1,41 +1,40 @@
 import { useEffect, useState } from "react";
 import { BsGripVertical, BsRocket } from "react-icons/bs";
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { FaTrash } from "react-icons/fa6";
 import { deleteQuiz } from "../reducer";
 import QuizzesControls from "./QuizzesControls";
 import QuizControlButtons from "./QuizControlButtons";
 
 
+
 export default function Quizzes() {
   const { cid } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  
   const courseQuizzes = quizzes.filter(
       (quiz: { course: string | undefined; }) => quiz.course === cid);
-
-
-  const handleEdit = (quizId: string) => {
-    console.log(`Editing Quiz ID: ${quizId}`);
-    // link to the Edit Quiz page
+      
+  const handleEdit = (qid: string) => {
+    console.log(`Editing Quiz ID: ${qid}`);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);
   };
 
   
-  const handleDelete = (quizId: any) => {
+  const handleDelete = (qid: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
-      dispatch(deleteQuiz(quizId));
+      dispatch(deleteQuiz(qid));
     }
   };
 
-  const handlePublish = (quizId: string) => {
-    console.log(`Publishing Quiz ID: ${quizId}`);
+  const handlePublish = (qid: string) => {
+    console.log(`Publishing Quiz ID: ${qid}`);
   };
 
-  const handleCopy = (quizId: string) => {
-    console.log(`Copying Quiz ID: ${quizId}`);
+  const handleCopy = (qid: string) => {
+    console.log(`Copying Quiz ID: ${qid}`);
   };
 
 
@@ -52,10 +51,11 @@ export default function Quizzes() {
       return "Closed";
     }
   };
+
   useEffect(
     ()=>{
       console.log(courseQuizzes)
-    }, []
+    }, [courseQuizzes]
   )
 
   return (
@@ -84,6 +84,7 @@ export default function Quizzes() {
               >
                 <div className="d-flex align-items-center">
                   <BsGripVertical className="me-3 fs-3" />
+                  
                   <BsRocket
                     style={{ transform: "rotate(45deg)" }}
                     className="me-4 text-success"
@@ -96,10 +97,10 @@ export default function Quizzes() {
 
                     <div className="text-muted">
                       <span className="fw-bold">Availability:</span>{" "}
-                      {getAvailability(quiz)} | 
+                        {getAvailability(quiz)} | 
                       <span className="fw-bold"> Due:</span>{" "}
-                      {quiz.dueDate ? new Date(quiz.dueDate).toLocaleString() : "N/A"} | 
-                      <span className="fw-bold"> Points:</span> {quiz.points} | 
+                      {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} | 
+                      <span className="fw-bold"> Points:</span> {quiz.points_possible} | 
                       <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
                       {currentUser.role === "STUDENT" && quiz.score !== undefined && (
                         <>
@@ -110,26 +111,19 @@ export default function Quizzes() {
                     </div>
                   </div>
                 </div>
+                
 
+                {/* Single Quiz Menu Button */}
                 <div className="d-flex align-items-center ms-auto">
                   {currentUser?.role === "FACULTY" && (
-                    <button
-                      className="btn btn-danger btn-sm me-3"
-                      onClick={() => handleDelete(quiz.id)}
-                      title="Delete Quiz"
-                    >
-                      <FaTrash />
-                    </button>
+                     <QuizControlButtons
+                      qid={quiz._id}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onPublish={handlePublish}
+                      onCopy={handleCopy}
+                   />
                   )}
-
-                  <QuizControlButtons
-                    quizId={quiz._id}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onPublish={handlePublish}
-                    onCopy={handleCopy}
-                  />
-                  
                 </div>
               </li>
             ))}
