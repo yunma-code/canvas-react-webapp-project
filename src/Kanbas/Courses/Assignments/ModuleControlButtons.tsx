@@ -1,10 +1,14 @@
 import { IoEllipsisVertical } from "react-icons/io5";
+import { BsPlus } from "react-icons/bs";
 import GreenCheckmark from "./GreenCheckmark";
 
-export default function LessonControlButtons() {
+export default function ModuleControlButtons({ haveEditAccess }: { haveEditAccess: boolean }) {
   return (
     <div className="float-end">
-      <GreenCheckmark />
+      {haveEditAccess &&
+        <BsPlus />
+      }
       <IoEllipsisVertical className="fs-4" />
     </div>
-);}
+  );
+}

@@ -1,13 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 export default function AccountNavigation() {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const links = currentUser ? ["Profile"] : ["Signin", "Signup"];
+  
   const location = useLocation();
 
   const isActive = (path: string) : string => {
     return location.pathname.startsWith(path) ? "active" : "text-danger";
   };
-  
+
   return (
     <div id="wd-account-navigation" className="wd list-group fs-5 rounded-0">
+      {!currentUser && (
+        <>
       <Link
         to={`/Kanbas/Account/Signin`}
         className={`list-group-item border-0 ${isActive("/Kanbas/Account/Signin")}`}
@@ -20,12 +27,17 @@ export default function AccountNavigation() {
       >
         Signup
       </Link>
+      </>
+      )}
+      {currentUser && (
+        
       <Link
         to={`/Kanbas/Account/Profile`}
         className={`list-group-item border-0 ${isActive("/Kanbas/Account/Profile")}`}
       >
         Profile
       </Link>
+    )}
     </div>
   );
 }
