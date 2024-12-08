@@ -117,7 +117,7 @@ export default function Quizzes() {
                 <div className="d-flex align-items-center ms-auto">
                   {currentUser?.role === "FACULTY" && (
                      <QuizControlButtons
-                      qid={quiz._id}
+                      quizId={quiz.id}
                       onEdit={handleEdit}
                       onDelete={handleDelete}
                       onPublish={handlePublish}
