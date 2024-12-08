@@ -24,17 +24,20 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
   }, []);
 
   return (
-    <div className="float-end position-relative">
-      <GreenCheckmark />
-      
+    <div className="float-end d-flex align-items-center position-relative">
+      {/* Green Checkmark */}
+      <div style={{ marginRight: "10px" }}>
+        <GreenCheckmark />
+      </div>
+
+      {/* Dropdown Menu Icon */}
       <div ref={iconRef}>
         <IoEllipsisVertical
-          className="fs-4"
+          className="fs-4 ms-2"
           onClick={toggleMenu}
           style={{ cursor: "pointer" }}
         />
 
-        {/* Dropdown Menu */}
         {menuOpen && (
           <div
             className="dropdown-menu show"
@@ -58,9 +61,11 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
               Copy
             </button>
           </div>
-
         )}
+
       </div>
-    </div>
+
+  </div>
+
   );
 }

@@ -43,26 +43,26 @@
 
 
 /* Quiz Details CSS */
-/* Scoped Quiz Details CSS */
 .quiz-details-container {
 	font-family: Arial, sans-serif;
 	padding: 20px;
+	margin: 0 auto;
   }
   
-  .quiz-details-container .quiz-header {
+.quiz-details-container .quiz-header {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-  }
+}
   
-  .quiz-details-container .button-group {
+.quiz-details-container .button-group {
 	display: flex;
 	justify-content: flex-start;
 	margin-left: 38%;
 	gap: 10px;
-  }
+}
   
-  .quiz-details-container .btn {
+.quiz-details-container .btn {
 	padding: 8px 16px;
 	background-color: #f8f9fa;
 	color: hsl(210, 6%, 35%);
@@ -74,40 +74,50 @@
 	align-items: center;
 	justify-content: center;
 	gap: 5px;
-  }
+}
   
-  .quiz-details-container .btn:hover {
+.quiz-details-container .btn:hover {
 	background-color: #e2e6ea;
-  }
-  
-  .quiz-details-container .edit-icon {
+}
+
+.quiz-details-container .edit-icon {
 	font-size: 14px;
-  }
+}
   
-  .quiz-details-container .quiz-details {
+.quiz-details-container .quiz-details {
 	margin-top: 20px;
-  }
-  
-  .quiz-details-container .quiz-row {
+}
+
+.quiz-details-container .quiz-details-row {
 	display: flex;
 	justify-content: space-between;
 	padding: 5px 0;
-  }
-  
-  .quiz-details-container .label {
+}
+
+.quiz-details-container .quiz-details-label {
+	text-align: right;
 	font-weight: bold;
-	margin-right: 10px;
-  }
+	flex: 1;
+	padding-right: 10px;
+}
+
+.quiz-details-container .quiz-details-answer {
+	text-align: left;
+	flex: 2;
+}
+
   
-  .quiz-details-container .quiz-table {
+.quiz-details-container .quiz-table {
 	margin-top: 20px;
 	border-top: 1px solid #ccc;
+	padding-top: 10px;
+	width: 100%;
   }
   
   .quiz-details-container .table-header,
   .quiz-details-container .table-row {
-	display: flex;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
 	padding: 10px 0;
   }
   
