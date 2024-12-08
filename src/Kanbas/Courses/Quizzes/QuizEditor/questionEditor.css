@@ -5,7 +5,6 @@
 .answer-selection-container{
     display: flex;
     flex-direction: row;
-    
-    align-items: center;
+    /* align-items: center; */
     margin-bottom: 1rem;
 }
