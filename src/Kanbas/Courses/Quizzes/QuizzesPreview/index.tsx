@@ -29,17 +29,18 @@ type Quiz = {
 };
 
 const QuizPreview = () => {
-  const {cid, qid } = useParams<{cid:string; qid: string }>();
+  const { cid, qid } = useParams<{ cid: string; qid: string }>();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const navigate = useNavigate();
 
-  // Hooks: Declare at the top level
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<{ [questionId: string]: string }>({});
 
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
   useEffect(() => {
-    // Fetch the quiz without conditionally using hooks
+
     const fetchedQuiz = quizzes.find((q: Quiz) => q.id === qid) || null;
     setQuiz(fetchedQuiz);
   }, [qid, quizzes]);
@@ -93,24 +94,27 @@ const QuizPreview = () => {
   const handleSubmit = () => {
     const score = calculateScore();
     const totalQuestions = quiz.questions.length;
-  
-    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit` , {
+
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
       state: {
         score,
         totalQuestions,
-        quiz, 
-        userAnswers, 
+        quiz,
+        userAnswers,
       },
     });
   };
-  
+
 
   return (
     <div className="container">
       <h2>{quiz.title}</h2>
-      <div className="alert alert-danger" role="alert">
-        This is a preview of the published version of the quiz.
-      </div>
+      {
+        currentUser.role !== "STUDENT" &&
+        <div className="alert alert-danger" role="alert">
+          This is a preview of the published version of the quiz.
+        </div>
+      }
       <div className="text-muted mb-2">Due: {quiz.due_at || "No due date provided"}</div>
 
       <h3>Quiz Instructions</h3>
@@ -210,12 +214,15 @@ const QuizPreview = () => {
           </button>
         </div>
       </div>
-
-      <div className="mt-3">
-        <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-link">
-          Keep editing this quiz
-        </Link>
-      </div>
+      {
+        currentUser.role !== "STUDENT" && (
+          <div className="mt-3">
+            <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-link">
+              Keep editing this quiz
+            </Link>
+          </div>
+        )
+      }
 
       <div className="mt-4">
         <h5>Questions</h5>
@@ -223,9 +230,8 @@ const QuizPreview = () => {
           {quiz.questions.map((question, index) => (
             <li
               key={question.id}
-              className={`list-group-item ${
-                currentQuestionIndex === index ? "text-danger fw-bold" : ""
-              }`}
+              className={`list-group-item ${currentQuestionIndex === index ? "text-danger fw-bold" : ""
+                }`}
               style={{ cursor: "pointer" }}
               onClick={() => handleQuestionClick(index)}
             >

@@ -40,8 +40,8 @@ export default function Quizzes() {
 
   const getAvailability = (quiz: any) => {
     const now = new Date();
-    const availableFrom = new Date(quiz.availableFrom);
-    const availableUntil = new Date(quiz.until);
+    const availableFrom = new Date(quiz.unlock_at);
+    const availableUntil = new Date(quiz.lock_at);
 
     if (now < availableFrom) {
       return `Not available until ${availableFrom.toLocaleString()}`;

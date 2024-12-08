@@ -1,5 +1,6 @@
 import { Link, useLocation, useParams } from "react-router-dom";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 type QuestionOption = {
   id: string;
@@ -22,9 +23,11 @@ type Quiz = {
 
 const SubmitScreen = () => {
   const location = useLocation();
-  const {cid, qid} = useParams();
+  const { cid, qid } = useParams();
   const { state } = location;
   const { score, totalQuestions, quiz, userAnswers } = state || {};
+
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   if (!state || !quiz || !userAnswers) {
     return (
@@ -48,7 +51,7 @@ const SubmitScreen = () => {
     } else if (question.question_type === "true_false" && question.answer !== undefined) {
       return userAnswer === String(question.answer).toLowerCase();
     }
-		// else if (question.question_type === "Fill_in_the_blank" && question.blanks) {
+    // else if (question.question_type === "Fill_in_the_blank" && question.blanks) {
     //   return question.blanks.some((blank) => blank.toLowerCase() === userAnswer);
     // }
     return false;
@@ -74,43 +77,44 @@ const SubmitScreen = () => {
 
             return (
               <li
-								key={question.id}
-								className={`list-group-item ${
-									correct ? "text-success" : "text-danger"
-								}`}
-							>
-								<div className="d-flex align-items-start text-start">
-									<div className="flex-grow-1">
-										<div className="fw-bold mb-2">
-											Question {index + 1}: {question.question_text}
-										</div>
-										<div className={`mb-1 ${correct ? "text-success" : "text-danger"}`}>
-											<strong>Your Answer:</strong> {userAnswer}
-										</div>
-										<div>
-											<strong>Correct Answer:</strong>{" "}
-											{question.question_type === "multiple_choice"
-												? question.options?.find((option) => option.is_correct)?.answer_text || "N/A"
-												: String(question.answer)}
-										</div>
-									</div>
-                <div>
-                  {correct ? (<FaCheckCircle size={24} className="text-success" />) : 
-									(<FaTimesCircle size={24} className="text-danger" />)}
-								</div>
+                key={question.id}
+                className={`list-group-item ${correct ? "text-success" : "text-danger"
+                  }`}
+              >
+                <div className="d-flex align-items-start text-start">
+                  <div className="flex-grow-1">
+                    <div className="fw-bold mb-2">
+                      Question {index + 1}: {question.question_text}
+                    </div>
+                    <div className={`mb-1 ${correct ? "text-success" : "text-danger"}`}>
+                      <strong>Your Answer:</strong> {userAnswer}
+                    </div>
+                    <div>
+                      <strong>Correct Answer:</strong>{" "}
+                      {question.question_type === "multiple_choice"
+                        ? question.options?.find((option) => option.is_correct)?.answer_text || "N/A"
+                        : String(question.answer)}
+                    </div>
+                  </div>
+                  <div>
+                    {correct ? (<FaCheckCircle size={24} className="text-success" />) :
+                      (<FaTimesCircle size={24} className="text-danger" />)}
+                  </div>
                 </div>
               </li>
             );
           })}
         </ul>
       </div>
-
-      <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-primary mt-5">
-        Keep Editing this quiz
-      </Link>
+      {
+        currentUser.role !== "STUDENT" && (
+          <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`} className="btn btn-primary mt-5">
+            Keep Editing this quiz
+          </Link>
+        )}
     </div>
   );
 };
 
 export default SubmitScreen;
-export {};
+export { };

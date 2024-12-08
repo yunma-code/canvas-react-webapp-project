@@ -14,12 +14,14 @@ import Quizzes from "./Quizzes/QuizDetails";
 import QuizEditor from "./Quizzes/QuizEditor";
 import QuizDetails from "./Quizzes/QuizDetails/QuizDetails";
 import SubmitScreen from "./Quizzes/QuizzesPreview/SubmitScreen";
+import { useSelector } from "react-redux";
 
 export default function Courses({ courses }: { courses: any[]; }) {
   const { cid } = useParams();
   const course = courses.find((course) => course._id === cid);
   const courseName = course?.name || "Unnamed Course";
   const { pathname } = useLocation();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   // get current page from pathname
   const currPage = pathname.split("/").pop();
@@ -38,7 +40,7 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="/" element={<Navigate to="Home" />} />
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
-            
+
             <Route path="Assignments" element={<Assignments />} />
             <Route path="Assignments/Editor/:assignmentId" element={<AssignmentEditor />} />
             <Route path="Assignments/:aid" element={<AssignmentPreview />} />
@@ -46,10 +48,18 @@ export default function Courses({ courses }: { courses: any[]; }) {
             <Route path="Assignments/AddAssignment" element={<AssignmentEditor />} />
 
             <Route path="Quizzes" element={<Quizzes />} />
-            <Route path="Quizzes/New" element={<QuizEditor />} />
-            <Route path="Quizzes/:qid" element={<QuizDetails />} />
-            <Route path="Quizzes/:qid/Edit" element={<QuizEditor />} />
-            <Route path="Quizzes/:qid/Preview" element={<QuizzesPreview />} />
+            {
+              currentUser.role === "STUDENT" ?
+                <Route path="Quizzes/:qid" element={<QuizzesPreview />} />
+                :
+                <>
+                  <Route path="Quizzes/New" element={<QuizEditor />} />
+                  <Route path="Quizzes/:qid" element={<QuizDetails />} />
+                  <Route path="Quizzes/:qid/Edit" element={<QuizEditor />} />
+                  <Route path="Quizzes/:qid/Preview" element={<QuizzesPreview />} />
+                </>
+            }
+
             <Route path="Quizzes/:qid/Submit" element={<SubmitScreen />} />
 
             <Route path="People" element={<PeopleTable />} />

@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoEllipsisVertical } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import GreenCheckmark from "../../Modules/GreenCheckmark";
 
 
 export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy, quizId }: any) {
   const [menuOpen, setMenuOpen] = useState(false);
   const iconRef = useRef<HTMLDivElement>(null);
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -37,7 +39,6 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
           onClick={toggleMenu}
           style={{ cursor: "pointer" }}
         />
-
         {menuOpen && (
           <div
             className="dropdown-menu show"
@@ -62,10 +63,12 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
             </button>
           </div>
         )}
-
       </div>
 
-  </div>
+
+
+
+    </div>
 
   );
 }
