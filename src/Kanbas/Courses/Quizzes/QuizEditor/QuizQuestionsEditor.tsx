@@ -20,7 +20,6 @@ export default function QuizQuestionsEditor({
         }
     }, [questionList]);
 
-    // 更新单个问题
     const onUpdateQuestion = (updatedQuestion: any) => {
         setQuestions((prevQuestions) =>
             prevQuestions.map((q) =>
@@ -65,7 +64,7 @@ export default function QuizQuestionsEditor({
 
                 {creatingNew ? (
                     <QuestionEditor
-                        question={questions[questions.length - 1]} // 当前新创建的问题
+                        question={questions[questions.length - 1]}
                         onUpdate={onUpdateQuestion}
                     />
                 ) : (

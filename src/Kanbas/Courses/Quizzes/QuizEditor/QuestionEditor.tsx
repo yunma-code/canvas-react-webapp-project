@@ -10,7 +10,6 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
     const [options, setOptions] = useState<any[]>([]);
     const [answer, setAnswer] = useState<boolean | undefined>(undefined);
 
-    // 初始化
     useEffect(() => {
         if (question) {
             const {
@@ -29,7 +28,6 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
         }
     }, [question]);
 
-    // 更新题目
     const handleUpdate = () => {
         const updatedQuestion = {
             question_type: type,
@@ -41,17 +39,14 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
         onUpdate(updatedQuestion);
     };
 
-    // 添加选项
     const handleAddOption = () => {
         setOptions([...options, { id: Date.now().toString(), answer_text: "", is_correct: false }]);
     };
 
-    // 删除选项
     const handleDeleteOption = (id: string) => {
         setOptions(options.filter((option) => option.id !== id));
     };
 
-    // 更新选项
     const handleOptionChange = (id: string, key: string, value: any) => {
         setOptions(
             options.map((option) =>
@@ -60,7 +55,6 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
         );
     };
 
-    // 渲染选项
     const renderOptions = () => {
         return options.map((option) => (
             <div key={option.id} className="answer-selection-container">
