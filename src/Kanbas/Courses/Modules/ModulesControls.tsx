@@ -66,4 +66,9 @@ export default function ModulesControls(
         </>)}
     </div>
     
+<<<<<<< HEAD
 );}
+=======
+);}
+
+>>>>>>> kanbas-react-web-app-cs5610-fa24/a6

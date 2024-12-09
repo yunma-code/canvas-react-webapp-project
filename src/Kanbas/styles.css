@@ -62,6 +62,7 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
   color: white;
 }
 
+<<<<<<< HEAD
 .assignment-table td {
   padding-left: 5px; 
   vertical-align: top;
@@ -102,3 +103,19 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .ql-toolbar {
   border-bottom: 1px solid #ccc; /* Toolbar border for separation */
 }
+=======
+.confirmation-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+.confirmation-dialog p {
+  margin-bottom: 20px;
+}
+>>>>>>> kanbas-react-web-app-cs5610-fa24/a6

@@ -37,7 +37,23 @@ export default function AccountNavigation() {
       >
         Profile
       </Link>
+<<<<<<< HEAD
     )}
     </div>
   );
 }
+=======
+      )}
+
+      {currentUser && currentUser.role === "ADMIN" && (
+        <Link
+        to={`/Kanbas/Account/Users`}
+        className={`list-group-item ${isActive("Users")}`}
+      > 
+        Users
+      </Link>
+      )}
+    </div>
+  );
+}
+>>>>>>> kanbas-react-web-app-cs5610-fa24/a6
