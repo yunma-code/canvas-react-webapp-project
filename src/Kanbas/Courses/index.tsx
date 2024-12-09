@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import QuizzesPreview from "./Quizzes/QuizzesPreview";
 import Quizzes from "./Quizzes/QuizDetails";
 import QuizEditor from "./Quizzes/QuizEditor";
-import QuizDetails from "./Quizzes/QuizDetails";
+import QuizDetails from "./Quizzes/QuizDetails/QuizDetails";
 import SubmitScreen from "./Quizzes/QuizzesPreview/SubmitScreen";
 
 export default function Courses({courses }: { courses: any[]; }) {

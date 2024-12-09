@@ -57,7 +57,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   useEffect(() => {
     // load quiz data if editing an existing quiz
-
+    console.log(qid)
     if (qid) {
       setId(quiz.id)
       setCourse(quiz.course)
