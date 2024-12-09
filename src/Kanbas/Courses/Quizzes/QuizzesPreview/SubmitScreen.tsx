@@ -36,7 +36,6 @@ type Quiz = {
 		lock_at: String,
 		description: String,
 		time_limit: Number,
-		published: Boolean,
 		questions: Question[],
 		is_published: Boolean,
 };
