@@ -11,6 +11,7 @@ export const signin = async (credentials: any) => {
   console.log("Request payload:", credentials);
   
   const response = await axiosWithCredentials.post( `${USERS_API}/signin`, credentials );
+  
   return response.data;
 };
 export const signup = async (user: any) => {
@@ -23,6 +24,7 @@ export const updateUser = async (user: any) => {
 };
 export const profile = async () => {
 	const response = await axiosWithCredentials.post(`${USERS_API}/profile`);
+  console.log("fetched profile: ", profile);
 	return response.data;
 };
 

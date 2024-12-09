@@ -12,7 +12,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
   const { cid, qid } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
+
   const currentUser = useSelector(
     (state: any) => state.accountReducer.currentUser);  // get current user role
   const canEdit = currentUser?.role === "FACULTY" || currentUser?.role === "TA";
@@ -30,91 +30,89 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   const [id, setId] = useState<string>(new Date().getTime().toString());
   const [course, setCourse] = useState<string>(cid!);
-  const [title, setTitle] = useState<string>();
-  const [pointsPossible, setPointsPossible] = useState<number>();
+  const [title, setTitle] = useState<string>("default title");
+  const [pointsPossible, setPointsPossible] = useState<number>(0);
   const [quizType, setQuizType] = useState<string>("Graded Quiz");
   const [assignmentGroup, setAssignmentGroup] = useState<string>("Quizzes");
   const [shuffleAnswers, setShuffleAnswers] = useState(true);
   const [allowMultipleAttempts, setAllowMultipleAttempts] = useState<boolean>(false);
   const [multipleAttempts, setMultipleAttempts] = useState<number>(1);
-  const [showCorrectAnswers, setShowCorrectAnswers] = useState<boolean>();
+  const [showCorrectAnswers, setShowCorrectAnswers] = useState<boolean>(false);
   const [oneQuestionAtATime, setOneQuestionAtATime] = useState<boolean>(true);
-  const [accessCode, setAccessCode] = useState<string | undefined>();
-  const [requireLockdownBrowser, setRequireLockdownBrowser] = useState();
+  const [accessCode, setAccessCode] = useState<string | undefined>("");
+  const [requireLockdownBrowser, setRequireLockdownBrowser] = useState(false);
   const [webcamRequired, setWebcamRequired] = useState<boolean>(false)
   const [cantGoBack, setCantGoBack] = useState<boolean>(false); // lock question after answering
 
   const [dueAt, setDueAt] = useState<Date | null>(null);
-  const [unlockAt, setUnlockAt] = useState<Date| null>(null); //Available date
-  const [lockAt, setLockAt] = useState<Date| null>(null); //until date
+  const [unlockAt, setUnlockAt] = useState<Date | null>(null); //Available date
+  const [lockAt, setLockAt] = useState<Date | null>(null); //until date
 
-  const [description, setDescription] = useState<string>();
-  const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>();
-  const [timeLimit, setTimeLimit] = useState<number>();
+  const [description, setDescription] = useState<string>("");
+  const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>(false);
+  const [timeLimit, setTimeLimit] = useState<number>(0);
   const [published, setPublished] = useState(false);
-  const [assignTo, setAssignTo] = useState<string[]>()
+  const [assignTo, setAssignTo] = useState<string[]>();
   const readOnly = false;
 
   useEffect(() => {
     // load quiz data if editing an existing quiz
+
     if (qid) {
-      console.log('in quizDetailsEditor', quiz);
-      if (!quiz) {
-        //shoud not happen normally
-        console.log('quiz not exist,shoud not happen normally', qid)
-        const quiz = {
-          _id: qid || new Date().getTime().toString(),
-          course: cid,
-        };
-      }
-      else {
-        setId(quiz.id)
-        setCourse(quiz.course)
-        setTitle(quiz.title)
-        setQuizType(quiz.quiz_type)
-        setPointsPossible(quiz.points_possible)
-        setAssignmentGroup(quiz.assignment_group_id)
-        setShuffleAnswers(quiz.shuffle_answers)
-        setAllowMultipleAttempts(prev => {
-          if (quiz.allowed_attempts > 1) {
-            return true
-          }
-          else {
-            return false
-          }
-        })
-        setMultipleAttempts(quiz.allowed_attempts)
-        setShowCorrectAnswers(quiz.show_correct_answers)
-        setAccessCode(quiz.access_code)
-        setWebcamRequired(false)
-        setHaveTimeLimit(prev => {
-          if (quiz.time_limit <= 0) {
-            return true
-          }
-          else {
-            return false
-          }
-        })
-        setTimeLimit(quiz.time_limit)
-        setShowTimeLimit(() => {
-          if (quiz.time_limit !== 0) {
-            return true;
-          }
-          else {
-            return false;
-          }
-        })
-        setOneQuestionAtATime(quiz.oneQuestionAtATime)
-        setCantGoBack(quiz.cant_go_back)
-        setDueAt(new Date(quiz.due_at))
-        setUnlockAt(new Date(quiz.unlock_at))
-        setLockAt(new Date(quiz.lock_at))
-        setDescription(quiz.description)
-        setTimeLimit(quiz.time_limit)
-        setPublished(quiz.published)
-      }
+      setId(quiz.id)
+      setCourse(quiz.course)
+      setTitle(quiz.title)
+      setQuizType(quiz.quiz_type)
+      setPointsPossible(quiz.points_possible)
+      setAssignmentGroup(quiz.assignment_group_id)
+      setShuffleAnswers(quiz.shuffle_answers)
+      setAllowMultipleAttempts(prev => {
+        if (quiz.allowed_attempts > 1) {
+          return true
+        }
+        else {
+          return false
+        }
+      })
+      setMultipleAttempts(quiz.allowed_attempts)
+      setShowCorrectAnswers(quiz.show_correct_answers)
+      setAccessCode(quiz.access_code)
+      setWebcamRequired(false)
+      setHaveTimeLimit(prev => {
+        if (quiz.time_limit <= 0) {
+          return true
+        }
+        else {
+          return false
+        }
+      })
+      setTimeLimit(quiz.time_limit)
+      setShowTimeLimit(() => {
+        if (quiz.time_limit !== 0) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      })
+      setOneQuestionAtATime(quiz.oneQuestionAtATime)
+      setCantGoBack(quiz.cant_go_back)
+      setDueAt(new Date(quiz.due_at))
+      setUnlockAt(new Date(quiz.unlock_at))
+      setLockAt(new Date(quiz.lock_at))
+      setDescription(quiz.description)
+      setTimeLimit(quiz.time_limit)
+      setPublished(quiz.published)
+    } else {
+      //shoud not happen normally
+      console.log('quiz not exist,shoud not happen normally', qid)
+      const quiz = {
+        _id: qid || new Date().getTime().toString(),
+        course: cid,
+      };
 
     }
+
 
   }, [quiz]);
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -447,7 +445,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                     <DatePicker
                       className="form-control"
                       selected={dueAt}
-                      onChange={(date) => setUnlockAt(date)}
+                      onChange={(date) => setDueAt(date)}
                       showTimeSelect
                       timeFormat="HH:mm"
                       timeIntervals={15}
@@ -455,7 +453,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       placeholderText="Select Start Date"
                     />
                     {/* <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} /> */}
-                      
+
                   </div>
                 </div>
 
@@ -475,13 +473,13 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                     />
                     {/* <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} /> */}
                   </div>
-                  
+
                   <div className="col-md-6">
                     <label id="wd-available-until" className="form-label">Until</label><br />
                     <DatePicker
                       className="form-control"
                       selected={lockAt}
-                      onChange={(date) => setUnlockAt(date)}
+                      onChange={(date) => setLockAt(date)}
                       showTimeSelect
                       timeFormat="HH:mm"
                       timeIntervals={15}
