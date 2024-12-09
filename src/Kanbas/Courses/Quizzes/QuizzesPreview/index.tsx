@@ -55,19 +55,6 @@ const QuizPreview = () => {
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-  // useEffect(() => {
-  //   const fetchedQuiz = quizzes.find((q: Quiz) => q.id === qid) || null;
-  //   setQuiz(fetchedQuiz);
-  // }, [qid, quizzes]);
-
-  // if (!quiz) {
-  //   return (
-  //     <div className="alert alert-danger" role="alert">
-  //       Quiz not found!
-  //     </div>
-  //   );
-  // }
-
   useEffect(() => {
     const fetchQuizzes = async () => {
       if (qid) {
