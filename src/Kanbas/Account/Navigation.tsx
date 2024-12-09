@@ -37,12 +37,6 @@ export default function AccountNavigation() {
       >
         Profile
       </Link>
-<<<<<<< HEAD
-    )}
-    </div>
-  );
-}
-=======
       )}
 
       {currentUser && currentUser.role === "ADMIN" && (
@@ -56,4 +50,4 @@ export default function AccountNavigation() {
     </div>
   );
 }
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
+

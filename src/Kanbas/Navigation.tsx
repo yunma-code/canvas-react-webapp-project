@@ -8,17 +8,11 @@ import { FaInbox, FaRegCircleUser } from "react-icons/fa6";
 
 const KanbasNavigation: React.FC = () => {
   const location = useLocation();
-<<<<<<< HEAD
-
-=======
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
   // set curr link as active
   const isActive = (path: string): boolean => {
     return location.pathname.startsWith(path);
   };
 
-<<<<<<< HEAD
-=======
   // use data structure to configures the components
   const { pathname } = useLocation();
   const links = [
@@ -29,7 +23,6 @@ const KanbasNavigation: React.FC = () => {
     { label: "Labs",      path: "/Labs",             icon: LiaCogSolid },
   ];
 
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
   return (
     <div
       id="wd-kanbas-navigation"
@@ -45,18 +38,6 @@ const KanbasNavigation: React.FC = () => {
       >
         <img src="/images/NEU.png" width="75px" alt="NEU Logo" />
       </a>
-<<<<<<< HEAD
-      <Link
-        to="/Kanbas/Account"
-        id="wd-account-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Kanbas/Account') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <FaRegCircleUser className="fs-1" /><br />
-        Account
-      </Link>
-=======
 
       <Link to="/Kanbas/Account" className={`list-group-item text-center border-0 bg-black
             ${pathname.includes("Account") ? "bg-white text-danger" : "bg-black text-white"}`}>
@@ -72,62 +53,6 @@ const KanbasNavigation: React.FC = () => {
           {link.label}
         </Link>
       ))}
-
-{/* 
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
-      <Link
-        to="/Kanbas/Dashboard"
-        id="wd-dashboard-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Kanbas/Dashboard') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <AiOutlineDashboard className="fs-1" /><br />
-        Dashboard
-      </Link>
-      <Link
-        to="/Kanbas/Courses"
-        id="wd-course-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Kanbas/Courses') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <LiaBookSolid className="fs-1" /><br />
-        Courses
-      </Link>
-      <Link
-        to="/Kanbas/Calendar"
-        id="wd-calendar-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Kanbas/Calendar') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <IoCalendarOutline className="fs-1" /><br />
-        Calendar
-      </Link>
-      <Link
-        to="/Kanbas/Inbox"
-        id="wd-inbox-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Kanbas/Inbox') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <FaInbox className="fs-1" /><br />
-        Inbox
-      </Link>
-<<<<<<< HEAD
-=======
-      <Link
-        to="/Labs/*"
-        id="wd-labs-link"
-        className={`list-group-item text-center border-0 ${
-          isActive('/Labs') ? 'active' : 'bg-black text-white'
-        }`}
-      >
-        <LiaCogSolid className="fs-1" /><br />
-        Labs
-      </Link> */}
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
     </div>
   );
 };

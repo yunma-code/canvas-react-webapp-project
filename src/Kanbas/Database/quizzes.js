@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export default[{
 	"id": "1",
 	"course": "RS101",
@@ -85,18 +84,11 @@ export default[{
 	"due_at": "2024-09-20T23:59:00-04:00",
 	"unlock_at": "2024-09-16T00:00:00-04:00",
 	"lock_at": "2024-09-20T23:59:00-04:00",
-=======
-export default [{
-	"id": "1",
-	"courseId": "RS101",
-	"title": "HTML Quiz",
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
 	"description": "An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.",
 	"time_limit": 15,
 	"published": true,
 	"questions": [{
 		"id": "1",
-<<<<<<< HEAD
 		"question_title":"",
 		"pts": 0,
 		"question_text": "<p>What does HTML stand for?</p>",
@@ -140,30 +132,6 @@ export default [{
 }]
 
 // [{
-=======
-			"question_text": "What does HTML stand for?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
-				{ "id": "2", "answer_text": "Hyperlinks and Text Markup Language", "is_correct": false },
-				{ "id": "3", "answer_text": "Home Tool Markup Language", "is_correct": false },
-				{ "id": "4", "answer_text": "Hyper Tool Markup Language", "is_correct": false }
-			]
-		},
-		{
-			"id": "2",
-			"question_text": "Which tag is used to define a hyperlink in HTML?",
-			"question_type": "multiple_choice",
-			"options": [
-				{ "id": "1", "answer_text": "<link>", "is_correct": false },
-				{ "id": "2", "answer_text": "<a>", "is_correct": true },
-				{ "id": "3", "answer_text": "<href>", "is_correct": false },
-				{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
-			]
-		},]
-}]
-// export default [{
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
 // 	"id": "633305",
 // 	"title": "Q1",
 // 	"html_url": "https://northeastern.instructure.com/courses/192544/quizzes/633305",

@@ -1,9 +1,6 @@
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa6";
-<<<<<<< HEAD
 
-export default function AssignmentControls() {
-=======
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import * as db from "../../Database";
@@ -21,7 +18,7 @@ export default function AssignmentControls() {
       navigate(`/Kanbas/Courses/${cid}/Assignments/Editor/NewAssignment`); 
     }
   };
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
+
   
   return (
     <div id="wd-assignments">
@@ -46,23 +43,15 @@ export default function AssignmentControls() {
         }}/>
       </div>
       
-<<<<<<< HEAD
-
-=======
-      {userRole === "FACULTY" && (
+      {userRole !== "STUDENT" && (
         <>
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
       <button id="wd-add-assignment-group" style={{ marginLeft: "10px"}} 
         className="btn btn-lg bg-assignment me-1">
         <FaPlus className="position-relative me-2" style={{ bottom: "1px"}} />
         Group</button>
 
       <button id="wd-add-assignment" style={{ marginLeft: "5px"}}
-<<<<<<< HEAD
-        className="btn btn-lg btn-danger me-1">
-        <FaPlus className="position-relative me-2" style={{ bottom: "1px"}} />
-        Assignment</button>
-=======
+
         className="btn btn-lg btn-danger me-1"
         onClick={handleAddAssignmentClick}>
           
@@ -70,7 +59,6 @@ export default function AssignmentControls() {
         Assignment</button>
         </>
       )}
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
       
     </div>
 );}

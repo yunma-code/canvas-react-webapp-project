@@ -62,7 +62,6 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
   color: white;
 }
 
-<<<<<<< HEAD
 .assignment-table td {
   padding-left: 5px; 
   vertical-align: top;
@@ -103,7 +102,6 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .ql-toolbar {
   border-bottom: 1px solid #ccc; /* Toolbar border for separation */
 }
-=======
 .confirmation-dialog {
   position: fixed;
   top: 50%;
@@ -118,4 +116,3 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .confirmation-dialog p {
   margin-bottom: 20px;
 }
->>>>>>> kanbas-react-web-app-cs5610-fa24/a6
