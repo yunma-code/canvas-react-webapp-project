@@ -2,12 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoEllipsisVertical } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import GreenCheckmark from "../../Modules/GreenCheckmark";
+import { FaBan } from "react-icons/fa";
 
 
 export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy, quizId }: any) {
   const [menuOpen, setMenuOpen] = useState(false);
   const iconRef = useRef<HTMLDivElement>(null);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+   // Retrieve the quiz
+   const quiz = useSelector((state: any) =>
+    state.quizzesReducer.quizzes.find((quiz: any) => quiz.id === quizId)
+  );
+
+  const isPublished = quiz?.is_published ?? false;
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -29,7 +37,12 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
     <div className="float-end d-flex align-items-center position-relative">
       {/* Green Checkmark */}
       <div style={{ marginRight: "10px" }}>
-        <GreenCheckmark />
+        <span
+          style={{ cursor: "pointer" }}
+          title={isPublished ? "Unpublish Quiz" : "Publish Quiz"}
+        >
+          {isPublished ? <GreenCheckmark /> : <FaBan style={{ color: "red" }} />}
+        </span>
       </div>
 
       {/* Dropdown Menu Icon */}

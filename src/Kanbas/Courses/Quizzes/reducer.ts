@@ -27,6 +27,7 @@ export type QuizT = {
   time_limit: Number,
   questions: QuestionT[],
   is_published: Boolean,
+
 }
 export type QuestionT = {
   id: string;
@@ -99,10 +100,19 @@ const quizzesSlice = createSlice({
 
       ) as any;
     },
+
+    publishQuiz: (state, { payload: quizId }) => {
+      state.quizzes = state.quizzes.map((quiz: any) =>
+        quiz.id === quizId
+          ? { ...quiz, is_published: !quiz.is_published }
+          : quiz
+      );
+    },
   },
+
 });
 
-export const { addQuiz, deleteQuiz, updateQuiz, editQuiz } =
+export const { addQuiz, deleteQuiz, updateQuiz, editQuiz, publishQuiz } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;
 
