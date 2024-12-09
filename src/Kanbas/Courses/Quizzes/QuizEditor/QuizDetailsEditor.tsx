@@ -431,7 +431,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       timeFormat="HH:mm"
                       timeIntervals={15}
                       dateFormat="yyyy-MM-dd HH:mm"
-                      placeholderText="Select Start Date"
+                      placeholderText="Select Due Date"
                     />
                     {/* <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} /> */}
 
@@ -450,7 +450,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       timeFormat="HH:mm"
                       timeIntervals={15}
                       dateFormat="yyyy-MM-dd HH:mm"
-                      placeholderText="Select Start Date"
+                      placeholderText="Select Unlock Date"
                     />
                     {/* <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} /> */}
                   </div>
@@ -465,7 +465,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       timeFormat="HH:mm"
                       timeIntervals={15}
                       dateFormat="yyyy-MM-dd HH:mm"
-                      placeholderText="Select Start Date"
+                      placeholderText="Select Lock Date"
                     />
                     {/* <input className="form-control" type="datetime-local" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? formatDateToLocalDatetime(lockAt) : ""} /> */}
                   </div>
