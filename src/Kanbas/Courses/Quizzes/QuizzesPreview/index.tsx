@@ -56,6 +56,7 @@ const QuizPreview = () => {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   useEffect(() => {
+
     const fetchQuizzes = async () => {
       if (qid) {
         try {
@@ -77,6 +78,7 @@ const QuizPreview = () => {
   }, [qid]);
 
   const currentQuestion = quiz?.questions[currentQuestionIndex];
+
 
   const handleNext = () => {
     if (currentQuestionIndex < quizQuestions.length -1) {
