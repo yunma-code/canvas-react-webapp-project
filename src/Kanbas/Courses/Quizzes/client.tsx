@@ -21,12 +21,12 @@ export const createQuiz = async (quiz: any) => {
   return response.data;
 };
 
-export const fetchQuizzesForCourse = async (courseId: string) => {
-	if (!courseId) {
+export const fetchQuizzesForCourse = async (cid: any) => {
+	if (!cid) {
     throw new Error("courseId is required");
   }
 	//console.log("Fetching quizzes for courseId:", courseId);
-  const response = await axiosWithCredentials.get(`${COURSE_API}/${courseId}/quizzes`);
+  const response = await axiosWithCredentials.get(`${COURSE_API}/${cid}/quizzes`);
 	//console.log("fetched quizzes: ", response.data);
   return response.data;
 };

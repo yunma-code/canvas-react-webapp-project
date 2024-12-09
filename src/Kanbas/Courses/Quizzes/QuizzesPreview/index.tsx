@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
+import * as quizClient from "../client";
 
 type QuestionOption = {
   id: string;
@@ -18,45 +19,81 @@ type Question = {
 };
 
 type Quiz = {
-  due_at: string;
-  id: string;
-  course: string;
-  title: string;
-  points_possible: number;
-  quiz_type: string;
-  description?: string;
-  questions: Question[];
+  course: String,
+		title: String,
+		points_possible: Number,
+		quiz_type: String,
+		assignment_group_id: String,
+		assignment_group_type: String,
+		shuffle_answers: Boolean,
+		allowed_attempts: Boolean,
+		attempts_number: Number,
+		show_correct_answers: Boolean,
+		one_question_at_a_time: Boolean,
+		has_access_code: Boolean,
+		require_lockdown_browser: Boolean,
+		cant_go_back: Boolean,
+		due_at: String,
+		unlock_at: String,
+		lock_at: String,
+		description: String,
+		time_limit: Number,
+		published: Boolean,
+		questions: Question[],
+		is_published: Boolean,
 };
+
 
 const QuizPreview = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const navigate = useNavigate();
 
-  const [quiz, setQuiz] = useState<Quiz | null>(null);
+  const [quiz, setQuiz] = useState<Quiz>();
+  const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<{ [questionId: string]: string }>({});
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
+  // useEffect(() => {
+  //   const fetchedQuiz = quizzes.find((q: Quiz) => q.id === qid) || null;
+  //   setQuiz(fetchedQuiz);
+  // }, [qid, quizzes]);
+
+  // if (!quiz) {
+  //   return (
+  //     <div className="alert alert-danger" role="alert">
+  //       Quiz not found!
+  //     </div>
+  //   );
+  // }
+
   useEffect(() => {
+    const fetchQuizzes = async () => {
+      if (qid) {
+        try {
+          const fetchedQuiz = await quizClient.fetchQuizById(qid);
+          setQuiz(fetchedQuiz); 
+          setQuizQuestions(fetchedQuiz.question);
+        } catch (error) {
+          console.error("Error fetching quiz: ", error);
+        }
+      } else {
+        return (
+          <div className="alert alert-danger" role="alert">
+            Quiz not found!
+          </div>
+        );
+      }
+    };
+    fetchQuizzes();
+  }, [qid]);
 
-    const fetchedQuiz = quizzes.find((q: Quiz) => q.id === qid) || null;
-    setQuiz(fetchedQuiz);
-  }, [qid, quizzes]);
-
-  if (!quiz) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        Quiz not found!
-      </div>
-    );
-  }
-
-  const currentQuestion = quiz.questions[currentQuestionIndex];
+  const currentQuestion = quiz?.questions[currentQuestionIndex];
 
   const handleNext = () => {
-    if (currentQuestionIndex < quiz.questions.length - 1) {
+    if (currentQuestionIndex < quizQuestions.length -1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -74,7 +111,7 @@ const QuizPreview = () => {
   const calculateScore = (): number => {
     let score = 0;
 
-    quiz.questions.forEach((question) => {
+    quiz?.questions.forEach((question) => {
       const userAnswer = userAnswers[question.id];
       if (question.question_type === "multiple_choice") {
         const correctOption = question.options?.find((option) => option.is_correct)?.answer_text;
@@ -87,13 +124,12 @@ const QuizPreview = () => {
         }
       }
     });
-
     return score;
   };
 
   const handleSubmit = () => {
     const score = calculateScore();
-    const totalQuestions = quiz.questions.length;
+    const totalQuestions = quiz?.questions.length;
 
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
       state: {
@@ -108,17 +144,17 @@ const QuizPreview = () => {
 
   return (
     <div className="container">
-      <h2>{quiz.title}</h2>
+      <h2>{quiz?.title}</h2>
       {
         currentUser.role !== "STUDENT" &&
         <div className="alert alert-danger" role="alert">
           This is a preview of the published version of the quiz.
         </div>
       }
-      <div className="text-muted mb-2">Due: {quiz.due_at || "No due date provided"}</div>
+      <div className="text-muted mb-2">Due: {quiz?.due_at || "No due date provided"}</div>
 
       <h3>Quiz Instructions</h3>
-      <p>{quiz.description || "No description provided."}</p>
+      <p>{quiz?.description || "No description provided."}</p>
       <hr className="my-4" />
 
       <div className="card mt-3">
@@ -127,9 +163,9 @@ const QuizPreview = () => {
           <span>1 pts</span>
         </div>
         <div className="card-body">
-          <p>{currentQuestion.question_text}</p>
+          <p>{currentQuestion?.question_text}</p>
           <form>
-            {currentQuestion.question_type === "multiple_choice" &&
+            {currentQuestion?.question_type === "multiple_choice" &&
               currentQuestion.options &&
               currentQuestion.options.map((option) => (
                 <div key={option.id} className="form-check">
@@ -149,7 +185,7 @@ const QuizPreview = () => {
                   </label>
                 </div>
               ))}
-            {currentQuestion.question_type === "true_false" && (
+            {currentQuestion?.question_type === "true_false" && (
               <>
                 <div className="form-check">
                   <input
@@ -200,7 +236,7 @@ const QuizPreview = () => {
         <button
           className="btn btn-secondary"
           onClick={handleNext}
-          disabled={currentQuestionIndex === quiz.questions.length - 1}
+          disabled={currentQuestionIndex === quizQuestions.length- 1}
         >
           Next
         </button>
@@ -227,7 +263,7 @@ const QuizPreview = () => {
       <div className="mt-4">
         <h5>Questions</h5>
         <ul className="list-group">
-          {quiz.questions.map((question, index) => (
+          {quiz?.questions.map((question, index) => (
             <li
               key={question.id}
               className={`list-group-item ${currentQuestionIndex === index ? "text-danger fw-bold" : ""
