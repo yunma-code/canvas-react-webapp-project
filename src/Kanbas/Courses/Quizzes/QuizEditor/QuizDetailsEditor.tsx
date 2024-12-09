@@ -95,14 +95,14 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
           return false;
         }
       })
-      setOneQuestionAtATime(quiz.oneQuestionAtATime)
+      setOneQuestionAtATime(quiz.one_question_at_a_time)
       setCantGoBack(quiz.cant_go_back)
       setDueAt(new Date(quiz.due_at))
       setUnlockAt(new Date(quiz.unlock_at))
       setLockAt(new Date(quiz.lock_at))
       setDescription(quiz.description)
       setTimeLimit(quiz.time_limit)
-      setPublished(quiz.published)
+      setPublished(quiz.is_published)
     } else {
       //shoud not happen normally
       console.log('quiz not exist,shoud not happen normally', qid)
@@ -115,25 +115,6 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
 
   }, [quiz]);
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-  //   console.log(e)
-  //   const { name, value } = e.target;
-  //   setQuizDetails({ ...quizDetails, [name]: value });
-  // };
-
-  // const handleDescriptionChange = (content: string) => {
-  //   setQuizDetails({ ...quizDetails, description: content });
-  // };
-  // const handleMultipleAttemptsClick = () => {
-  //   if (multipleAttempts) {
-  //     setQuizDetails({ ...quizDetails, multipleAttempts: 0 });
-  //   } else {
-  //     setQuizDetails({ ...quizDetails, multipleAttempts: 1 });
-  //   }
-  //   setMultipleAttempts(prev => !prev);
-  // }
-
-
 
   const handleSave = () => {
     if (!canEdit) return;  // prevent STUDENT from saving
