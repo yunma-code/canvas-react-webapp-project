@@ -5,32 +5,32 @@ const initialState = {
   quizzes: quizzes,
 };
 export type QuizT = {
-  id:string;
-  title:string;
-  course:string;
-  points_possible:number;
-  quizType:string;
-  assignTo:string|undefined;
-  assignmentGroupId:string;
-  shuffleAnswers:boolean;
-  allowedAttempts:number;
-  showCorrectAnswers:boolean;
-  oneQuestionAtaTime:boolean;
-  hasAccessCode:string;
-  requireLockdownBrowser:boolean;
-  cantGoBack:boolean;
-  dueAt:Date;
-  unlockAt:Date;
-  lockAt:Date;
-  description:string;
-  timeLimit:number;
-  published:boolean;
-  questions:QuestionT[];
+  id: string;
+  title: string;
+  course: string;
+  points_possible: number;
+  quizType: string;
+  assignTo: string | undefined;
+  assignmentGroupId: string;
+  shuffleAnswers: boolean;
+  allowedAttempts: number;
+  showCorrectAnswers: boolean;
+  oneQuestionAtaTime: boolean;
+  hasAccessCode: string;
+  requireLockdownBrowser: boolean;
+  cantGoBack: boolean;
+  dueAt: Date;
+  unlockAt: Date;
+  lockAt: Date;
+  description: string;
+  timeLimit: number;
+  published: boolean;
+  questions: QuestionT[];
 }
 export type QuestionT = {
-  id:string;
-  question_text:string;
-  question_type:string;
+  id: string;
+  question_text: string;
+  question_type: string;
   options: any;
 }
 const quizzesSlice = createSlice({
@@ -62,7 +62,7 @@ const quizzesSlice = createSlice({
         published: quiz.published,
         questions: quiz.quesions,
       };
-      console.log("add quiz triggerd",newquiz)
+      console.log("add quiz triggerd", newquiz)
       state.quizzes = [...state.quizzes, newquiz] as any;
     },
 
@@ -72,34 +72,43 @@ const quizzesSlice = createSlice({
     },
 
     updateQuiz: (state, { payload: quiz }) => {
-      console.log('quiz',quiz)
-      return { 
+      console.log('quiz', quiz)
+      return {
         ...state,
-        quizzes:state.quizzes.map((a: any) =>{
-          console.log('a',a)
-          if(a.id === quiz.id){
+        quizzes: state.quizzes.map((a: any) => {
+          console.log('a', a)
+          if (a.id === quiz.id) {
             return quiz
           }
-          else{
+          else {
             return a
           }
-          
-        } ) as any
+
+        }) as any
       }
-      
+
     },
-    
+
     editQuiz: (state, { payload: moduleId }) => {
       state.quizzes = state.quizzes.map((a: any) =>
-        
+
         a._id === moduleId ? { ...a, editing: true } : a
 
       ) as any;
     },
+
+    publishQuiz: (state, { payload: quizId }) => {
+      state.quizzes = state.quizzes.map((quiz: any) =>
+        quiz.id === quizId
+          ? { ...quiz, published: !quiz.published }
+          : quiz
+      );
+    },
   },
+
 });
 
-export const { addQuiz, deleteQuiz, updateQuiz, editQuiz } =
+export const { addQuiz, deleteQuiz, updateQuiz, editQuiz, publishQuiz } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;
 

@@ -447,7 +447,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                     <DatePicker
                       className="form-control"
                       selected={dueAt}
-                      onChange={(date) => setUnlockAt(date)}
+                      onChange={(date) => setDueAt(date)}
                       showTimeSelect
                       timeFormat="HH:mm"
                       timeIntervals={15}
@@ -481,7 +481,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                     <DatePicker
                       className="form-control"
                       selected={lockAt}
-                      onChange={(date) => setUnlockAt(date)}
+                      onChange={(date) => setLockAt(date)}
                       showTimeSelect
                       timeFormat="HH:mm"
                       timeIntervals={15}

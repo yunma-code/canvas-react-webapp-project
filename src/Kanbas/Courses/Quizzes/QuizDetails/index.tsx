@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import { BsGripVertical, BsRocket } from "react-icons/bs";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { deleteQuiz } from "../reducer";
+import { deleteQuiz, publishQuiz } from "../reducer";
 import QuizzesControls from "./QuizzesControls";
 import QuizControlButtons from "./QuizControlButtons";
-
 
 
 export default function Quizzes() {
   const { cid } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
+
+  const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const courseQuizzes = quizzes.filter(
       (quiz: { course: string | undefined; }) => quiz.course === cid);
       
@@ -21,7 +21,6 @@ export default function Quizzes() {
     console.log(`Editing Quiz ID: ${qid}`);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);
   };
-
   
   const handleDelete = (qid: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
@@ -30,11 +29,17 @@ export default function Quizzes() {
   };
 
   const handlePublish = (qid: string) => {
-    console.log(`Publishing Quiz ID: ${qid}`);
+    const quiz = courseQuizzes.find((quiz: any) => quiz.id === qid);
+    if (!quiz) {
+      console.error(`Quiz with ID ${qid} not found.`);
+      return;
+    }
+    dispatch(publishQuiz(qid));
   };
 
   const handleCopy = (qid: string) => {
     console.log(`Copying Quiz ID: ${qid}`);
+
   };
 
 
