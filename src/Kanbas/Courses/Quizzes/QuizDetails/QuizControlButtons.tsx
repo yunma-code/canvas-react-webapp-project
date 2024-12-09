@@ -15,7 +15,7 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
     state.quizzesReducer.quizzes.find((quiz: any) => quiz.id === quizId)
   );
 
-  const isPublished = quiz?.published ?? false;
+  const isPublished = quiz?.is_published ?? false;
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
