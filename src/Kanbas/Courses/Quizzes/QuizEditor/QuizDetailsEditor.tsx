@@ -4,6 +4,8 @@ import { addQuiz, updateQuiz } from "../reducer";
 import { useDispatch, useSelector } from "react-redux";
 import QuillEditor from './QuillEditor';
 import "quill/dist/quill.snow.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?: any; onUpdateQuizDetails: (quiz: any) => void; }) {
@@ -41,9 +43,11 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
   const [requireLockdownBrowser, setRequireLockdownBrowser] = useState();
   const [webcamRequired, setWebcamRequired] = useState<boolean>(false)
   const [cantGoBack, setCantGoBack] = useState<boolean>(false); // lock question after answering
-  const [dueAt, setDueAt] = useState<Date>();
-  const [unlockAt, setUnlockAt] = useState<Date>(); //Available date
-  const [lockAt, setLockAt] = useState<Date>(); //until date
+
+  const [dueAt, setDueAt] = useState<Date | null>(null);
+  const [unlockAt, setUnlockAt] = useState<Date| null>(null); //Available date
+  const [lockAt, setLockAt] = useState<Date| null>(null); //until date
+
   const [description, setDescription] = useState<string>();
   const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>();
   const [timeLimit, setTimeLimit] = useState<number>();
@@ -440,7 +444,18 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                 <div className="row mb-4 w-100">
                   <div className="col-md-6">
                     <label id="wd-due-date" className="form-label">Due</label><br />
-                    <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} />
+                    <DatePicker
+                      className="form-control"
+                      selected={dueAt}
+                      onChange={(date) => setUnlockAt(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      dateFormat="yyyy-MM-dd HH:mm"
+                      placeholderText="Select Start Date"
+                    />
+                    {/* <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} /> */}
+                      
                   </div>
                 </div>
 
@@ -448,12 +463,32 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                 <div className="row mb-4 justify-content-end w-100">
                   <div className="col-md-6">
                     <label id="wd-available-from" className="form-label">Available from</label><br />
-                    <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} />
+                    <DatePicker
+                      className="form-control"
+                      selected={unlockAt}
+                      onChange={(date) => setUnlockAt(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      dateFormat="yyyy-MM-dd HH:mm"
+                      placeholderText="Select Start Date"
+                    />
+                    {/* <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} /> */}
                   </div>
                   
                   <div className="col-md-6">
                     <label id="wd-available-until" className="form-label">Until</label><br />
-                    <input className="form-control" type="datetime-local" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? formatDateToLocalDatetime(lockAt) : ""} />
+                    <DatePicker
+                      className="form-control"
+                      selected={lockAt}
+                      onChange={(date) => setUnlockAt(date)}
+                      showTimeSelect
+                      timeFormat="HH:mm"
+                      timeIntervals={15}
+                      dateFormat="yyyy-MM-dd HH:mm"
+                      placeholderText="Select Start Date"
+                    />
+                    {/* <input className="form-control" type="datetime-local" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? formatDateToLocalDatetime(lockAt) : ""} /> */}
                   </div>
                 </div>
               </div>
