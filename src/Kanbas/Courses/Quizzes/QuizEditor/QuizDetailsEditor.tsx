@@ -150,14 +150,12 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-    onUpdateQuizDetails(quizDetails);
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+    const fetchedId = onUpdateQuizDetails(quizDetails);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 
   const handleSaveAndPublish = () => {
     handleSave();
-    // publish
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
   const handleCancel = () => {

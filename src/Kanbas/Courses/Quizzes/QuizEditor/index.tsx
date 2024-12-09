@@ -10,18 +10,38 @@ export default function QuizEditor() {
     const [quiz, setQuiz] = useState<any>();
     const { qid } = useParams();
 
-
-    const onUpdateQuestionList = (questions: any[]) => {
-        setQuiz((prevQuiz: any) => ({
-            ...prevQuiz,
-            "questions": questions
-        }));
+    const saveQuiz = async (updatedQuiz: any) => {
+        try {
+            if (qid) {
+                await quizClient.updateQuiz(qid, updatedQuiz);
+                return qid;
+            } else {
+                const createdQuiz = await quizClient.createQuiz(updatedQuiz);
+                setQuiz(createdQuiz); 
+                return createdQuiz.id;
+            }
+        } catch (error) {
+            console.error("Error saving quiz:", error);
+        }
     };
-    const onUpdateQuizDetails = (details: Partial<typeof quiz>) => {
-        setQuiz((prevQuiz: any) => ({
-            ...prevQuiz,
+
+    const onUpdateQuestionList = async (questions: any[]) => {
+        const updatedQuiz = {
+            ...quiz,
+            questions,
+        };
+        setQuiz(updatedQuiz); 
+        return await saveQuiz(updatedQuiz); 
+        
+    };
+
+    const onUpdateQuizDetails = async (details: Partial<typeof quiz>) => {
+        const updatedQuiz = {
+            ...quiz,
             ...Object.fromEntries(Object.entries(details).filter(([_, v]) => v !== undefined)),
-        }));
+        };
+        setQuiz(updatedQuiz); 
+        return await saveQuiz(updatedQuiz); 
     };
 
     useEffect(
