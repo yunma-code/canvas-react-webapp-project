@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import QuizDetailsEditor from "./QuizDetailsEditor";
 import QuizQuestionsEditor from "./QuizQuestionsEditor";
-import { quizzes } from "../../../Database";
+import * as quizClient from "../client";
 import { useParams } from "react-router-dom";
 
 export default function QuizEditor() {
@@ -26,18 +26,19 @@ export default function QuizEditor() {
 
     useEffect(
         () => {
-            try {
-                const quiz = quizzes.find((quiz) => quiz.id === qid);
-                console.log("quiz:", quiz);
-                if (quiz) {
-                    setQuiz(quiz);
+            if(qid){
+                try {
+                    const quiz = quizClient.fetchQuizById(qid);
+                    console.log("quiz:", quiz);
+                    if (quiz) {
+                        setQuiz(quiz);
+                    }
+                } catch (error) {
+                    console.log(error);
                 }
-            } catch (error) {
-                console.log(error);
             }
 
-
-        }, [quiz]
+        }, []
     );
 
 
