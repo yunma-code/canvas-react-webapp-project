@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./Quiz.css";
@@ -18,6 +18,11 @@ const QuizDetails = () => {
   const handlePreview = () => {
     navigate(`${pathname}/preview`);
   };
+  useEffect(
+    ()=>{
+      console.log("inside quizDetails");
+    },[]
+  )
 
   return (
     <div className="quiz-details-container">
