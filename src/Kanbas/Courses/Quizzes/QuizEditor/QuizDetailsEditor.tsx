@@ -103,20 +103,11 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       setDescription(quiz.description)
       setTimeLimit(quiz.time_limit)
       setPublished(quiz.is_published)
-    } else {
-      //shoud not happen normally
-      console.log('quiz not exist,shoud not happen normally', qid)
-      const quiz = {
-        _id: qid || new Date().getTime().toString(),
-        course: cid,
-      };
-
     }
-
 
   }, [quiz]);
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!canEdit) return;  // prevent STUDENT from saving
     const quizDetails = {
       id,
@@ -150,14 +141,13 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-    onUpdateQuizDetails(quizDetails);
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+    const fetchedId =await onUpdateQuizDetails(quizDetails);
+    console.log(fetchedId);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 
   const handleSaveAndPublish = () => {
     handleSave();
-    // publish
-    navigate(`/Kanbas/Courses/${cid}/Quizzes`);
   };
 
   const handleCancel = () => {

@@ -12,7 +12,7 @@ export default function QuizQuestionsEditor({
     const [questions, setQuestions] = useState<any[]>([]);
     const [creatingNew, setCreatingNew] = useState<boolean>(false);
     const navigate = useNavigate();
-    const {cid, qid} = useParams();
+    const { cid, qid } = useParams();
 
     useEffect(() => {
         if (questionList) {
@@ -29,8 +29,13 @@ export default function QuizQuestionsEditor({
     };
 
     const handleCancel = () => {
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
-      };
+        if (qid) {
+            navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
+        }else{
+            navigate(`/Kanbas/Courses/${cid}/Quizzes`);
+        }
+
+    };
 
     const addNewQuestion = () => {
         const newQuestion = {
@@ -40,12 +45,13 @@ export default function QuizQuestionsEditor({
             options: [],
         };
         setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
-        setCreatingNew(true); 
+        setCreatingNew(true);
     };
 
     const handleSave = () => {
         if (questions && questions.length > 0) {
-            onUpdateQuestionList(questions);
+            const fetchedId = onUpdateQuestionList(questions);
+            navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
         } else {
             console.error("No questions to save.");
         }
