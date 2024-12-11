@@ -69,6 +69,10 @@ const quizzesSlice = createSlice({
       console.log("add quiz triggerd", newquiz)
       state.quizzes = [...state.quizzes, newquiz] as any;
     },
+    
+    addQuizzes: (state, { payload: quizzes }) => {
+      state.quizzes = quizzes;
+    },
 
     deleteQuiz: (state, { payload: quizId }) => {
       state.quizzes = state.quizzes.filter(
@@ -112,7 +116,7 @@ const quizzesSlice = createSlice({
 
 });
 
-export const { addQuiz, deleteQuiz, updateQuiz, editQuiz, publishQuiz } =
+export const { addQuiz,addQuizzes, deleteQuiz, updateQuiz, editQuiz, publishQuiz } =
   quizzesSlice.actions;
 export default quizzesSlice.reducer;
 
