@@ -10,7 +10,7 @@ const QuizDetails = () => {
   const { quizzes } = useSelector((state: any) => state.quizzesReducer);
   const quiz = quizzes.find((q: any) => q._id === quizId);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-  const hasEditAccess = currentUser.role === "FACULTY";
+  const hasEditAccess = (currentUser.role === "FACULTY" || currentUser.role === "ADMIN" || currentUser.role === "TA");
 
   const handleEdit = () => {
     navigate(`${pathname}/Edit`);
