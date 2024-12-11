@@ -16,6 +16,7 @@ export default function QuizEditor() {
                 await quizClient.updateQuiz(qid, updatedQuiz);
                 return qid;
             } else {
+                console.log("no qid");
                 const createdQuiz = await quizClient.createQuiz(updatedQuiz);
                 console.log("createdQuiz:", createdQuiz);
                 setQuiz(createdQuiz);
