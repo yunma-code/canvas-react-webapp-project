@@ -28,6 +28,7 @@
 - [ ] Delete -removes the quiz and stays in the Quiz List screen
 - [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish
 - [ ] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
+  - [ ] 等save publish
 - [ ] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
 - [ ] Clicking quiz title navigates to Quiz Details screen
 - [ ] Under the quiz title display

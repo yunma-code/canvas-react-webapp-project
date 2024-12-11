@@ -2,20 +2,52 @@ import { useEffect, useState } from "react";
 import { BsGripVertical, BsRocket } from "react-icons/bs";
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { deleteQuiz, publishQuiz } from "../reducer";
+import { addQuizzes, deleteQuiz, publishQuiz } from "../reducer";
 import QuizzesControls from "./QuizzesControls";
 import QuizControlButtons from "./QuizControlButtons";
-
+import * as quizzesClient from "../client";
 
 export default function Quizzes() {
+
+  type Quiz = {
+    _id: string;
+    id: string;
+		course?: string,
+		title?: string;
+		points_possible?: number,
+		quiz_type?: string,
+		assignment_group_id?: string,
+		assignment_group_type?: string,
+		shuffle_answers?: boolean,
+		allowed_attempts?: boolean,
+		attempts_number?: number,
+		show_correct_answers?: boolean,
+		one_question_at_a_time?: boolean,
+		has_access_code?: boolean,
+		require_lockdown_browser?: boolean,
+		cant_go_back?: boolean,
+		due_at?: string,
+		unlock_at?: string,
+		lock_at?: string,
+		description: string,
+		time_limit?: number,
+		questions?: Array<any>;
+		is_published?: boolean,
+		cid: string,
+  };
+
   const { cid } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
-  const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
-  const courseQuizzes = quizzes.filter(
-    (quiz: { course: string | undefined; }) => quiz.course === cid);
+  // Find the quizzes
+  const courseQuizzes: Quiz[] = useSelector((state: any) =>
+    state.quizzesReducer.quizzes.filter(
+      (quiz: Quiz) => quiz.course === cid
+    )
+  );
+  
 
   const handleEdit = (qid: string) => {
     console.log(`Editing Quiz ID: ${qid}`);
@@ -57,11 +89,20 @@ export default function Quizzes() {
     }
   };
 
-  useEffect(
-    () => {
-      console.log(courseQuizzes)
-    }, [courseQuizzes]
-  )
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      if (cid) {
+        try {
+          const fetchedQuizzes = await quizzesClient.fetchQuizzesForCourse(cid);
+          console.log("Fetched quizzes:", fetchedQuizzes); // debug log
+          dispatch(addQuizzes(fetchedQuizzes));
+        } catch (error) {
+          console.error("Error fetching quizzes:", error);
+        }
+      }
+    };
+    fetchQuizzes();
+  }, [cid, dispatch]);
 
   return (
     <div className="container">
@@ -86,12 +127,12 @@ export default function Quizzes() {
               <p className="text-muted fs-5">No quizzes found. Please click the "+ Quiz" button to create a new quiz.</p>
             </div>
           ) : (
+            // If quizzes exist
             <ul className="wd-quiz-details list-group rounded-0">
               {courseQuizzes.map((quiz: any) => (
                 <li
                   key={quiz.id}
                   className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
-
                 >
                   <div className="d-flex align-items-center">
                     <BsGripVertical className="me-3 fs-3" />
@@ -140,6 +181,7 @@ export default function Quizzes() {
               ))}
             </ul>
           )}
+
         </li>
       </ul>
     </div>
