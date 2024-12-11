@@ -107,7 +107,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   }, [quiz]);
 
-  const handleSave = () => {
+  const handleSave = async() => {
     if (!canEdit) return;  // prevent STUDENT from saving
     const quizDetails = {
       id,
@@ -141,7 +141,8 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-    const fetchedId = onUpdateQuizDetails(quizDetails);
+    const fetchedId =await onUpdateQuizDetails(quizDetails);
+    console.log(fetchedId);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 

@@ -18,6 +18,7 @@ export const deleteQuiz = async (quizId: string) => {
 
 export const createQuiz = async (quiz: any) => {
   const response = await axiosWithCredentials.post(QUIZZES_API, quiz);
+  console.log(response);
   return response.data;
 };
 

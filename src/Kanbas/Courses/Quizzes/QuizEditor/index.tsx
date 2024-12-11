@@ -17,7 +17,8 @@ export default function QuizEditor() {
                 return qid;
             } else {
                 const createdQuiz = await quizClient.createQuiz(updatedQuiz);
-                setQuiz(createdQuiz); 
+                console.log("createdQuiz:", createdQuiz);
+                setQuiz(createdQuiz);
                 return createdQuiz.id;
             }
         } catch (error) {
@@ -25,28 +26,31 @@ export default function QuizEditor() {
         }
     };
 
-    const onUpdateQuestionList = async (questions: any[]) => {
+    const onUpdateQuestionList = (questions: any[]) => {
         const updatedQuiz = {
             ...quiz,
             questions,
         };
-        setQuiz(updatedQuiz); 
-        return await saveQuiz(updatedQuiz); 
-        
+        setQuiz(updatedQuiz);
+        const id = saveQuiz(updatedQuiz);
+        return id;
+
     };
 
-    const onUpdateQuizDetails = async (details: Partial<typeof quiz>) => {
+    const onUpdateQuizDetails = (details: Partial<typeof quiz>) => {
         const updatedQuiz = {
             ...quiz,
             ...Object.fromEntries(Object.entries(details).filter(([_, v]) => v !== undefined)),
         };
-        setQuiz(updatedQuiz); 
-        return await saveQuiz(updatedQuiz); 
+        setQuiz(updatedQuiz);
+        const id = saveQuiz(updatedQuiz);
+        console.log("onupdatequestiondetail:",id)
+        return id;
     };
 
     useEffect(
         () => {
-            if(qid){
+            if (qid) {
                 try {
                     const quiz = quizClient.fetchQuizById(qid);
                     console.log("quiz:", quiz);
