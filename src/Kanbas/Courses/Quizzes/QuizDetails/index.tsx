@@ -15,13 +15,13 @@ export default function Quizzes() {
 
   const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const courseQuizzes = quizzes.filter(
-      (quiz: { course: string | undefined; }) => quiz.course === cid);
-      
+    (quiz: { course: string | undefined; }) => quiz.course === cid);
+
   const handleEdit = (qid: string) => {
     console.log(`Editing Quiz ID: ${qid}`);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);
   };
-  
+
   const handleDelete = (qid: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
       dispatch(deleteQuiz(qid));
@@ -58,7 +58,7 @@ export default function Quizzes() {
   };
 
   useEffect(
-    ()=>{
+    () => {
       console.log(courseQuizzes)
     }, [courseQuizzes]
   )
@@ -80,59 +80,66 @@ export default function Quizzes() {
             </div>
           </div>
 
-          <ul className="wd-quiz-details list-group rounded-0">
-            {courseQuizzes.map((quiz: any) => (
-              <li
-                key={quiz.id}
-                className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
+          {/* If no quizzes */}
+          {courseQuizzes.length === 0 ? (
+            <div className="p-4 text-center">
+              <p className="text-muted fs-5">No quizzes found. Please click the "+ Quiz" button to create a new quiz.</p>
+            </div>
+          ) : (
+            <ul className="wd-quiz-details list-group rounded-0">
+              {courseQuizzes.map((quiz: any) => (
+                <li
+                  key={quiz.id}
+                  className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
 
-              >
-                <div className="d-flex align-items-center">
-                  <BsGripVertical className="me-3 fs-3" />
-                  
-                  <BsRocket
-                    style={{ transform: "rotate(45deg)" }}
-                    className="me-4 text-success"
-                  />
+                >
+                  <div className="d-flex align-items-center">
+                    <BsGripVertical className="me-3 fs-3" />
 
-                  <div>
-                    <strong className="fs-4">
-                      <Link to={`./${quiz.id}`}> {quiz.title} </Link>
-                    </strong>
+                    <BsRocket
+                      style={{ transform: "rotate(45deg)" }}
+                      className="me-4 text-success"
+                    />
 
-                    <div className="text-muted">
-                      <span className="fw-bold">Availability:</span>{" "}
-                        {getAvailability(quiz)} | 
-                      <span className="fw-bold"> Due:</span>{" "}
-                      {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} | 
-                      <span className="fw-bold"> Points:</span> {quiz.points_possible} | 
-                      <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
-                      {currentUser.role === "STUDENT" && quiz.score !== undefined && (
-                        <>
-                          {" | "}
-                          <span className="fw-bold">Score:</span> {quiz.score}
-                        </>
-                      )}
+                    <div>
+                      <strong className="fs-4">
+                        <Link to={`./${quiz.id}`}> {quiz.title} </Link>
+                      </strong>
+
+                      <div className="text-muted">
+                        <span className="fw-bold">Availability:</span>{" "}
+                        {getAvailability(quiz)} |
+                        <span className="fw-bold"> Due:</span>{" "}
+                        {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} |
+                        <span className="fw-bold"> Points:</span> {quiz.points_possible} |
+                        <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
+                        {currentUser.role === "STUDENT" && quiz.score !== undefined && (
+                          <>
+                            {" | "}
+                            <span className="fw-bold">Score:</span> {quiz.score}
+                          </>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                
 
-                {/* Single Quiz Menu Button */}
-                <div className="d-flex align-items-center ms-auto">
-                  {currentUser?.role === "FACULTY" && (
-                     <QuizControlButtons
-                      quizId={quiz.id}
-                      onEdit={handleEdit}
-                      onDelete={handleDelete}
-                      onPublish={handlePublish}
-                      onCopy={handleCopy}
-                   />
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
+
+                  {/* Single Quiz Menu Button */}
+                  <div className="d-flex align-items-center ms-auto">
+                    {currentUser?.role === "FACULTY" && (
+                      <QuizControlButtons
+                        quizId={quiz.id}
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                        onPublish={handlePublish}
+                        onCopy={handleCopy}
+                      />
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </li>
       </ul>
     </div>

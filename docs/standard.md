@@ -8,20 +8,20 @@
 - [x] Clicking on a course navigates to the details of that course, with Course Navigation sidebar containing at least Quizzes link
 - [x] Clicking on Quizzes link navigates to Quizzes List Screen described later in this form
 - [ ] A different course has a different set of quizzes
-  - [ ] 待试验
+  - [ ] 等改完save才能看
 
 
 ### Courses Per User
-- [ ] Users only see courses they are associated with
-- [ ] Faculty only see courses they have created (or enrolled in)
-- [ ] Students only see courses they are enrolled in
-- [ ] Anyone can enroll into a course (Faculty or Student)
-- [ ] Faculty can edit course, but student can not
+- [x] Users only see courses they are associated with
+- [x] Faculty only see courses they have created (or enrolled in)
+- [x] Students only see courses they are enrolled in
+- [x] Anyone can enroll into a course (Faculty or Student)
+- [x] Faculty can edit course, but student can not
 
 
 ### Quizzes List Screen
 - [ ] Quizzes screen displays the quizzes for the current course
-- [ ] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz)To test, login as faculty, create a brand new course, quizzes list should be empty
+- [x] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz)To test, login as faculty, create a brand new course, quizzes list should be empty
 - [ ] Clicking Add Quiz button (+ Quiz) creates a new quiz with a default name andnavigates to Quiz Details screen for editing the quiz. Alternatively, it can navigate toQuiz Details Editor screen
 - [ ] Clicking the context menu button (3 dots) reveals the Quiz Context Menu withoptions listed below...
 - [ ] Edit - navigates to Quiz Details screen

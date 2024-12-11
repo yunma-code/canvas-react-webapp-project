@@ -20,26 +20,26 @@ type Question = {
 
 type Quiz = {
   course: String,
-		title: String,
-		points_possible: Number,
-		quiz_type: String,
-		assignment_group_id: String,
-		assignment_group_type: String,
-		shuffle_answers: Boolean,
-		allowed_attempts: Boolean,
-		attempts_number: Number,
-		show_correct_answers: Boolean,
-		one_question_at_a_time: Boolean,
-		has_access_code: Boolean,
-		require_lockdown_browser: Boolean,
-		cant_go_back: Boolean,
-		due_at: String,
-		unlock_at: String,
-		lock_at: String,
-		description: String,
-		time_limit: Number,
-		questions: Question[],
-		is_published: Boolean,
+  title: String,
+  points_possible: Number,
+  quiz_type: String,
+  assignment_group_id: String,
+  assignment_group_type: String,
+  shuffle_answers: Boolean,
+  allowed_attempts: Boolean,
+  attempts_number: Number,
+  show_correct_answers: Boolean,
+  one_question_at_a_time: Boolean,
+  has_access_code: Boolean,
+  require_lockdown_browser: Boolean,
+  cant_go_back: Boolean,
+  due_at: String,
+  unlock_at: String,
+  lock_at: String,
+  description: String,
+  time_limit: Number,
+  questions: Question[],
+  is_published: Boolean,
 };
 
 
@@ -61,7 +61,7 @@ const QuizPreview = () => {
       if (qid) {
         try {
           const fetchedQuiz = await quizClient.fetchQuizById(qid);
-          setQuiz(fetchedQuiz); 
+          setQuiz(fetchedQuiz);
           setQuizQuestions(fetchedQuiz.question);
         } catch (error) {
           console.error("Error fetching quiz: ", error);
@@ -81,7 +81,7 @@ const QuizPreview = () => {
 
 
   const handleNext = () => {
-    if (currentQuestionIndex < quizQuestions.length -1) {
+    if (currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -224,7 +224,7 @@ const QuizPreview = () => {
         <button
           className="btn btn-secondary"
           onClick={handleNext}
-          disabled={currentQuestionIndex === quizQuestions.length- 1}
+          disabled={currentQuestionIndex === quizQuestions.length - 1}
         >
           Next
         </button>
