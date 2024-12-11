@@ -116,3 +116,31 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .confirmation-dialog p {
   margin-bottom: 20px;
 }
+
+/* Profile css*/
+.profile-modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal-content h4 {
+  margin-bottom: 20px;
+}
+
