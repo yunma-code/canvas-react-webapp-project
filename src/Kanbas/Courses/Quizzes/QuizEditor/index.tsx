@@ -9,6 +9,8 @@ export default function QuizEditor() {
     const [isEditingDetails, setIsEditingDetails] = useState(true);
     const [quiz, setQuiz] = useState<any>();
     const { qid } = useParams();
+    const [isLoading, setIsLoading] = useState(true); // Determines if data is still loading
+    const [isNewQuiz, setIsNewQuiz] = useState(false); // Determines if we are creating a new quiz
 
     const saveQuiz = async (updatedQuiz: any) => {
         try {
@@ -45,26 +47,33 @@ export default function QuizEditor() {
         };
         setQuiz(updatedQuiz);
         const id = saveQuiz(updatedQuiz);
-        console.log("onupdatequestiondetail:",id)
+        console.log("onupdatequestiondetail:", id)
         return id;
     };
 
-    useEffect(
-        () => {
+    useEffect(() => {
+        const fetchQuiz = async () => {
             if (qid) {
                 try {
-                    const quiz = quizClient.fetchQuizById(qid);
-                    console.log("quiz:", quiz);
-                    if (quiz) {
-                        setQuiz(quiz);
-                    }
+                    const fetchedQuiz = await quizClient.fetchQuizById(qid);
+                    console.log("fetchedQuiz", fetchedQuiz);
+                    setQuiz(fetchedQuiz);
+                    setIsNewQuiz(false);
                 } catch (error) {
-                    console.log(error);
+                    console.error("Error fetching quiz:", error);
+                } finally {
+                    setIsLoading(false);
                 }
+            } else {
+                // Handle new quiz creation
+                setIsNewQuiz(true);
+                setIsLoading(false);
             }
+        };
 
-        }, []
-    );
+        fetchQuiz();
+    }, [qid]);
+
 
 
 
@@ -91,18 +100,23 @@ export default function QuizEditor() {
             </nav>
 
             {/* Tab Content */}
-            <div className="tab-content" id="content">
-                {isEditingDetails ? (
-                    <div className="tab-pane fade show active">
-                        <QuizDetailsEditor quiz={quiz} onUpdateQuizDetails={onUpdateQuizDetails} />
-                    </div>
+            <div className="tab-content">
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : isEditingDetails ? (
+                    <QuizDetailsEditor
+                        quiz={quiz}
+                        onUpdateQuizDetails={onUpdateQuizDetails}
+                    />
                 ) : (
-                    <div className="tab-pane fade show active">
-                        <QuizQuestionsEditor questionList={quiz?.questions} onUpdateQuestionList={onUpdateQuestionList} />
-                    </div>
+                    <QuizQuestionsEditor
+                        questionList={quiz?.questions || []}
+                        onUpdateQuestionList={onUpdateQuestionList}
+                    />
                 )}
             </div>
 
         </div>
-    )
+    );
+
 }

@@ -51,14 +51,25 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
   const [description, setDescription] = useState<string>("");
   const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>(false);
   const [timeLimit, setTimeLimit] = useState<number>(0);
-  const [published, setPublished] = useState(false);
+  const [isPublished, setIsPublished] = useState(false);
   const [assignTo, setAssignTo] = useState<string[]>();
   const readOnly = false;
+
+  const formatDateWithOffset = (date: Date) => {
+    if (!date) return null;
+
+    const offset = -date.getTimezoneOffset(); // 获取时区偏移（分钟）
+    const sign = offset >= 0 ? "+" : "-";
+    const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
+    const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
+
+    return `${date.toISOString().split(".")[0]}${sign}${hours}:${minutes}`;
+};
 
   useEffect(() => {
     // load quiz data if editing an existing quiz
     console.log(qid)
-    if (qid) {
+    if (qid && quiz) {
       setId(quiz.id)
       setCourse(quiz.course)
       setTitle(quiz.title)
@@ -97,12 +108,12 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       })
       setOneQuestionAtATime(quiz.one_question_at_a_time)
       setCantGoBack(quiz.cant_go_back)
-      setDueAt(new Date(quiz.due_at))
-      setUnlockAt(new Date(quiz.unlock_at))
-      setLockAt(new Date(quiz.lock_at))
+      setDueAt(quiz.due_at ? new Date(quiz.due_at) : null);
+      setUnlockAt(quiz.unlock_at ? new Date(quiz.unlock_at) : null);
+      setLockAt(quiz.lock_at ? new Date(quiz.lock_at) : null);
       setDescription(quiz.description)
       setTimeLimit(quiz.time_limit)
-      setPublished(quiz.is_published)
+      setIsPublished(quiz.is_published)
     }
 
   }, [quiz]);
@@ -124,12 +135,12 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       requireLockdownBrowser,
       webcamRequired,
       cantGoBack,
-      dueAt,
-      unlockAt,
-      lockAt,
+      due_at: dueAt ? formatDateWithOffset(dueAt) : null,
+      unlock_at: unlockAt ? formatDateWithOffset(unlockAt) : null,
+      lock_at: lockAt ? formatDateWithOffset(lockAt) : null,
       description,
       timeLimit,
-      published,
+      isPublished,
       assignTo,
     }
     console.log('quizDetails:', quizDetails)
