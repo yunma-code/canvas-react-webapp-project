@@ -2,9 +2,7 @@
 
 - [x] You can register. When you register you are automatically logged in and sent to your profile.
 - [x] You can login. When you login you are sent to your profile or landing page
-- [ ] In your profile, you can edit your information
-  - [ ] 缺少update逻辑
-  - [ ] 注意profile的日期问题
+- [x] In your profile, you can edit your information
 - [x] Clicking on the dashboard, you only see the courses for the currently logged in user. At least one course
   - [ ] 课程的图片现在无法显示，images是否要放到node？
 - [x] Clicking on a course navigates to the details of that course, with Course Navigation sidebar containing at least Quizzes link

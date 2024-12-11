@@ -78,6 +78,11 @@ export const updateRole = async (userId: string, role: string) => {
   return response.data;
 };
 
+export const updateDob = async (userId: string, dob: Date) => {
+  const response = await axiosWithCredentials.put(`${USERS_API}/${userId}`, {dob});
+  return response.data;
+};
+
 export const createUser = async (user: any) => {
   const response = await axios.post(`${USERS_API}`, user);
   return response.data;

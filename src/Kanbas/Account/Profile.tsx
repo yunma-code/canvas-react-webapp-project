@@ -50,21 +50,28 @@ export default function Profile() {
             placeholder="Last Name" className="form-control mb-2"
             onChange={(e) => setProfile({ ...profile, lastName: e.target.value })} />
 
-          <input defaultValue={profile.dob} id="wd-dob" type="date"
+          <input
+            defaultValue={profile.dob ? profile.dob.split('T')[0] : ''}
+            id="wd-dob" type="Date"
             className="form-control mb-2"
             onChange={(e) => setProfile({ ...profile, dob: e.target.value })} />
 
           <input defaultValue={profile.email} id="wd-email"
             type="email" className="form-control mb-2"
             onChange={(e) => setProfile({ ...profile, email: e.target.value })} />
-          <select onChange={(e) => setProfile({ ...profile, role: e.target.value })}
-            id="wd-role" className="form-control mb-2">
-            <option value="USER">User</option>
-            <option value="ADMIN">Admin</option>
-            <option value="FACULTY">Faculty</option>
+
+          <select
+            value={profile.role}
+            onChange={(e) => setProfile({ ...profile, role: e.target.value })}
+            id="wd-role"
+            className="form-control mb-2"
+          >
             <option value="STUDENT">Student</option>
+            <option value="FACULTY">Faculty</option>
+            <option value="ADMIN">Admin</option>
+            <option value="USER">User</option>
           </select>
-          
+
           <div>
             <button onClick={updateProfile} className="btn btn-primary w-100 mb-2">
               Update
