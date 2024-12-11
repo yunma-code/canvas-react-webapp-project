@@ -26,11 +26,13 @@ export const fetchQuizzesForCourse = async (cid: any) => {
 	if (!cid) {
     throw new Error("courseId is required");
   }
-	//console.log("Fetching quizzes for courseId:", courseId);
+	// console.log("Fetching quizzes in client for cid:", cid);
   const response = await axiosWithCredentials.get(`${COURSE_API}/${cid}/quizzes`);
-	//console.log("fetched quizzes: ", response.data);
+	// console.log("fetched quizzes: ", response.data);
   return response.data;
 };
+
+
 
 export const fetchQuizById = async (quizId: string) => {
   if (!quizId) {
