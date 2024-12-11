@@ -142,7 +142,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       dispatch(addQuiz(quizDetails));
     }
     const fetchedId =await onUpdateQuizDetails(quizDetails);
-    console.log(fetchedId);
+    console.log("fetchedId:",fetchedId);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 

@@ -5,7 +5,7 @@ const initialState = {
   quizzes: quizzes,
 };
 export type QuizT = {
-  id: any;
+  id: String,
   course: String,
   title: String,
   points_possible: Number,
@@ -30,10 +30,10 @@ export type QuizT = {
 
 }
 export type QuestionT = {
-  id: string;
-  question_text: string;
-  question_type: string;
-  options: any;
+  id: string,
+  question_text: string,
+  question_type: string,
+  options: any,
 }
 const quizzesSlice = createSlice({
   name: "quizzes",
