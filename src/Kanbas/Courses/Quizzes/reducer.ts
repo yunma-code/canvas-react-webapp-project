@@ -62,7 +62,7 @@ const quizzesSlice = createSlice({
         lock_at: quiz.lock_at,
         description: quiz.description,
         time_limit: quiz.time_limit,
-        questions: quiz.quesions,
+        questions: quiz.questions,
         is_published: quiz.is_published,
 
       };

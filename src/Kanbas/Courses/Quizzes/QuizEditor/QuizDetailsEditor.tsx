@@ -114,7 +114,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       setTimeLimit(quiz.time_limit)
       setIsPublished(!quiz.is_published);
     }
-  }, [quiz]);
+  }, []);
 
   const handleSave = async() => {
     if (!canEdit) return;  // prevent STUDENT from saving
@@ -193,6 +193,10 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
     console.log("Published quiz ID:", fetchedId);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
+
+  const handleAssignTo = (input: string) => {
+    setAssignTo(input);
+  }
 
   const handleCancel = () => {
     navigate(`/Kanbas/Courses/${cid}/Quizzes`);
@@ -306,7 +310,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                 {haveTimeLimit && <>
                   <input type="number" className="col-2 ms-4 me-2"
                     value={timeLimit}
-                    onChange={(e) => e.target.value} />
+                    onChange={(e) => setTimeLimit(Number(e.target.value))} />
                   Minutes
                 </>
                 }
@@ -319,7 +323,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                     <>
                       <input type="number" className="col-2 ms-4 me-1"
                         value={multipleAttempts}
-                        onChange={(e) => e.target.value} />
+                        onChange={(e) => setMultipleAttempts(Number(e.target.value))} />
                       Attempts
                     </>
                   }
@@ -446,7 +450,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
 
                     <label id="wd-assign-to" className="form-label">Assign to</label>
-                    <select id="wd-assign-to" className="form-select" value={assignTo} onChange={(e) => console.log(e.target.value)}>
+                    <select id="wd-assign-to" className="form-select" value={assignTo} onChange={(e) => handleAssignTo(e.target.value)}>
                       <option value="EVERYONE">Everyone</option>
                       <option value="SELECTED">Selected Students</option>
                     </select>

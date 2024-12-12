@@ -3,6 +3,8 @@ import axios from "axios";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSE_API = `${REMOTE_SERVER}/api/courses`;
 const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
+const ATTEMPTS_API = `${REMOTE_SERVER}/api/quizzes/attempts`;
+console.log("ATTEMPTS_API: ", ATTEMPTS_API);
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
@@ -41,11 +43,40 @@ export const fetchQuizById = async (quizId: string) => {
   return response.data;
 };
 
+
+export const updateAttemptForQuiz = async (attemptId: any, attemptUpdates: any) => {
+  try {
+    const response = await axiosWithCredentials.put(`${ATTEMPTS_API}/${attemptId}`, attemptUpdates);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating attempt:", error);
+    throw error;
+  }
+};
+
+export const fetchAttemptForQuiz = async (quizId: string) => {
+  if (!quizId) {
+    throw new Error("quizId is required");
+  }
+  console.log("fetching attempt for quiz: ", quizId);
+  const response = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/attempt`);
+  console.log("fetched attempt: ", response.data);
+  return response.data;
+};
+
+export const createAttempt = async (attempt: any) => {
+  if (!attempt || !attempt.quiz ) {
+    throw new Error("Attempt data with quiz id is required");
+  }
+  attempt.current_attempt = 1;
+  const response = await axiosWithCredentials.post(`${ATTEMPTS_API}`, attempt);
+  return response.data;
+}
+
 export const togglePublishQuiz = async (quizId: string, is_published: boolean) => {
   const response = await axiosWithCredentials.patch(`${QUIZZES_API}/${quizId}`, {
     is_published: is_published,
   });
   return response.data;
 };
-
 
