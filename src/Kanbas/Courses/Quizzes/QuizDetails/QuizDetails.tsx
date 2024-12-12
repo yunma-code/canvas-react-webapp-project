@@ -83,7 +83,7 @@ const QuizDetails = () => {
       // await updateAttemptForQuiz(quiz.id, currentAttempt);
 
       setCurrentAttempt(updatedAttempt);
-      navigate(`/quiz/${qid}/attempt`, {state: currentAttempt});
+      navigate(`attempt`, {state: currentAttempt});
     } catch (error) {
       console.error("Failed to update attempt:", error);
       alert("An error occurred while starting the quiz. Please try again later.");
