@@ -12,28 +12,28 @@ export default function Quizzes() {
   type Quiz = {
     _id: string;
     id: string;
-		course?: string,
-		title?: string;
-		points_possible?: number,
-		quiz_type?: string,
-		assignment_group_id?: string,
-		assignment_group_type?: string,
-		shuffle_answers?: boolean,
-		allowed_attempts?: boolean,
-		attempts_number?: number,
-		show_correct_answers?: boolean,
-		one_question_at_a_time?: boolean,
-		has_access_code?: boolean,
-		require_lockdown_browser?: boolean,
-		cant_go_back?: boolean,
-		due_at?: string,
-		unlock_at?: string,
-		lock_at?: string,
-		description: string,
-		time_limit?: number,
-		questions?: Array<any>;
-		is_published?: boolean,
-		cid: string,
+    course?: string,
+    title?: string;
+    points_possible?: number,
+    quiz_type?: string,
+    assignment_group_id?: string,
+    assignment_group_type?: string,
+    shuffle_answers?: boolean,
+    allowed_attempts?: boolean,
+    attempts_number?: number,
+    show_correct_answers?: boolean,
+    one_question_at_a_time?: boolean,
+    has_access_code?: boolean,
+    require_lockdown_browser?: boolean,
+    cant_go_back?: boolean,
+    due_at?: string,
+    unlock_at?: string,
+    lock_at?: string,
+    description: string,
+    time_limit?: number,
+    questions?: Array<any>;
+    is_published?: boolean,
+    cid: string,
   };
 
   const { cid } = useParams();
@@ -48,15 +48,14 @@ export default function Quizzes() {
     )
   );
 
-  
-  
   const handleEdit = (qid: string) => {
     console.log(`Editing Quiz ID: ${qid}`);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);
   };
 
-  const handleDelete = (qid: any) => {
+  const handleDelete = async (qid: any) => {
     if (window.confirm("Are you sure you want to delete this quiz?")) {
+      await quizzesClient.deleteQuiz(qid);
       dispatch(deleteQuiz(qid));
     }
   };
@@ -67,12 +66,15 @@ export default function Quizzes() {
       console.error(`Quiz with ID ${qid} not found.`);
       return;
     }
-    try {
-      await quizzesClient.togglePublishQuiz(qid, !quiz.is_published);
-      dispatch(publishQuiz(qid));
-    } catch (error) {
-      console.error("Error toggling publish state:", error);
-    }
+    dispatch(
+      addQuizzes(
+        courseQuizzes.map((q) =>
+          q.id === qid ? { ...q, is_published: !q.is_published } : q
+        )
+      )
+    );
+    await quizzesClient.togglePublishQuiz(qid, !quiz.is_published);
+
   };
 
   const handleCopy = (qid: string) => {
@@ -130,61 +132,73 @@ export default function Quizzes() {
           {/* If no quizzes */}
           {courseQuizzes.length === 0 ? (
             <div className="p-4 text-center">
-              <p className="text-muted fs-5">No quizzes found. Please click the "+ Quiz" button to create a new quiz.</p>
+              {currentUser.role === "STUDENT" ? (
+                <p className="text-muted fs-5">No quizzes found. Please wait for the teacher to publish assignments.</p>
+              ) : (
+                <p className="text-muted fs-5">No quizzes found. Please click the "+ Quiz" button to create a new quiz.</p>
+              )}
             </div>
           ) : (
             // If quizzes exist
             <ul className="wd-quiz-details list-group rounded-0">
-              {courseQuizzes.map((quiz: any) => (
-                <li
-                  key={quiz.id}
-                  className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
-                >
-                  <div className="d-flex align-items-center">
-                    <BsGripVertical className="me-3 fs-3" />
+              {courseQuizzes
+                .filter((quiz: any) => {
+                  // If current role = student and is not published
+                  if (currentUser.role === "STUDENT" && !quiz.is_published) {
+                    return false;
+                  }
+                  return true;
+                })
+                .map((quiz: any) => (
+                  <li
+                    key={quiz.id}
+                    className="wd-detail list-group-item d-flex justify-content-between align-items-center p-3 ps-1"
+                  >
+                    <div className="d-flex align-items-center">
+                      <BsGripVertical className="me-3 fs-3" />
 
-                    <BsRocket
-                      style={{ transform: "rotate(45deg)" }}
-                      className="me-4 text-success"
-                    />
+                      <BsRocket
+                        style={{ transform: "rotate(45deg)" }}
+                        className="me-4 text-success"
+                      />
 
-                    <div>
-                      <strong className="fs-4">
-                        <Link to={`./${quiz.id}`}> {quiz.title} </Link>
-                      </strong>
+                      <div>
+                        <strong className="fs-4">
+                          <Link to={`./${quiz.id}`}> {quiz.title} </Link>
+                        </strong>
 
-                      <div className="text-muted">
-                        <span className="fw-bold">Availability:</span>{" "}
-                        {getAvailability(quiz)} |
-                        <span className="fw-bold"> Due:</span>{" "}
-                        {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} |
-                        <span className="fw-bold"> Points:</span> {quiz.points_possible} |
-                        <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
-                        {currentUser.role === "STUDENT" && quiz.score !== undefined && (
-                          <>
-                            {" | "}
-                            <span className="fw-bold">Score:</span> {quiz.score}
-                          </>
-                        )}
+                        <div className="text-muted">
+                          <span className="fw-bold">Availability:</span>{" "}
+                          {getAvailability(quiz)} |
+                          <span className="fw-bold"> Due:</span>{" "}
+                          {quiz.due_at ? new Date(quiz.due_at).toLocaleString() : "N/A"} |
+                          <span className="fw-bold"> Points:</span> {quiz.points_possible} |
+                          <span className="fw-bold"> Questions:</span> {quiz.questions?.length || 0}
+                          {currentUser.role === "STUDENT" && quiz.score !== undefined && (
+                            <>
+                              {" | "}
+                              <span className="fw-bold">Score:</span> {quiz.score}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
 
-                  {/* Single Quiz Menu Button */}
-                  <div className="d-flex align-items-center ms-auto">
-                    {currentUser?.role === "FACULTY" && (
-                      <QuizControlButtons
-                        quizId={quiz.id}
-                        onEdit={handleEdit}
-                        onDelete={handleDelete}
-                        onPublish={handlePublish}
-                        onCopy={handleCopy}
-                      />
-                    )}
-                  </div>
-                </li>
-              ))}
+                    {/* Single Quiz Menu Button */}
+                    <div className="d-flex align-items-center ms-auto">
+                      {currentUser?.role === "FACULTY" && (
+                        <QuizControlButtons
+                          quizId={quiz.id}
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                          onPublish={handlePublish}
+                          onCopy={handleCopy}
+                        />
+                      )}
+                    </div>
+                  </li>
+                ))}
             </ul>
           )}
 

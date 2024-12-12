@@ -25,12 +25,9 @@
 - [x] Clicking the context menu button (3 dots) reveals the Quiz Context Menu with options listed below...
   - [x] Edit - navigates to Quiz Details screen
   - [x] Delete - removes the quiz and stays in the Quiz List screen
-  - [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish 
-      【等待Save按钮】
-- [ ] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
-      【等待Save按钮】
-- [ ] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
-      【做一个protect，如果检测到是学生/非falculty，并且该quiz.is_publish = false, 则不应显示】
+  - [x] Publish - publishes the quiz and option becomes Unpublish so you can unpublish 
+- [x] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
+- [x] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
 - [x] Clicking quiz title navigates to Quiz Details screen
 - [ ] Under the quiz title display
   - [x] Availability
