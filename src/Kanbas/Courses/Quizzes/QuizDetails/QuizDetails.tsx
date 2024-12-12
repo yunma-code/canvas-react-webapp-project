@@ -128,10 +128,15 @@ const QuizDetails = () => {
   // Set error modal
   const [showErrorModal, setShowErrorModal] = useState(false);
   useEffect(() => {
-    if (currentAttempt && quiz && (quiz.attempts_number - currentAttempt.current_attempt) <= 0) {
+    if (
+      currentUser?.role === "STUDENT" &&
+      currentAttempt &&
+      quiz &&
+      (quiz.attempts_number - currentAttempt.current_attempt) <= 0
+    ) {
       setShowErrorModal(true);
     }
-  }, [quiz, currentAttempt]);
+  }, [quiz, currentAttempt, currentUser]);
   const handleCloseModal = () => { setShowErrorModal(false); };
 
   return (
