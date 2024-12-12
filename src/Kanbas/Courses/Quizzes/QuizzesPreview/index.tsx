@@ -59,29 +59,31 @@ const QuizPreview = () => {
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
   useEffect(() => {
-
     const fetchQuizzes = async () => {
       if (qid) {
+        setIsLoading(true);
         try {
           const fetchedQuiz = await quizClient.fetchQuizById(qid);
           setQuiz(fetchedQuiz);
-          setQuizQuestions(fetchedQuiz.question);
+          setQuizQuestions(fetchedQuiz.questions);
+
+          // Initialize answers for the attempt
+          const newAnswers = fetchedQuiz.questions.map((q: any) => ({
+            id: q.id,
+            answer: null,
+          }));
+          setCurrentAttempt({ ...currentAttempt, answers: newAnswers });
         } catch (error) {
           console.error("Error fetching quiz: ", error);
         } finally {
           setIsLoading(false);
         }
-      } else {
-        // return (
-        //   <div className="alert alert-danger" role="alert">
-        //     Quiz not found!
-        //   </div>
-        // );
-        setIsLoading(true);
       }
     };
+
     fetchQuizzes();
-  }, [qid]);
+  }, [qid]); // Include `qid` in dependencies
+
 
   const currentQuestion = quiz?.questions[currentQuestionIndex];
 
@@ -105,6 +107,7 @@ const QuizPreview = () => {
   //id: question id, means which question
   //answer: should be the answer of a specific question
   const handleUpdateAttempt = (id: string, answer: any) => {
+    console.log("attempt", attempt)
     // Create a new array to avoid mutating state directly
     const updatedAnswers = attempt.answers.map((a: any) =>
       a.id === id ? { ...a, answer } : a
@@ -188,8 +191,10 @@ const QuizPreview = () => {
                         name={`question${currentQuestionIndex}`}
                         id={`option${option.id}`}
                         value={option.answer_text}
-                        checked={currentAttempt.answers.findOne((a: any)=>a.id === currentQuestion.id).answer === option.id}
-                        onChange={() =>handleUpdateAttempt(currentQuestion.id, option.id)}
+                        checked={
+                          currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === option.id
+                        }
+                        onChange={() => handleUpdateAttempt(currentQuestion.id, option.id)}
                       />
                       <label className="form-check-label" htmlFor={`option${option.id}`}>
                         {option.answer_text}
