@@ -75,36 +75,36 @@ const QuizDetails = () => {
 
 
   const handleStart = async () => {
-      if(currentUser.role === "STUDENT"){
-        //push attempt to remote, also reduce attempt_left
-        if (!currentAttempt) {
-          alert("No current attempt found. Please reload the page.");
-          return;
-        }
-
-        if (currentAttempt.current_attempt === quiz.attempt_number) {
-          alert(`You have exceeded the maximum number of attempts (${quiz?.attempt_number}).`);
-          return;
-        }
-        try {
-          const updatedAttempt = {
-            ...currentAttempt,
-            current_attempt: currentAttempt.current_attempt + 1
-          }
-          // await updateAttemptForQuiz(quiz.id, currentAttempt);
-  
-          setCurrentAttempt(updatedAttempt);
-          console.log(updatedAttempt)
-          navigate(`attempt`, { state: { attempt: updatedAttempt } });
-        } catch (error) {
-          console.error("Failed to update attempt:", error);
-          alert("An error occurred while starting the quiz. Please try again later.");
-        }
-      } else {
-        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview`);
+    if (currentUser.role === "STUDENT") {
+      //push attempt to remote, also reduce attempt_left
+      if (!currentAttempt) {
+        alert("No current attempt found. Please reload the page.");
+        return;
       }
 
-      
+      if (currentAttempt.current_attempt === quiz.attempt_number) {
+        alert(`You have exceeded the maximum number of attempts (${quiz?.attempt_number}).`);
+        return;
+      }
+      try {
+        const updatedAttempt = {
+          ...currentAttempt,
+          current_attempt: currentAttempt.current_attempt + 1
+        }
+        // await updateAttemptForQuiz(quiz.id, currentAttempt);
+
+        setCurrentAttempt(updatedAttempt);
+        console.log(updatedAttempt)
+        navigate(`attempt`, { state: { attempt: updatedAttempt } });
+      } catch (error) {
+        console.error("Failed to update attempt:", error);
+        alert("An error occurred while starting the quiz. Please try again later.");
+      }
+    } else {
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview`);
+    }
+
+
   };
 
   const handleViewLastAttempt = () => {
@@ -125,6 +125,15 @@ const QuizDetails = () => {
   const handleEdit = () => navigate(`${pathname}/Edit`);
   const handlePreview = () => navigate(`${pathname}/preview`);
 
+  // Set error modal
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  useEffect(() => {
+    if (currentAttempt && quiz && (quiz.attempts_number - currentAttempt.current_attempt) <= 0) {
+      setShowErrorModal(true);
+    }
+  }, [quiz, currentAttempt]);
+  const handleCloseModal = () => { setShowErrorModal(false); };
+
   return (
     <div>
       {isLoading ?
@@ -141,9 +150,21 @@ const QuizDetails = () => {
           }
 
           <hr />
-          <div className="quiz-header">
-            <h2>{quiz?.title || "Quiz Title"}</h2>
+          <div className="quiz-header-container">
+            <h2 className="quiz-header-title">{quiz?.title || "Quiz Title"}</h2>
+            {currentAttempt && currentAttempt.current_attempt > 0 && (
+              <button
+                className="btn quiz-header-view-attempt-btn"
+                onClick={handleViewLastAttempt}
+              >
+                View Last Attempt
+              </button>
+            )}
           </div>
+
+          {/* <div className="quiz-header">
+            <h2>{quiz?.title || "Quiz Title"}</h2>
+          </div> */}
 
           <hr className="divider" />
           <div className="quiz-details">
@@ -208,30 +229,38 @@ const QuizDetails = () => {
                 <span>{quiz?.lock_at ? new Date(quiz.lock_at).toLocaleString() : "N/A"}</span>
               </div>
             </div>
-            {/* start quiz button if still have attempt */}
-            <div>
-              {currentAttempt  && (
-                (quiz.attempts_number - currentAttempt.current_attempt) > 0 ? (
-                  <button className="btn" onClick={handleStart}>
-                    Start Quiz
-                  </button>
-                ) : (
-                  <p className="error-message">
-                    You have reached the maximum number of attempts for this quiz.
-                  </p>
-                )
-              )}
-            </div>
-            {/* show previous attempt results*/}
 
-            {currentAttempt && currentAttempt.current_attempt > 0 && (
+            {/* Start quiz button or error modal */}
+            {currentAttempt && (
+              (quiz.attempts_number - currentAttempt.current_attempt) > 0 ? (
+                <button className="btn" onClick={handleStart}>
+                  Start Quiz
+                </button>
+              ) : (
+                showErrorModal && (
+                  <div
+                    className="error-modal-overlay"
+                    onClick={handleCloseModal}
+                  >
+                    <div className="error-modal-content">
+                      <p className="error-modal-message">
+                        You have reached the maximum number of attempts for this quiz.
+                      </p>
+                    </div>
+                  </div>
+                )
+              )
+            )}
+
+
+            {/* show previous attempt results*/}
+            {/* {currentAttempt && currentAttempt.current_attempt > 0 && (
               <div>
                 <button className="btn" onClick={handleViewLastAttempt}>
                   View last attempt
                 </button>
-
               </div>
-            )}
+            )} */}
 
           </div>
         </div>}
