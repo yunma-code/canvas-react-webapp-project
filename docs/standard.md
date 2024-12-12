@@ -25,27 +25,25 @@
 - [x] Clicking the context menu button (3 dots) reveals the Quiz Context Menu with options listed below...
   - [x] Edit - navigates to Quiz Details screen
   - [x] Delete - removes the quiz and stays in the Quiz List screen
-  - [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish 
-      【等待Save按钮】
-- [ ] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
-      【等待Save按钮】
-- [ ] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
-      【做一个protect，如果检测到是学生/非falculty，并且该quiz.is_publish = false, 则不应显示】
+  - [x] Publish - publishes the quiz and option becomes Unpublish so you can unpublish 
+- [x] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
+- [x] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
 - [x] Clicking quiz title navigates to Quiz Details screen
 - [ ] Under the quiz title display
-  - [ ] Availability
+  - [x] Availability
   - Closed-if current date is after quizzes Available Date
   - Available -if current date is between Available Date and Available Until Date
   - Not available until < AVAILABLE DATE > - if current date is before the Available Date
   - [ ] 
       Due date, Points, Number of questions,
-      Score - if the current user is a student, the score from the last attempt is showr
+      Score - if the current user is a student, the score from the last attempt is show
+    【加上student的score】
 
 ### Quiz Details Screen
 Implement a Quizzes Details screen as described below with only following propertiesIgnore other properties
 【加两个button，start和last submition】
-- [ ] Displays summary of quiz properties
-- [ ] Quiz Type - Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded surveyPoints - the sum of the points of all questions in the quizAssignment Group-Quizzes (default), Exams,  Assignments, Project
+- [x] Displays summary of quiz properties
+- [x] Quiz Type - Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded surveyPoints - the sum of the points of all questions in the quizAssignment Group-Quizzes (default), Exams,  Assignments, Project
 Shuffle Answers- Yes (default) / NoTime Limit -20 Minutes (default)
 - [ ] Multiple Attempts-No (default)/ YesHow Many Attempts -1 (default). lf Multiple Attempts is Yes, then can configure
 how many times the student can retake the quiz
@@ -91,7 +89,7 @@ The Quiz Editor screen allows faculty to edit the meta data for a quiz. lmplemen
 - [ ] Can editQuiz Type- Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded SurveyPoints - the sum of the points of all guestions in the quiz
 Assignment Group-Quizzes (default),Exams, Assignments, Project
 Shuffle Answers - Yes (default) / No
-Time Limit -20 Minutes (default)
+Time Limit - 20 Minutes (default)
 
 - [ ] Points shows sum of all the points of each question.
 - [ ] Clicking Cancel button dismisses the edits

@@ -33,7 +33,6 @@ export const fetchQuizzesForCourse = async (cid: any) => {
 };
 
 
-
 export const fetchQuizById = async (quizId: string) => {
   if (!quizId) {
     throw new Error("quizId is required");
@@ -41,3 +40,12 @@ export const fetchQuizById = async (quizId: string) => {
   const response = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}`);
   return response.data;
 };
+
+export const togglePublishQuiz = async (quizId: string, is_published: boolean) => {
+  const response = await axiosWithCredentials.patch(`${QUIZZES_API}/${quizId}`, {
+    is_published: is_published,
+  });
+  return response.data;
+};
+
+
