@@ -28,10 +28,11 @@ export default function QuizQuestionsEditor({
         onUpdateQuestionList(newQuestionList);
     };
 
-    const onDeleteQuestion = (updatedQuestion: any) => {
+    const onDeleteQuestion = (id: string) => {
+        console.log("id:", id)
         const newQuestionList =
             questionList.filter((q) =>
-                q.id !== updatedQuestion.id
+                q.id !== id
             );
         console.log("newQuestionList:", newQuestionList)
         onUpdateQuestionList(newQuestionList);
@@ -78,19 +79,11 @@ export default function QuizQuestionsEditor({
                     />
                 ))}
 
-                {creatingNew ? (
-                    <QuestionEditor
-                        question={questionList[questionList.length - 1]}
-                        onUpdate={onUpdateQuestion}
-                        onDelete={onDeleteQuestion}
-                    />
-                ) : (
-                    <div className="d-flex flex-column align-items-end">
-                        <button className="btn btn-danger mt-4" onClick={addNewQuestion}>
-                            Add Question
-                        </button>
-                    </div>
-                )}
+                <div className="d-flex flex-column align-items-center">
+                    <button className="btn btn-outline-secondary mt-4" onClick={addNewQuestion}>
+                        + Add Question
+                    </button>
+                </div>
             </div>
 
             <div className="mt-4">
