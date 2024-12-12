@@ -81,7 +81,7 @@ const QuizPreview = () => {
 
 
   const handleNext = () => {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
+    if (!Array.isArray(quizQuestions) || currentQuestionIndex < quizQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -110,6 +110,8 @@ const QuizPreview = () => {
         if (userAnswer === String(question.answer)) {
           score++;
         }
+      // }else if(question.question_type === "fill_in_blank" && question.answer !== undefined) {
+      //   if (userAnswer)
       }
     });
     return score;
@@ -224,7 +226,7 @@ const QuizPreview = () => {
         <button
           className="btn btn-secondary"
           onClick={handleNext}
-          disabled={currentQuestionIndex === quizQuestions.length - 1}
+          disabled={currentQuestionIndex === quizQuestions?.length - 1}
         >
           Next
         </button>
