@@ -1,4 +1,4 @@
-export default[{
+export default [{
 	"id": "1",
 	"course": "RS101",
 	"title": "HTML Quiz",
@@ -18,13 +18,14 @@ export default[{
 	"unlock_at": "2024-09-16T00:00:00-04:00",
 	"lock_at": "2024-09-20T23:59:00-04:00",
 
-	"description": "<p>An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.</p>",
+	"description": "<p>An HTML label element can be associated with an HTML input element by setting their id attributes to the same value.</p>",
 	"time_limit": 15,
 	"published": true,
 	"questions": [{
 		"id": "1",
-
-		"question_text": "What does HTML stand for?",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>What does HTML stand for?</p>",
 		"question_type": "multiple_choice",
 		"options": [
 			{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
@@ -35,7 +36,9 @@ export default[{
 	},
 	{
 		"id": "2",
-		"question_text": "Which tag is used to define a hyperlink in HTML?",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>Which tag is used to define a hyperlink in HTML?</p>",
 		"question_type": "multiple_choice",
 		"options": [
 			{ "id": "1", "answer_text": "<link>", "is_correct": false },
@@ -46,17 +49,33 @@ export default[{
 	},
 	{
 		"id": "3",
-		"question_text": "The <title> element specifies a title for the HTML document that appears in the browser's title bar or tab.",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>The &lt;title&gt; element specifies a title for the HTML document that appears in the browser's title bar or tab.</p>",
 		"question_type": "true_false",
 		"answer": false
 	},
 	{
 		"id": "4",
-		"question_text": "The <div> tag is used to create hyperlinks in HTML.",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>The &lt;div&gt; tag is used to create hyperlinks in HTML.</p>",
 		"question_type": "true_false",
 		"answer": false
+	},{
+		"id": "5",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>Which tag is used to define a hyperlink in HTML?</p>",
+		"question_type": "fill_in_blank",
+		"options": [
+			{ "id": "1", "answer_text": "<link>", "is_correct": false },
+			{ "id": "2", "answer_text": "<a>", "is_correct": true },
+			{ "id": "3", "answer_text": "<href>", "is_correct": false },
+			{ "id": "4", "answer_text": "<hyperlink>", "is_correct": false }
+		]
 	}
-]
+	]
 },
 {
 	"id": "2",
@@ -79,11 +98,12 @@ export default[{
 	"lock_at": "2024-09-20T23:59:00-04:00",
 	"description": "An HTML label element can be associated with  an HTML input element by setting their id attributes to the same value.",
 	"time_limit": 15,
-	"published": true,
+	"is_published": true,
 	"questions": [{
 		"id": "1",
-
-		"question_text": "What does HTML stand for?",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>What does HTML stand for?</p>",
 		"question_type": "multiple_choice",
 		"options": [
 			{ "id": "1", "answer_text": "HyperText Markup Language", "is_correct": true },
@@ -94,7 +114,9 @@ export default[{
 	},
 	{
 		"id": "2",
-		"question_text": "Which tag is used to define a hyperlink in HTML?",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>Which tag is used to define a hyperlink in HTML?</p>",
 		"question_type": "multiple_choice",
 		"options": [
 			{ "id": "1", "answer_text": "<link>", "is_correct": false },
@@ -105,13 +127,17 @@ export default[{
 	},
 	{
 		"id": "3",
-		"question_text": "The <title> element specifies a title for the HTML document that appears in the browser's title bar or tab.",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>The &lt;title&gt; element specifies a title for the HTML document that appears in the browser's title bar or tab.</p>",
 		"question_type": "true_false",
 		"answer": true
 	},
 	{
 		"id": "4",
-		"question_text": "The <div> tag is used to create hyperlinks in HTML.",
+		"question_title": "",
+		"pts": 0,
+		"question_text": "<p>The &lt;div&gt; tag is used to create hyperlinks in HTML.</p>",
 		"question_type": "true_false",
 		"answer": false
 	}]
@@ -138,7 +164,7 @@ export default[{
 // 	"due_at": "2024-09-20T23:59:00-04:00",
 // 	"lock_at": "2024-09-20T23:59:00-04:00",
 // 	"unlock_at": "2024-09-16T00:00:00-04:00",
-// 	"published": true,
+// 	"is_published": true,
 // 	"hide_results": null,
 // 	"show_correct_answers_at": "2024-09-26T00:00:00-04:00",
 // 	"hide_correct_answers_at": null,

@@ -102,3 +102,45 @@ body * {  font-family: Arial, Helvetica, sans-serif;  }
 .ql-toolbar {
   border-bottom: 1px solid #ccc; /* Toolbar border for separation */
 }
+.confirmation-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+.confirmation-dialog p {
+  margin-bottom: 20px;
+}
+
+/* Profile css*/
+.profile-modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.profile-modal-content h4 {
+  margin-bottom: 20px;
+}
+

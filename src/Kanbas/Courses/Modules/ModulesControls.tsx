@@ -16,7 +16,7 @@ export default function ModulesControls(
 
   return (
     <div id="wd-modules-controls" className="text-nowrap">
-      {userRole === "FACULTY" && (
+      {userRole !== "STUDENT" && (
       <>
       <button id="wd-add-module-btn" className="btn btn-lg btn-danger me-1 float-end"
         data-bs-toggle="modal" data-bs-target="#wd-add-module-dialog">
@@ -67,3 +67,4 @@ export default function ModulesControls(
     </div>
     
 );}
+

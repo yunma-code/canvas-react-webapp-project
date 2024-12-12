@@ -1,59 +1,133 @@
+
 import { useEffect, useState } from "react";
 import QuillEditor from "./QuillEditor";
 import { BiTrash } from "react-icons/bi";
 import "./questionEditor.css";
 
-export default function QuestionEditor({ question, onUpdate }: { question?: any; onUpdate: (question: any) => void }) {
+export default function QuestionEditor({ question, onUpdate, onDelete }: { question?: any; onUpdate: (question: any) => void; onDelete: (id: string) => void }) {
+
     const [type, setType] = useState<string>("multiple_choice");
     const [description, setDescription] = useState<string>("");
-    const [points, setPoints] = useState<number>(0);
+    const [pts, setPts] = useState<number>(1);
     const [options, setOptions] = useState<any[]>([]);
     const [answer, setAnswer] = useState<boolean | undefined>(undefined);
 
     useEffect(() => {
-        if (question) {
-            const {
-                question_type = "multiple_choice",
-                question_text = "<p></p>",
-                points = 0,
-                options = [],
-                answer = undefined,
-            } = question;
+        const {
+            question_type = "multiple_choice",
+            question_text = "<p></p>",
+            pts = 1,
+            options = [],
+            answer = undefined,
+        } = question;
 
-            setType(question_type);
-            setDescription(question_text);
-            setPoints(points);
-            setOptions(options);
-            setAnswer(answer);
-        }
+        setType(question_type);
+        setDescription(question_text);
+        setPts(pts);
+        setOptions(options);
+        setAnswer(answer);
+
     }, [question]);
 
     const handleUpdate = () => {
         const updatedQuestion = {
+            ...question,
             question_type: type,
             question_text: description,
-            points,
-            options,
-            answer,
+            pts: pts,
+            options: options,
+            answer: answer,
         };
         onUpdate(updatedQuestion);
     };
 
     const handleAddOption = () => {
-        setOptions([...options, { id: Date.now().toString(), answer_text: "", is_correct: false }]);
+        const newOptions = [...options, { id: Date.now().toString(), answer_text: "", is_correct: false }];
+        setOptions(newOptions);
+        const updatedQuestion = {
+            ...question,
+            options: newOptions
+        };
+        onUpdate(updatedQuestion);
+    };
+
+    const handleAddPossibleAnswer = () => {
+        const newOptions = [...options, { id: Date.now().toString(), answer_text: "" }];
+        setOptions(newOptions);
+        const updatedQuestion = {
+            ...question,
+            options: newOptions
+        };
+        onUpdate(updatedQuestion);
     };
 
     const handleDeleteOption = (id: string) => {
-        setOptions(options.filter((option) => option.id !== id));
+        const newOptions = options.filter((option) => option.id !== id);
+        setOptions(newOptions);
+        const updatedQuestion = {
+            ...question,
+            options: newOptions
+        };
+        onUpdate(updatedQuestion);
     };
 
+
     const handleOptionChange = (id: string, key: string, value: any) => {
-        setOptions(
-            options.map((option) =>
-                option.id === id ? { ...option, [key]: value } : option
-            )
+        const newOptions = options.map((option) =>
+            option.id === id ? { ...option, [key]: value } : option
         );
+        setOptions(newOptions);
+        const updatedQuestion = {
+            ...question,
+            options: newOptions
+        };
+        onUpdate(updatedQuestion);
     };
+
+    const handleAnswerChange = (value: boolean) => {
+
+        const updatedQuestion = {
+            ...question,
+            answer: value
+        };
+        onUpdate(updatedQuestion);
+    }
+    const handleTypeChange = (value: string) => {
+        console.log("value", value)
+        if (value === "multiple_choice") {
+            const updatedQuestion = {
+                ...question,
+                pts: pts,
+                question_type: value,
+                options: []
+            };
+            onUpdate(updatedQuestion);
+        } else if (value === "fill_in_blank") {
+            const updatedQuestion = {
+                ...question,
+                pts: pts,
+                question_type: value,
+                options: []
+            };
+            onUpdate(updatedQuestion);
+        } else if (value === "true_false") {
+            const updatedQuestion = {
+                ...question,
+                pts: pts,
+                question_type: value,
+                answer: true
+            };
+            onUpdate(updatedQuestion);
+        }
+    }
+
+    const handleQuestionDetailsChange = (key: string, value: any) => {
+        const updatedQuestion = {
+            ...question,
+            [key]: value
+        };
+        onUpdate(updatedQuestion);
+    }
 
     const renderOptions = () => {
         return options.map((option) => (
@@ -67,9 +141,9 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                     className="form-check me-3"
                     type="checkbox"
                     checked={option.is_correct}
-                    onChange={(e) =>
-                        handleOptionChange(option.id, "is_correct", e.target.checked)
-                    }
+                    onChange={(e) => {
+                        handleOptionChange(option.id, "is_correct", e.target.checked);
+                    }}
                 />
                 <input
                     className="form-control me-3"
@@ -102,8 +176,9 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                 <select
                     className="form-select me-2"
                     style={{ maxWidth: "30%" }}
+                    name="question_type"
                     value={type}
-                    onChange={(e) => setType(e.target.value)}
+                    onChange={(e) => { handleTypeChange(e.target.value) }}
                 >
                     <option value="multiple_choice">Multiple Choice</option>
                     <option value="true_false">True/False</option>
@@ -115,8 +190,12 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                         type="number"
                         className="form-control"
                         style={{ width: "60px" }}
-                        value={points}
-                        onChange={(e) => setPoints(Number(e.target.value))}
+                        value={pts}
+                        name="pts"
+                        onChange={(e) => {
+                            setPts(Number(e.target.value));
+                            handleQuestionDetailsChange(e.target.name, Number(e.target.value))
+                        }}
                     />
                 </div>
             </div>
@@ -125,7 +204,10 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                 <h4>Question:</h4>
                 <QuillEditor
                     initialValue={description}
-                    onContentChange={setDescription}
+                    onContentChange={(context) => {
+                        setDescription(context);
+                        handleQuestionDetailsChange("question_text", context)
+                    }}
                 />
             </div>
 
@@ -143,9 +225,11 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                                 + Add Another Answer
                             </button>
                             <button
-                                className="btn btn-danger "
+                                className="btn btn-danger"
+                                name={question.id}
+                                onClick={() => onDelete(question.id)}
                             >
-                                remove question
+                                Remove Question
                             </button>
                         </div>
                     </div>
@@ -163,7 +247,10 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                                 className="form-check me-3"
                                 type="checkbox"
                                 checked={answer === true}
-                                onChange={() => setAnswer(true)}
+                                onChange={() => {
+                                    setAnswer(true);
+                                    handleAnswerChange(true);
+                                }}
                             />
                         </div>
                         <div className="answer-selection-container">
@@ -176,24 +263,68 @@ export default function QuestionEditor({ question, onUpdate }: { question?: any;
                                 className="form-check me-3"
                                 type="checkbox"
                                 checked={answer === false}
-                                onChange={() => setAnswer(false)}
+                                onChange={(e) => {
+                                    setAnswer(false);
+                                    handleAnswerChange(false);
+                                }}
                             />
+                        </div>
+                        <hr />
+                        <div className="d-flex flex-row justify-content-end mb-3">
+
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => {
+                                    setType("multiple_choice"); // Example: reset type
+                                }}
+                            >
+                                Remove Question
+                            </button>
                         </div>
                     </div>
                 )}
                 {type === "fill_in_blank" && (
-                    <div>
-                        <h4 className="form-label">Fill in the Blank:</h4>
-                        <p>Coming Soon!</p>
+                    <div className="answer-container">
+                        <h4 className="form-label">Answers:</h4>
+                        {options.map((option) => (
+                            <div key={option.id} className="answer-selection-container">
+                                <label className="form-label col-2 me-3">Possible Answer:</label>
+                                <input
+                                    className="form-control me-3"
+                                    type="text"
+                                    value={option.answer_text}
+                                    onChange={(e) =>
+                                        handleOptionChange(option.id, "answer_text", e.target.value)
+                                    }
+                                />
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() => handleDeleteOption(option.id)}
+                                >
+                                    <BiTrash />
+                                </button>
+                            </div>
+                        ))}
+                        <hr />
+                        <div className="d-flex flex-row justify-content-end mb-3">
+                            <button
+                                className="btn btn-outline-primary me-2"
+                                onClick={handleAddPossibleAnswer}
+                            >
+                                + Add Another Answer
+                            </button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => {
+                                    setType("multiple_choice"); // Example: reset type
+                                }}
+                            >
+                                Remove Question
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
-
-            {/* <div className="m-3">
-                <button className="btn btn-success" onClick={handleUpdate}>
-                    Save Question
-                </button>
-            </div> */}
         </div>
     );
 }

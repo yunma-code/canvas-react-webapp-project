@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { editAssignment, updateAssignment } from "./reducer";
+import { updateAssignment } from "./reducer";
 
 export default function AssignmentPreview() {
     const { assignments } = useSelector((state: any) => state.assignmentsReducer);
