@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import * as quizClient from "../client";
+import parse from "html-react-parser";
 
 type QuestionOption = {
   id: string;
@@ -19,27 +20,27 @@ type Question = {
 };
 
 type Quiz = {
-  course: String,
-  title: String,
-  points_possible: Number,
-  quiz_type: String,
-  assignment_group_id: String,
-  assignment_group_type: String,
-  shuffle_answers: Boolean,
-  allowed_attempts: Boolean,
-  attempts_number: Number,
-  show_correct_answers: Boolean,
-  one_question_at_a_time: Boolean,
-  has_access_code: Boolean,
-  require_lockdown_browser: Boolean,
-  cant_go_back: Boolean,
-  due_at: String,
-  unlock_at: String,
-  lock_at: String,
-  description: String,
-  time_limit: Number,
+  course: string,
+  title: string,
+  points_possible: number,
+  quiz_type: string,
+  assignment_group_id: string,
+  assignment_group_type: string,
+  shuffle_answers: boolean,
+  allowed_attempts: boolean,
+  attempts_number: number,
+  show_correct_answers: boolean,
+  one_question_at_a_time: boolean,
+  has_access_code: boolean,
+  require_lockdown_browser: boolean,
+  cant_go_back: boolean,
+  due_at: string,
+  unlock_at: string,
+  lock_at: string,
+  description: string,
+  time_limit: number,
   questions: Question[],
-  is_published: Boolean,
+  is_published: boolean,
 };
 
 
@@ -170,7 +171,8 @@ const QuizPreview = () => {
           <div className="text-muted mb-2">Due: {quiz?.due_at || "No due date provided"}</div>
 
           <h3>Quiz Instructions</h3>
-          <p>{quiz?.description || "No description provided."}</p>
+          {quiz?.description  ? <div>{parse(quiz.description )}</div>:
+           "No description provided."}
           <hr className="my-4" />
 
           <div className="card mt-3">
@@ -179,7 +181,7 @@ const QuizPreview = () => {
               <span>1 pts</span>
             </div>
             <div className="card-body">
-              <p>{currentQuestion?.question_text}</p>
+              <div>{parse( currentQuestion? currentQuestion.question_text : "<p></p>")}</div>
               <form>
                 {currentQuestion?.question_type === "multiple_choice" &&
                   currentQuestion.options &&
