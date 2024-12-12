@@ -2,34 +2,33 @@
 
 - [x] You can register. When you register you are automatically logged in and sent to your profile.
 - [x] You can login. When you login you are sent to your profile or landing page
-- [ ] In your profile, you can edit your information
-  - [ ] 缺少update逻辑
-  - [ ] 注意profile的日期问题
+- [x] In your profile, you can edit your information
 - [x] Clicking on the dashboard, you only see the courses for the currently logged in user. At least one course
   - [ ] 课程的图片现在无法显示，images是否要放到node？
 - [x] Clicking on a course navigates to the details of that course, with Course Navigation sidebar containing at least Quizzes link
 - [x] Clicking on Quizzes link navigates to Quizzes List Screen described later in this form
 - [ ] A different course has a different set of quizzes
-  - [ ] 待试验
+  - [ ] 等改完save才能看
 
 
 ### Courses Per User
-- [ ] Users only see courses they are associated with
-- [ ] Faculty only see courses they have created (or enrolled in)
-- [ ] Students only see courses they are enrolled in
-- [ ] Anyone can enroll into a course (Faculty or Student)
-- [ ] Faculty can edit course, but student can not
+- [x] Users only see courses they are associated with
+- [x] Faculty only see courses they have created (or enrolled in)
+- [x] Students only see courses they are enrolled in
+- [x] Anyone can enroll into a course (Faculty or Student)
+- [x] Faculty can edit course, but student can not
 
 
 ### Quizzes List Screen
 - [ ] Quizzes screen displays the quizzes for the current course
-- [ ] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz)To test, login as faculty, create a brand new course, quizzes list should be empty
+- [x] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz)To test, login as faculty, create a brand new course, quizzes list should be empty
 - [ ] Clicking Add Quiz button (+ Quiz) creates a new quiz with a default name andnavigates to Quiz Details screen for editing the quiz. Alternatively, it can navigate toQuiz Details Editor screen
 - [ ] Clicking the context menu button (3 dots) reveals the Quiz Context Menu withoptions listed below...
 - [ ] Edit - navigates to Quiz Details screen
 - [ ] Delete -removes the quiz and stays in the Quiz List screen
 - [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish
 - [ ] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
+  - [ ] 等save publish
 - [ ] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
 - [ ] Clicking quiz title navigates to Quiz Details screen
 - [ ] Under the quiz title display
