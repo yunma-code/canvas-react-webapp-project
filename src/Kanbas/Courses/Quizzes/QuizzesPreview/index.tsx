@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { Link } from "react-router-dom";
 import * as quizClient from "../client";
 
@@ -13,7 +13,7 @@ type QuestionOption = {
 type Question = {
   id: string;
   question_text: string;
-  question_type: "multiple_choice" | "true_false";
+  question_type: "multiple_choice" | "true_false" | "fill_in_blank";
   options?: QuestionOption[];
   answer?: boolean;
 };
@@ -45,13 +45,15 @@ type Quiz = {
 
 const QuizPreview = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
-  const quizzes = useSelector((state: any) => state.quizzesReducer.quizzes);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { attempt } = location.state || {};
+  const [currentAttempt, setCurrentAttempt] = useState(attempt || { answers: [] });
 
   const [quiz, setQuiz] = useState<Quiz>();
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<{ [questionId: string]: string }>({});
+  // const [userAnswers, setUserAnswers] = useState<{ [questionId: string]: string }>({});
 
   const { currentUser } = useSelector((state: any) => state.accountReducer);
 
@@ -96,11 +98,32 @@ const QuizPreview = () => {
     setCurrentQuestionIndex(index);
   };
 
+  //id: question id, means which question
+  //answer: should be the answer of a specific question
+  const handleUpdateAttempt = (id: string, answer: any) => {
+    // Create a new array to avoid mutating state directly
+    const updatedAnswers = attempt.answers.map((a: any) =>
+      a.id === id ? { ...a, answer } : a
+    );
+
+    // Check if the id was found; if not, add the new answer
+    const isExisting = attempt.answers.some((a: any) => a.id === id);
+    if (!isExisting) {
+      updatedAnswers.push({ id, answer });
+    }
+
+    // Update the state or data source
+    setCurrentAttempt((prev: any) => ({
+      ...prev,
+      answers: updatedAnswers,
+    }));
+  };
+
   const calculateScore = (): number => {
     let score = 0;
 
     quiz?.questions.forEach((question) => {
-      const userAnswer = userAnswers[question.id];
+      const userAnswer = currentAttempt.answers[question.id];
       if (question.question_type === "multiple_choice") {
         const correctOption = question.options?.find((option) => option.is_correct)?.answer_text;
         if (userAnswer === correctOption) {
@@ -110,8 +133,8 @@ const QuizPreview = () => {
         if (userAnswer === String(question.answer)) {
           score++;
         }
-      // }else if(question.question_type === "fill_in_blank" && question.answer !== undefined) {
-      //   if (userAnswer)
+        // }else if(question.question_type === "fill_in_blank" && question.answer !== undefined) {
+        //   if (userAnswer)
       }
     });
     return score;
@@ -121,15 +144,22 @@ const QuizPreview = () => {
     const score = calculateScore();
     const totalQuestions = quiz?.questions.length;
 
-    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
-      state: {
-        score,
-        totalQuestions,
-        quiz,
-        userAnswers,
-      },
-    });
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, currentAttempt);
   };
+
+  const handleUpdateAttemptForMultipleChoice = (id: string, optionId: string, isSelected: boolean) => {
+    setCurrentAttempt((prev: any) => ({
+      ...prev,
+      answers: {
+        ...prev.answers,
+        [id]: {
+          ...prev.answers[id],
+          [optionId]: isSelected
+        }
+      }
+    }));
+  };
+  
 
 
   return (
@@ -165,11 +195,15 @@ const QuizPreview = () => {
                     name={`question${currentQuestionIndex}`}
                     id={`option${option.id}`}
                     value={option.answer_text}
-                    checked={userAnswers[currentQuestion.id] === option.answer_text}
-                    onChange={() =>
-                      setUserAnswers({ ...userAnswers, [currentQuestion.id]: option.answer_text })
+                    checked={
+                      currentAttempt.answers[currentQuestion.id]?.answer[option.id] === true
                     }
+                    onChange={() => {
+                      const isSelected = currentAttempt.answers[currentQuestion.id]?.answer[option.id] !== true;
+                      handleUpdateAttemptForMultipleChoice(currentQuestion.id, option.id, isSelected);
+                    }}
                   />
+
                   <label className="form-check-label" htmlFor={`option${option.id}`}>
                     {option.answer_text}
                   </label>
@@ -181,13 +215,11 @@ const QuizPreview = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name={`question${currentQuestionIndex}`}
+                    name={currentQuestion.id}
                     id={`trueOption${currentQuestionIndex}`}
                     value="true"
-                    checked={userAnswers[currentQuestion.id] === "true"}
-                    onChange={() =>
-                      setUserAnswers({ ...userAnswers, [currentQuestion.id]: "true" })
-                    }
+                    checked={currentAttempt.answers[currentQuestion.id] === true}
+                    onChange={(e) => handleUpdateAttempt(e.target.id, true)}
                   />
                   <label className="form-check-label" htmlFor={`trueOption${currentQuestionIndex}`}>
                     True
@@ -197,13 +229,11 @@ const QuizPreview = () => {
                   <input
                     className="form-check-input"
                     type="radio"
-                    name={`question${currentQuestionIndex}`}
-                    id={`falseOption${currentQuestionIndex}`}
+                    name={currentQuestion.id}
+                    id={`trueOption${currentQuestionIndex}`}
                     value="false"
-                    checked={userAnswers[currentQuestion.id] === "false"}
-                    onChange={() =>
-                      setUserAnswers({ ...userAnswers, [currentQuestion.id]: "false" })
-                    }
+                    checked={currentAttempt.answers[currentQuestion.id] === false}
+                    onChange={(e) => handleUpdateAttempt(e.target.id, false)}
                   />
                   <label className="form-check-label" htmlFor={`falseOption${currentQuestionIndex}`}>
                     False
@@ -211,6 +241,10 @@ const QuizPreview = () => {
                 </div>
               </>
             )}
+            {
+              currentQuestion?.question_type === "fill_in_blank" &&
+              <p>coming soon</p>
+            }
           </form>
         </div>
       </div>

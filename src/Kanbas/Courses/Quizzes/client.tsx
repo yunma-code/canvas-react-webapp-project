@@ -3,7 +3,7 @@ import axios from "axios";
 const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSE_API = `${REMOTE_SERVER}/api/courses`;
 const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
-const ATTEMPTS_API = `${REMOTE_SERVER}/api/attempts`;
+const ATTEMPTS_API = `${REMOTE_SERVER}/api/quizzes/attempts`;
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
@@ -41,14 +41,8 @@ export const fetchQuizById = async (quizId: string) => {
   return response.data;
 };
 
-// add attempt methods
-export const createAttempt = async (attempt: any) => {
-  const response = await axiosWithCredentials.post(ATTEMPTS_API, attempt);
-  return response.data;
-};
-
-export const updateAttempt = async (attemptId: String, attemptUpdates: any) => {
-  const response = await axiosWithCredentials.put(`${ATTEMPTS_API}/${attemptId}`, attemptUpdates);
+export const updateAttemptForQuiz = async (quizId: String, attemptUpdates: any) => {
+  const response = await axiosWithCredentials.post(`${ATTEMPTS_API}/${quizId}`, attemptUpdates);
   return response.data;
 };
 

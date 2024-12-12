@@ -58,7 +58,10 @@ export default function Courses({courses }: { courses: any[]; }) {
             <Route path="Quizzes" element={<Quizzes />} />
             {
               currentUser.role === "STUDENT" ?
+              <>
                 <Route path="Quizzes/:qid" element={<QuizDetails />} />
+                <Route path="Quizzes/:qid/attempt" element={<QuizzesPreview/>}/>
+                </>
                 :
                 <>
                   <Route path="Quizzes/New" element={<QuizEditor />} />

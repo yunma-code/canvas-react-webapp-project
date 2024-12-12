@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchQuizById, fetchAttemptForQuiz, createAttempt, updateAttempt } from "../client";
+import { fetchQuizById, fetchAttemptForQuiz, updateAttemptForQuiz } from "../client";
 import "./Quiz.css";
 
 type Attempt = {
   _id?: string;
-  attempts_left: number;
+  current_attempt: number;
   score: number;
   answers: any[];
   user: string;
@@ -33,28 +33,28 @@ const QuizDetails = () => {
       console.log("current quiz: ", fetchedQuiz);
     };
     currentQuiz();
-  },[]
+  }, []
   )
 
   useEffect(() => {
     const loadAttempt = async () => {
       if (!qid || !currentUser?._id) return;
 
-      const attempts = await fetchAttemptForQuiz(qid!);
-      const existingAttempt = attempts.find((attempt: Attempt) => attempt.user === currentUser._id);
+      const attempt = await fetchAttemptForQuiz(qid!);
 
-      if (existingAttempt) {
-        setCurrentAttempt(existingAttempt);
+      if (attempt) {
+        setCurrentAttempt(attempt);
       } else {
-        const newAttempt = await createAttempt({
-          attempts_left: quiz.attempts_number || 1,
+        const newAttempt = {
+          current_attempt: 0,
           score: 0,
           answers: [],
           user: currentUser._id,
           quiz: qid,
           course: quiz?.course,
-        });
-        console.log("new attempt: ", newAttempt);
+        };
+        console.log("creating attempt: ", newAttempt);
+        // create attempt at local when the remote attempt is not found
         setCurrentAttempt(newAttempt);
       }
     };
@@ -62,30 +62,33 @@ const QuizDetails = () => {
   }, [qid, currentUser?._id, quiz]);
 
 
+
   const handleStart = async () => {
+    //push attempt to remote, also reduce attempt_left
     if (!currentAttempt) {
       alert("No current attempt found. Please reload the page.");
       return;
     }
 
-    if (currentAttempt.attempts_left === 0) {
+    if (currentAttempt.current_attempt === quiz.attempt_number) {
       alert(`You have exceeded the maximum number of attempts (${quiz?.attempt_number}).`);
       return;
     }
 
     try {
-      const updatedAttempt = await updateAttempt(currentAttempt._id!, {
-        attempts_left: currentAttempt.attempts_left - 1,
-      });
+      const updatedAttempt = {
+        ...currentAttempt,
+        current_attempt: currentAttempt.current_attempt + 1
+      }
+      // await updateAttemptForQuiz(quiz.id, currentAttempt);
 
       setCurrentAttempt(updatedAttempt);
-      navigate(`/quiz/${qid}/attempt`);
+      navigate(`/quiz/${qid}/attempt`, {state: currentAttempt});
     } catch (error) {
       console.error("Failed to update attempt:", error);
       alert("An error occurred while starting the quiz. Please try again later.");
     }
   };
-
 
   const handleEdit = () => navigate(`${pathname}/Edit`);
   const handlePreview = () => navigate(`${pathname}/preview`);
@@ -167,8 +170,8 @@ const QuizDetails = () => {
         </div>
         {/* start quiz button if still have attempt */}
         <div>
-          {currentAttempt ? (
-            currentAttempt.attempts_left > 0 ? (
+          {currentAttempt && (
+            (quiz.attempts_number - currentAttempt.current_attempt) > 0 ? (
               <button className="btn" onClick={handleStart}>
                 Start Quiz
               </button>
@@ -177,8 +180,6 @@ const QuizDetails = () => {
                 You have reached the maximum number of attempts for this quiz.
               </p>
             )
-          ) : (
-            <p className="error-message">Loading attempt data...</p>
           )}
         </div>
       </div>
