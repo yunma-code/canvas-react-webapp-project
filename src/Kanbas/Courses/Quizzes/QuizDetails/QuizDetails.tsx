@@ -30,6 +30,7 @@ const QuizDetails = () => {
     const currentQuiz = async () => {
       const fetchedQuiz = await fetchQuizById(qid!);
       setQuiz(fetchedQuiz);
+      console.log("current quiz: ", fetchedQuiz);
     };
     currentQuiz();
   },[]
@@ -46,13 +47,14 @@ const QuizDetails = () => {
         setCurrentAttempt(existingAttempt);
       } else {
         const newAttempt = await createAttempt({
-          attempts_left: quiz.attempt_number || 1,
+          attempts_left: quiz.attempts_number || 1,
           score: 0,
           answers: [],
           user: currentUser._id,
           quiz: qid,
           course: quiz?.course,
         });
+        console.log("new attempt: ", newAttempt);
         setCurrentAttempt(newAttempt);
       }
     };
