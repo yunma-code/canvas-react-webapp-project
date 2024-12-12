@@ -30,7 +30,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   const [id, setId] = useState<string>(new Date().getTime().toString());
   const [course, setCourse] = useState<string>(cid!);
-  const [title, setTitle] = useState<string>("default title");
+  const [title, setTitle] = useState<string>("Default Title");
   const [pointsPossible, setPointsPossible] = useState<number>(0);
   const [quizType, setQuizType] = useState<string>("Graded Quiz");
   const [assignmentGroup, setAssignmentGroup] = useState<string>("Quizzes");
@@ -414,8 +414,8 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
                     <label id="wd-assign-to" className="form-label">Assign to</label>
                     <select id="wd-assign-to" className="form-select" value={assignTo} onChange={(e) => console.log(e.target.value)}>
-                      {/* <option value="EVERYONE">Everyone</option>
-                      <option value="SELECTED">Selected Students</option> */}
+                      <option value="EVERYONE">Everyone</option>
+                      <option value="SELECTED">Selected Students</option>
                     </select>
 
                   </div>
@@ -434,7 +434,6 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       dateFormat="yyyy-MM-dd HH:mm"
                       placeholderText="Select Due Date"
                     />
-                    {/* <input className="form-control" type="datetime-local" id="wd-due-date" onChange={(e) => setDueAt(e.target.valueAsDate!)} value={(dueAt) ? formatDateToLocalDatetime(dueAt) : ""} /> */}
 
                   </div>
                 </div>
@@ -453,7 +452,6 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       dateFormat="yyyy-MM-dd HH:mm"
                       placeholderText="Select Unlock Date"
                     />
-                    {/* <input className="form-control" type="datetime-local" id="wd-available-from" onChange={(e) => setUnlockAt(e.target.valueAsDate!)} value={unlockAt ? formatDateToLocalDatetime(unlockAt) : ""} /> */}
                   </div>
 
                   <div className="col-md-6">
@@ -468,7 +466,6 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                       dateFormat="yyyy-MM-dd HH:mm"
                       placeholderText="Select Lock Date"
                     />
-                    {/* <input className="form-control" type="datetime-local" id="wd-available-until" onChange={(e) => setLockAt(e.target.valueAsDate!)} value={lockAt ? formatDateToLocalDatetime(lockAt) : ""} /> */}
                   </div>
                 </div>
               </div>
@@ -477,6 +474,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
         </form>
 
         <hr />
+
         {/* save, publish, and cancel */}
         <div className="d-flex justify-content-end mt-3">
           <button onClick={handleCancel} className="btn btn-secondary me-2">
@@ -487,6 +485,10 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
               <button onClick={handleSave} className="btn btn-danger me-2">Save</button>
             </>
           )}
+          <button onClick={handleSaveAndPublish} className="btn btn-primary me-2">
+            Save and Publish
+          </button>
+
         </div>
       </div>
 

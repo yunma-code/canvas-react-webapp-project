@@ -4,11 +4,9 @@
 - [x] You can login. When you login you are sent to your profile or landing page
 - [x] In your profile, you can edit your information
 - [x] Clicking on the dashboard, you only see the courses for the currently logged in user. At least one course
-  - [ ] 课程的图片现在无法显示，images是否要放到node？
 - [x] Clicking on a course navigates to the details of that course, with Course Navigation sidebar containing at least Quizzes link
 - [x] Clicking on Quizzes link navigates to Quizzes List Screen described later in this form
-- [ ] A different course has a different set of quizzes
-  - [ ] 等改完save才能看
+- [x] A different course has a different set of quizzes
 
 
 ### Courses Per User
@@ -20,28 +18,32 @@
 
 
 ### Quizzes List Screen
-- [ ] Quizzes screen displays the quizzes for the current course
-- [x] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz)To test, login as faculty, create a brand new course, quizzes list should be empty
-- [ ] Clicking Add Quiz button (+ Quiz) creates a new quiz with a default name andnavigates to Quiz Details screen for editing the quiz. Alternatively, it can navigate toQuiz Details Editor screen
-- [ ] Clicking the context menu button (3 dots) reveals the Quiz Context Menu withoptions listed below...
-- [ ] Edit - navigates to Quiz Details screen
-- [ ] Delete -removes the quiz and stays in the Quiz List screen
-- [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish
+- [x] Quizzes screen displays the quizzes for the current course
+- [x] Quizzes list is empty by default. Provide message to click Add Quiz button (+ Quiz) 
+  To test, login as faculty, create a brand new course, quizzes list should be empty
+- [x] Clicking Add Quiz button (+ Quiz) creates a new quiz with a default name and navigates to Quiz Details screen for editing the quiz. Alternatively, it can navigate to Quiz Details Editor screen
+- [x] Clicking the context menu button (3 dots) reveals the Quiz Context Menu with options listed below...
+  - [x] Edit - navigates to Quiz Details screen
+  - [x] Delete - removes the quiz and stays in the Quiz List screen
+  - [ ] Publish - publishes the quiz and option becomes Unpublish so you can unpublish 
+      【等待Save按钮】
 - [ ] By default quizzes are unpublished and unavailable to students depicted with a Unpublished symbol ❌ as shown below
-  - [ ] 等save publish
+      【等待Save按钮】
 - [ ] Clicking Unpublished symbol publishes the quiz, makes it available to students and is represented with the Published symbol ✅ as shown below
-- [ ] Clicking quiz title navigates to Quiz Details screen
+      【做一个protect，如果检测到是学生/非falculty，并且该quiz.is_publish = false, 则不应显示】
+- [x] Clicking quiz title navigates to Quiz Details screen
 - [ ] Under the quiz title display
-        Availability
-        Closed-if current date is after quizzes Available Date
-        Available -if current date is between Available Date and Available Until Date
-        Not available until < AVAILABLE DATE > - if current date is before the Available Date
-- [ ] Under the quiz title display
-        Due date, Points, Number of questions,
-        Score - if the current user is a student, the score from the last attempt is showr
+  - [ ] Availability
+  - Closed-if current date is after quizzes Available Date
+  - Available -if current date is between Available Date and Available Until Date
+  - Not available until < AVAILABLE DATE > - if current date is before the Available Date
+  - [ ] 
+      Due date, Points, Number of questions,
+      Score - if the current user is a student, the score from the last attempt is showr
 
 ### Quiz Details Screen
 Implement a Quizzes Details screen as described below with only following propertiesIgnore other properties
+【加两个button，start和last submition】
 - [ ] Displays summary of quiz properties
 - [ ] Quiz Type - Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded surveyPoints - the sum of the points of all questions in the quizAssignment Group-Quizzes (default), Exams,  Assignments, Project
 Shuffle Answers- Yes (default) / NoTime Limit -20 Minutes (default)
