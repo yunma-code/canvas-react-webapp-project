@@ -6,32 +6,41 @@ export default function QuizQuestionsEditor({
     questionList,
     onUpdateQuestionList,
 }: {
-    questionList?: any[];
+    questionList: any[];
     onUpdateQuestionList: (questionList: any[]) => void;
 }) {
-    const [questions, setQuestions] = useState<any[]>([]);
     const [creatingNew, setCreatingNew] = useState<boolean>(false);
     const navigate = useNavigate();
     const { cid, qid } = useParams();
 
     useEffect(() => {
         if (questionList) {
-            setQuestions(questionList);
+            console.log("questionList:", questionList)
         }
     }, [questionList]);
 
     const onUpdateQuestion = (updatedQuestion: any) => {
-        setQuestions((prevQuestions) =>
-            prevQuestions.map((q) =>
+        const newQuestionList =
+            questionList.map((q) =>
                 q.id === updatedQuestion.id ? updatedQuestion : q
-            )
-        );
+            );
+        console.log("newQuestionList:", newQuestionList)
+        onUpdateQuestionList(newQuestionList);
+    };
+
+    const onDeleteQuestion = (updatedQuestion: any) => {
+        const newQuestionList =
+            questionList.filter((q) =>
+                q.id !== updatedQuestion.id
+            );
+        console.log("newQuestionList:", newQuestionList)
+        onUpdateQuestionList(newQuestionList);
     };
 
     const handleCancel = () => {
         if (qid) {
             navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
-        }else{
+        } else {
             navigate(`/Kanbas/Courses/${cid}/Quizzes`);
         }
 
@@ -44,13 +53,13 @@ export default function QuizQuestionsEditor({
             question_type: "multiple_choice",
             options: [],
         };
-        setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
         setCreatingNew(true);
+        onUpdateQuestionList([...questionList, newQuestion]);
     };
 
     const handleSave = () => {
-        if (questions && questions.length > 0) {
-            const fetchedId = onUpdateQuestionList(questions);
+        if (questionList && questionList.length > 0) {
+            const fetchedId = onUpdateQuestionList(questionList);
             navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
         } else {
             console.error("No questions to save.");
@@ -60,18 +69,20 @@ export default function QuizQuestionsEditor({
     return (
         <div>
             <div className="container mt-4">
-                {questions.map((question) => (
+                {questionList.map((question) => (
                     <QuestionEditor
                         key={question.id}
                         question={question}
                         onUpdate={onUpdateQuestion}
+                        onDelete={onDeleteQuestion}
                     />
                 ))}
 
                 {creatingNew ? (
                     <QuestionEditor
-                        question={questions[questions.length - 1]}
+                        question={questionList[questionList.length - 1]}
                         onUpdate={onUpdateQuestion}
+                        onDelete={onDeleteQuestion}
                     />
                 ) : (
                     <div className="d-flex flex-column align-items-end">
