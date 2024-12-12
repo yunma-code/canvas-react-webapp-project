@@ -75,7 +75,7 @@ const SubmitScreen = () => {
     // }
     return false;
   };
-
+  
   return (
     <div className="container text-center mt-5">
       <h3 className="fs-4">Congratulations! You have successfully completed the quiz.</h3>
@@ -108,6 +108,7 @@ const SubmitScreen = () => {
                     <div className={`mb-1 ${correct ? "text-success" : "text-danger"}`}>
                       <strong>Your Answer:</strong> {userAnswer}
                     </div>
+                    {/* add attempt logic, if attempts are exhausted, show correct answer  */}
                     <div>
                       <strong>Correct Answer:</strong>{" "}
                       {question.question_type === "multiple_choice"
