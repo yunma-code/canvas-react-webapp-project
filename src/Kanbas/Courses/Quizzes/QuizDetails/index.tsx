@@ -48,7 +48,6 @@ export default function Quizzes() {
     )
   );
   
-
   const handleEdit = (qid: string) => {
     console.log(`Editing Quiz ID: ${qid}`);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Edit`);

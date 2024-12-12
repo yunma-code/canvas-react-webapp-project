@@ -74,9 +74,9 @@ const quizzesSlice = createSlice({
       state.quizzes = quizzes;
     },
 
-    deleteQuiz: (state, { payload: quizId }) => {
+    deleteQuiz: (state, { payload: qid }) => {
       state.quizzes = state.quizzes.filter(
-        (a: any) => a._id !== quizId);
+        (a: any) => a.id !== qid);
     },
 
     updateQuiz: (state, { payload: quiz }) => {
