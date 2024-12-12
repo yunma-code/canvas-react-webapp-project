@@ -137,7 +137,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                 <select
                     className="form-select me-2"
                     style={{ maxWidth: "30%" }}
-                    name="question_title"
+                    name="question_type"
                     value={type}
                     onChange={(e) => { handleQuestionDetailsChange(e.target.name, e.target.value) }}
                 >
