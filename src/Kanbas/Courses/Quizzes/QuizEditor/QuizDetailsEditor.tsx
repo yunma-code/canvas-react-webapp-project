@@ -15,18 +15,18 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   const currentUser = useSelector(
     (state: any) => state.accountReducer.currentUser);  // get current user role
-  const canEdit = currentUser?.role === "FACULTY" || currentUser?.role === "TA";
+  const canEdit = currentUser?.role === "FACULTY" || currentUser?.role === "TA" || currentUser?.role === "ADMIN";
 
   const [showTimeLimit, setShowTimeLimit] = useState<any>(true); //display purpose only
 
-  const formatDateToLocalDatetime = (date: Date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
+  // const formatDateToLocalDatetime = (date: Date) => {
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, "0");
+  //   const day = String(date.getDate()).padStart(2, "0");
+  //   const hours = String(date.getHours()).padStart(2, "0");
+  //   const minutes = String(date.getMinutes()).padStart(2, "0");
+  //   return `${year}-${month}-${day}T${hours}:${minutes}`;
+  // };
 
   const [id, setId] = useState<string>(new Date().getTime().toString());
   const [course, setCourse] = useState<string>(cid!);
@@ -52,7 +52,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
   const [haveTimeLimit, setHaveTimeLimit] = useState<boolean>(false);
   const [timeLimit, setTimeLimit] = useState<number>(0);
   const [isPublished, setIsPublished] = useState(false);
-  const [assignTo, setAssignTo] = useState<string[]>();
+  const [assignTo, setAssignTo] = useState<any>("Everyone");
   const readOnly = false;
 
   const formatDateWithOffset = (date: Date) => {
@@ -68,7 +68,6 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
 
   useEffect(() => {
     // load quiz data if editing an existing quiz
-    console.log(quiz)
     if (qid && quiz) {
       setId(quiz.id)
       setCourse(quiz.course)
@@ -124,24 +123,27 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       id,
       course,
       title,
-      pointsPossible,
-      quizType,
-      assignmentGroup,
-      shuffleAnswers,
-      multipleAttempts,
-      showCorrectAnswers,
-      oneQuestionAtATime,
-      accessCode,
-      requireLockdownBrowser,
-      webcamRequired,
-      cantGoBack,
+      description,
+      points_possible: pointsPossible,
+      quiz_type: quizType,
+      assignment_group_id: "",
+      assignment_group_type: assignmentGroup,
+      shuffle_answers: shuffleAnswers,
+      allowed_attempts: allowMultipleAttempts,
+      attempts_number: multipleAttempts,
+      show_correct_answers: showCorrectAnswers,
+      one_question_at_a_time: oneQuestionAtATime,
+      has_access_code: accessCode ? true : false,
+      access_code: accessCode,
+      require_lockdown_browser: requireLockdownBrowser,
+      webcam_required: webcamRequired,
+      cant_go_back: cantGoBack,
       due_at: dueAt ? formatDateWithOffset(dueAt) : null,
       unlock_at: unlockAt ? formatDateWithOffset(unlockAt) : null,
       lock_at: lockAt ? formatDateWithOffset(lockAt) : null,
-      description,
-      timeLimit,
-      isPublished,
-      assignTo,
+      time_limit: timeLimit,
+      is_published: isPublished,
+      assign_to: assignTo,
     }
     console.log('quizDetails:', quizDetails)
     if (qid) {
