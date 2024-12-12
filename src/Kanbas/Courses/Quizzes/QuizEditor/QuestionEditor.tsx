@@ -4,7 +4,8 @@ import QuillEditor from "./QuillEditor";
 import { BiTrash } from "react-icons/bi";
 import "./questionEditor.css";
 
-export default function QuestionEditor({ question, onUpdate, onDelete}: { question?: any; onUpdate: (question: any) => void; onDelete: (id: string) =>void}) {
+export default function QuestionEditor({ question, onUpdate, onDelete }: { question?: any; onUpdate: (question: any) => void; onDelete: (id: string) => void }) {
+
     const [type, setType] = useState<string>("multiple_choice");
     const [description, setDescription] = useState<string>("");
     const [points, setPoints] = useState<number>(0);
@@ -12,21 +13,20 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
     const [answer, setAnswer] = useState<boolean | undefined>(undefined);
 
     useEffect(() => {
-        if (question) {
-            const {
-                question_type = "multiple_choice",
-                question_text = "<p></p>",
-                points = 0,
-                options = [],
-                answer = undefined,
-            } = question;
+        const {
+            question_type = "multiple_choice",
+            question_text = "<p></p>",
+            points = 0,
+            options = [],
+            answer = undefined,
+        } = question;
 
-            setType(question_type);
-            setDescription(question_text);
-            setPoints(points);
-            setOptions(options);
-            setAnswer(answer);
-        }
+        setType(question_type);
+        setDescription(question_text);
+        setPoints(points);
+        setOptions(options);
+        setAnswer(answer);
+
     }, [question]);
 
     const handleUpdate = () => {
@@ -43,6 +43,16 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
 
     const handleAddOption = () => {
         const newOptions = [...options, { id: Date.now().toString(), answer_text: "", is_correct: false }];
+        setOptions(newOptions);
+        const updatedQuestion = {
+            ...question,
+            options: newOptions
+        };
+        onUpdate(updatedQuestion);
+    };
+
+    const handleAddPossibleAnswer = () => {
+        const newOptions = [...options, { id: Date.now().toString(), answer_text: "" }];
         setOptions(newOptions);
         const updatedQuestion = {
             ...question,
@@ -74,12 +84,39 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
         onUpdate(updatedQuestion);
     };
 
-    const handleAnswerChange = (value: boolean)=>{
+    const handleAnswerChange = (value: boolean) => {
+
         const updatedQuestion = {
             ...question,
             answer: value
         };
         onUpdate(updatedQuestion);
+    }
+    const handleTypeChange = (value: string) => {
+        console.log("value", value)
+        if (value === "multiple_choice") {
+            const updatedQuestion = {
+                ...question,
+                question_type: value,
+                options: []
+            };
+            onUpdate(updatedQuestion);
+        } else if (value === "fill_in_blank") {
+            const updatedQuestion = {
+                ...question,
+                question_type: value,
+                options: []
+            };
+            onUpdate(updatedQuestion);
+        } else if (value === "true_false") {
+            const updatedQuestion = {
+                ...question,
+                question_type: value,
+                answer: true
+            };
+            onUpdate(updatedQuestion);
+
+        }
     }
 
     const handleQuestionDetailsChange = (key: string, value: any) => {
@@ -139,7 +176,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                     style={{ maxWidth: "30%" }}
                     name="question_type"
                     value={type}
-                    onChange={(e) => { handleQuestionDetailsChange(e.target.name, e.target.value) }}
+                    onChange={(e) => { handleTypeChange(e.target.value) }}
                 >
                     <option value="multiple_choice">Multiple Choice</option>
                     <option value="true_false">True/False</option>
@@ -162,7 +199,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                 <h4>Question:</h4>
                 <QuillEditor
                     initialValue={description}
-                    onContentChange={(context) =>handleQuestionDetailsChange("question_text", context)}
+                    onContentChange={(context) => handleQuestionDetailsChange("question_text", context)}
                 />
             </div>
 
@@ -182,7 +219,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                             <button
                                 className="btn btn-danger"
                                 name={question.id}
-                                onClick={()=>onDelete(question.id)}
+                                onClick={() => onDelete(question.id)}
                             >
                                 Remove Question
                             </button>
@@ -218,6 +255,18 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                                 onChange={(e) => handleAnswerChange(e.target.checked)}
                             />
                         </div>
+                        <hr />
+                        <div className="d-flex flex-row justify-content-end mb-3">
+
+                            <button
+                                className="btn btn-danger"
+                                onClick={() => {
+                                    setType("multiple_choice"); // Example: reset type
+                                }}
+                            >
+                                Remove Question
+                            </button>
+                        </div>
                     </div>
                 )}
                 {type === "fill_in_blank" && (
@@ -246,7 +295,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete}: { questi
                         <div className="d-flex flex-row justify-content-end mb-3">
                             <button
                                 className="btn btn-outline-primary me-2"
-                                onClick={handleAddOption}
+                                onClick={handleAddPossibleAnswer}
                             >
                                 + Add Another Answer
                             </button>
