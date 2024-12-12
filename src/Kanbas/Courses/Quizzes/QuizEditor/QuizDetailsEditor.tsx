@@ -156,7 +156,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
     }
     const fetchedId =await onUpdateQuizDetails(quizDetails);
     console.log("fetchedId:",fetchedId);
-    navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}/Edit`);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 
   const handleSaveAndPublish = () => {
