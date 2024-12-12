@@ -4,6 +4,7 @@ const REMOTE_SERVER = process.env.REACT_APP_REMOTE_SERVER;
 const COURSE_API = `${REMOTE_SERVER}/api/courses`;
 const QUIZZES_API = `${REMOTE_SERVER}/api/quizzes`;
 const ATTEMPTS_API = `${REMOTE_SERVER}/api/quizzes/attempts`;
+console.log("ATTEMPTS_API: ", ATTEMPTS_API);
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
 
@@ -41,9 +42,14 @@ export const fetchQuizById = async (quizId: string) => {
   return response.data;
 };
 
-export const updateAttemptForQuiz = async (quizId: String, attemptUpdates: any) => {
-  const response = await axiosWithCredentials.post(`${ATTEMPTS_API}/${quizId}`, attemptUpdates);
-  return response.data;
+export const updateAttemptForQuiz = async (attemptId: any, attemptUpdates: any) => {
+  try {
+    const response = await axiosWithCredentials.put(`${ATTEMPTS_API}/${attemptId}`, attemptUpdates);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating attempt:", error);
+    throw error;
+  }
 };
 
 export const fetchAttemptForQuiz = async (quizId: string) => {
@@ -55,4 +61,13 @@ export const fetchAttemptForQuiz = async (quizId: string) => {
   console.log("fetched attempt: ", response.data);
   return response.data;
 };
+
+export const createAttempt = async (attempt: any) => {
+  if (!attempt || !attempt.quiz ) {
+    throw new Error("Attempt data with quiz id is required");
+  }
+  attempt.current_attempt = 1;
+  const response = await axiosWithCredentials.post(`${ATTEMPTS_API}`, attempt);
+  return response.data;
+}
 

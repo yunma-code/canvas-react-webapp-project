@@ -48,42 +48,62 @@ const QuizPreview = () => {
   const { cid, qid } = useParams<{ cid: string; qid: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
+
   const { attempt } = location.state || {};
   const [currentAttempt, setCurrentAttempt] = useState(attempt || { answers: [] });
   const [isLoading, setIsLoading] = useState(true);
-
   const [quiz, setQuiz] = useState<Quiz>();
   const [quizQuestions, setQuizQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   // const [userAnswers, setUserAnswers] = useState<{ [questionId: string]: string }>({});
 
-  const { currentUser } = useSelector((state: any) => state.accountReducer);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
 
   useEffect(() => {
     const fetchQuizzes = async () => {
-      if (qid) {
+      try {
         setIsLoading(true);
-        try {
-          const fetchedQuiz = await quizClient.fetchQuizById(qid);
-          setQuiz(fetchedQuiz);
-          setQuizQuestions(fetchedQuiz.questions);
+        if (!qid) throw new Error("Quiz id is required");
 
-          // Initialize answers for the attempt
-          const newAnswers = fetchedQuiz.questions.map((q: any) => ({
-            id: q.id,
-            answer: null,
-          }));
-          setCurrentAttempt({ ...currentAttempt, answers: newAnswers });
-        } catch (error) {
-          console.error("Error fetching quiz: ", error);
-        } finally {
-          setIsLoading(false);
+        const fetchedQuiz = await quizClient.fetchQuizById(qid);
+        setQuiz(fetchedQuiz);
+        setQuizQuestions(fetchedQuiz.questions);
+
+        // const newAnswers = fetchedQuiz.questions.map((q: any) => ({
+        //   id: q.id,
+        //   answer: null,
+        // }));
+        // setCurrentAttempt({ ...currentAttempt, answers: newAnswers });
+        const existingAttempt = await quizClient.fetchAttemptForQuiz(qid);
+        if (existingAttempt) {
+          setCurrentAttempt(existingAttempt);
+        } else {
+          const newAttempt = {
+            current_attempt: 1,
+            score: 0,
+            answers: fetchedQuiz.questions.map((q: Question) => ({
+              id: q.id,
+              answer: null,
+            })),
+            user: currentUser.id,
+            quiz: qid,
+            course: cid,
+          };
+          setCurrentAttempt(newAttempt);
         }
+      } catch (error) {
+        console.error("Error fetching quiz: ", error);
+      } finally {
+        setIsLoading(false);
       }
+
     };
 
     fetchQuizzes();
-  }, [qid]); // Include `qid` in dependencies
+  }, [qid, currentUser.id, cid]);
 
 
   const currentQuestion = quiz?.questions[currentQuestionIndex];
@@ -108,52 +128,135 @@ const QuizPreview = () => {
   //id: question id, means which question
   //answer: should be the answer of a specific question
   const handleUpdateAttempt = (id: string, answer: any) => {
-    console.log("attempt", currentAttempt)
+    console.log("current attempt", currentAttempt)
     // Create a new array to avoid mutating state directly
     const updatedAnswers = currentAttempt.answers.map((a: any) =>
       a.id === id ? { ...a, answer } : a
     );
 
     // Check if the id was found; if not, add the new answer
-    const isExisting = currentAttempt.answers.some((a: any) => a.id === id);
-    if (!isExisting) {
+    if (!currentAttempt.answers.some((a: any) => a.id === id)) {
       updatedAnswers.push({ id, answer });
     }
 
-    // Update the state or data source
+    // Update the currentAttempt state
     setCurrentAttempt((prev: any) => ({
       ...prev,
       answers: updatedAnswers,
     }));
   };
 
+  // const calculateScore = (): number => {
+  //   let score = 0;
+
+  //   quiz?.questions.forEach((question) => {
+  //     const userAnswer = currentAttempt.answers[question.id];
+  //     if (question.question_type === "multiple_choice") {
+  //       const correctOption = question.options?.find((option) => option.is_correct)?.answer_text;
+  //       if (userAnswer === correctOption) {
+  //         score++;
+  //       }
+  //     } else if (question.question_type === "true_false" && question.answer !== undefined) {
+  //       if (userAnswer === String(question.answer)) {
+  //         score++;
+  //       }
+  //       // }else if(question.question_type === "fill_in_blank" && question.answer !== undefined) {
+  //       //   if (userAnswer)
+  //     }
+  //   });
+  //   return score;
+  // };
   const calculateScore = (): number => {
     let score = 0;
-
     quiz?.questions.forEach((question) => {
-      const userAnswer = currentAttempt.answers[question.id];
-      if (question.question_type === "multiple_choice") {
-        const correctOption = question.options?.find((option) => option.is_correct)?.answer_text;
-        if (userAnswer === correctOption) {
-          score++;
-        }
-      } else if (question.question_type === "true_false" && question.answer !== undefined) {
-        if (userAnswer === String(question.answer)) {
-          score++;
-        }
-        // }else if(question.question_type === "fill_in_blank" && question.answer !== undefined) {
-        //   if (userAnswer)
+      const userAnswer = currentAttempt.answers.find((a: any) => a.id === question.id)?.answer;
+      if (
+        question.question_type === "multiple_choice" &&
+        question.options?.find((option) => option.is_correct)?.id === userAnswer
+      ) {
+        score++;
+      } else if (question.question_type === "true_false" && String(question.answer) === userAnswer) {
+        score++;
       }
     });
     return score;
   };
 
-  const handleSubmit = () => {
-    const score = calculateScore();
-    const totalQuestions = quiz?.questions.length;
 
-    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, currentAttempt);
+  //   const handleSubmit = async () => {
+  //     setIsSubmitting(true);
+  //     try {
+  //         const score = calculateScore();
+  //         const totalQuestions = quiz?.questions.length || 0;
+
+  //         const attemptData = {
+  //             currentAttempt: 1,
+  //             score,
+  //             answers: currentAttempt.answers,
+  //             users: currentUser.id,
+  //             quiz: qid,
+  //             course: cid,
+  //         };
+  //         console.log("attemped data to submit: ", attemptData);
+
+  //         const createdAttemp = await quizClient.createAttempt(attemptData);
+
+  //         navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
+  //             state: {
+  //                 score,
+  //                 totalQuestions,
+  //                 quiz,
+  //                 userAnswers: currentAttempt.answers, // Pass user answers
+  //             },
+  //         });
+  //     } catch (error) {
+  //         console.error("Error submitting quiz attempt: ", error);
+  //         alert("Failed to submit the quiz. Please try again later.");
+  //     } finally {
+  //       setIsSubmitting(false);
+  //     }
+  // };
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      const score = calculateScore();
+      const totalQuestions = quiz?.questions.length || 0;
+
+      const attemptPayload = {
+        ...currentAttempt,
+        score,
+        quiz: qid,
+        current_attempt: (currentAttempt.current_attempt || 0) + 1,
+      };
+      console.log("attetmp payload: ", attemptPayload);
+
+      // Create or update the attempt
+      if (currentAttempt._id) {
+        await quizClient.updateAttemptForQuiz(currentAttempt._id, attemptPayload);
+      } else {
+        const newAttempt = await quizClient.createAttempt(attemptPayload);
+        setCurrentAttempt(newAttempt);
+      }
+
+
+      navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
+        state: {
+          score,
+          totalQuestions,
+          quiz,
+          userAnswers: currentAttempt.answers,
+        },
+      });
+    } catch (error) {
+      console.error("Error submitting quiz attempt:", error);
+      alert("Failed to submit the quiz. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+
+
 
   return (
     <div>
@@ -171,8 +274,8 @@ const QuizPreview = () => {
           <div className="text-muted mb-2">Due: {quiz?.due_at || "No due date provided"}</div>
 
           <h3>Quiz Instructions</h3>
-          {quiz?.description  ? <div>{parse(quiz.description )}</div>:
-           "No description provided."}
+          {quiz?.description ? <div>{parse(quiz.description)}</div> :
+            "No description provided."}
           <hr className="my-4" />
 
           <div className="card mt-3">
@@ -181,8 +284,9 @@ const QuizPreview = () => {
               <span>1 pts</span>
             </div>
             <div className="card-body">
-              <div>{parse( currentQuestion? currentQuestion.question_text : "<p></p>")}</div>
+              <div>{parse(currentQuestion ? currentQuestion.question_text : "<p></p>")}</div>
               <form>
+                {/* Multiple Choice Question */}
                 {currentQuestion?.question_type === "multiple_choice" &&
                   currentQuestion.options &&
                   currentQuestion.options.map((option) => (
@@ -192,17 +296,19 @@ const QuizPreview = () => {
                         type="radio"
                         name={`question${currentQuestionIndex}`}
                         id={`option${option.id}`}
-                        value={option.answer_text}
+                        value={option.id} 
                         checked={
-                          currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === option.id
+                          currentAttempt.answers.find((a: any) => a.id === currentQuestion.id)?.answer === option.id
                         }
-                        onChange={() => handleUpdateAttempt(currentQuestion.id, option.id)}
+                        onChange={() => handleUpdateAttempt(currentQuestion.id, option.id)} 
                       />
                       <label className="form-check-label" htmlFor={`option${option.id}`}>
                         {option.answer_text}
                       </label>
                     </div>
                   ))}
+
+                {/* True/False Question */}
                 {currentQuestion?.question_type === "true_false" && (
                   <>
                     <div className="form-check">
@@ -212,8 +318,8 @@ const QuizPreview = () => {
                         name={currentQuestion.id}
                         id={`trueOption${currentQuestionIndex}`}
                         value="true"
-                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === true}
-                        onChange={(e) => handleUpdateAttempt(e.target.name, true)}
+                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id)?.answer === "true"}
+                        onChange={() => handleUpdateAttempt(currentQuestion.id, "true")}
                       />
                       <label className="form-check-label" htmlFor={`trueOption${currentQuestionIndex}`}>
                         True
@@ -224,10 +330,10 @@ const QuizPreview = () => {
                         className="form-check-input"
                         type="radio"
                         name={currentQuestion.id}
-                        id={`trueOption${currentQuestionIndex}`}
+                        id={`falseOption${currentQuestionIndex}`}
                         value="false"
-                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === false}
-                        onChange={(e) => handleUpdateAttempt(e.target.name, false)}
+                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id)?.answer === "false"}
+                        onChange={() => handleUpdateAttempt(currentQuestion.id, "false")}
                       />
                       <label className="form-check-label" htmlFor={`falseOption${currentQuestionIndex}`}>
                         False
@@ -235,18 +341,18 @@ const QuizPreview = () => {
                     </div>
                   </>
                 )}
-                {
-                  currentQuestion?.question_type === "fill_in_blank" &&
 
+                {/* Fill-in-the-Blank Question */}
+                {currentQuestion?.question_type === "fill_in_blank" && (
                   <input
-                        className="form-control"
-                        type="text"
-                        name={currentQuestion.id}
-                        value=""
-                        onChange={(e) => handleUpdateAttempt(e.target.name, e.target.value)}
-                      />
-                }
+                    type="text"
+                    className="form-control"
+                    value={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id)?.answer || ""}
+                    onChange={(e) => handleUpdateAttempt(currentQuestion.id, e.target.value)}
+                  />
+                )}
               </form>
+
             </div>
           </div>
 
@@ -270,7 +376,7 @@ const QuizPreview = () => {
           <div className="card d-flex mt-3 p-3">
             <div className="d-flex justify-content-end align-items-center w-100">
               <p className="text-muted mb-0 me-2">Quiz saved at 8:19 am</p>
-              <button className="btn btn-secondary" onClick={handleSubmit}>
+              <button className="btn btn-secondary" onClick={handleSubmit} disabled={isSubmitting}>
                 Submit Quiz
               </button>
             </div>

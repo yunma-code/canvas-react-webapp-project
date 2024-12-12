@@ -16,6 +16,7 @@ type Attempt = {
 
 const QuizDetails = () => {
   const { qid } = useParams();
+  const { cid } = useParams();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [quiz, setQuiz] = useState<any>();
@@ -26,7 +27,7 @@ const QuizDetails = () => {
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
+  const isNonStudent = !["STUDENT"].includes(currentUser?.role); // for attempt logic
 
   useEffect(() => {
     const currentQuiz = async () => {
@@ -74,31 +75,51 @@ const QuizDetails = () => {
 
 
   const handleStart = async () => {
-    //push attempt to remote, also reduce attempt_left
-    if (!currentAttempt) {
-      alert("No current attempt found. Please reload the page.");
-      return;
-    }
+      if(currentUser.role === "STUDENT"){
+        //push attempt to remote, also reduce attempt_left
+        if (!currentAttempt) {
+          alert("No current attempt found. Please reload the page.");
+          return;
+        }
 
-    if (currentAttempt.current_attempt === quiz.attempt_number) {
-      alert(`You have exceeded the maximum number of attempts (${quiz?.attempt_number}).`);
-      return;
-    }
-
-    try {
-      const updatedAttempt = {
-        ...currentAttempt,
-        current_attempt: currentAttempt.current_attempt + 1
+        if (currentAttempt.current_attempt === quiz.attempt_number) {
+          alert(`You have exceeded the maximum number of attempts (${quiz?.attempt_number}).`);
+          return;
+        }
+        try {
+          const updatedAttempt = {
+            ...currentAttempt,
+            current_attempt: currentAttempt.current_attempt + 1
+          }
+          // await updateAttemptForQuiz(quiz.id, currentAttempt);
+  
+          setCurrentAttempt(updatedAttempt);
+          console.log(updatedAttempt)
+          navigate(`attempt`, { state: { attempt: updatedAttempt } });
+        } catch (error) {
+          console.error("Failed to update attempt:", error);
+          alert("An error occurred while starting the quiz. Please try again later.");
+        }
+      } else {
+        navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/preview`);
       }
-      // await updateAttemptForQuiz(quiz.id, currentAttempt);
 
-      setCurrentAttempt(updatedAttempt);
-      console.log(updatedAttempt)
-      navigate(`attempt`, { state: {attempt: updatedAttempt} });
-    } catch (error) {
-      console.error("Failed to update attempt:", error);
-      alert("An error occurred while starting the quiz. Please try again later.");
+      
+  };
+
+  const handleViewLastAttempt = () => {
+    if (!currentAttempt) {
+      alert("No attempt available yet");
+      return;
     }
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, {
+      state: {
+        score: currentAttempt.score,
+        totalQuestions: quiz?.questions?.length || 0,
+        quiz,
+        userAnswers: currentAttempt.answers,
+      },
+    });
   };
 
   const handleEdit = () => navigate(`${pathname}/Edit`);
@@ -108,14 +129,16 @@ const QuizDetails = () => {
     <div>
       {isLoading ?
         <>
-        <p> Loading ...</p>
+          <p> Loading ...</p>
         </>
         :
         <div className="quiz-details-container">
-          <div className="button-group">
-            <button className="btn" onClick={handlePreview}>Preview</button>
-            {hasEditAccess && <button className="btn" onClick={handleEdit}>Edit</button>}
-          </div>
+          {currentUser.role !== 'STUDENT' &&
+            <div className="button-group">
+              <button className="btn" onClick={handlePreview}>Preview</button>
+              {hasEditAccess && <button className="btn" onClick={handleEdit}>Edit</button>}
+            </div>
+          }
 
           <hr />
           <div className="quiz-header">
@@ -187,7 +210,7 @@ const QuizDetails = () => {
             </div>
             {/* start quiz button if still have attempt */}
             <div>
-              {currentAttempt && (
+              {currentAttempt  && (
                 (quiz.attempts_number - currentAttempt.current_attempt) > 0 ? (
                   <button className="btn" onClick={handleStart}>
                     Start Quiz
@@ -199,6 +222,17 @@ const QuizDetails = () => {
                 )
               )}
             </div>
+            {/* show previous attempt results*/}
+
+            {currentAttempt && currentAttempt.current_attempt > 0 && (
+              <div>
+                <button className="btn" onClick={handleViewLastAttempt}>
+                  View last attempt
+                </button>
+
+              </div>
+            )}
+
           </div>
         </div>}
     </div>
