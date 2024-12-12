@@ -203,13 +203,8 @@ const QuizPreview = () => {
                         name={`question${currentQuestionIndex}`}
                         id={`option${option.id}`}
                         value={option.answer_text}
-                        checked={
-                          currentAttempt.answers[currentQuestion.id]?.answer[option.id] === true
-                        }
-                        onChange={() => {
-                          const isSelected = currentAttempt.answers[currentQuestion.id]?.answer[option.id] !== true;
-                          handleUpdateAttemptForMultipleChoice(currentQuestion.id, option.id, isSelected);
-                        }}
+                        checked={}
+                        onChange={}
                       />
 
                       <label className="form-check-label" htmlFor={`option${option.id}`}>
