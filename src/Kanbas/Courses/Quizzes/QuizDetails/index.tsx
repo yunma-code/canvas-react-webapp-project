@@ -93,10 +93,10 @@ export default function Quizzes() {
       if (cid) {
         try {
           const fetchedQuizzes = await quizzesClient.fetchQuizzesForCourse(cid);
-          console.log("Fetched quizzes:", fetchedQuizzes); // debug log
+          // console.log("Fetched quizzes:", fetchedQuizzes); // debug log
           dispatch(addQuizzes(fetchedQuizzes));
         } catch (error) {
-          console.error("Error fetching quizzes:", error);
+          // console.error("Error fetching quizzes:", error);
         }
       }
     };
