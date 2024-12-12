@@ -76,35 +76,14 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       setPointsPossible(quiz.points_possible)
       setAssignmentGroup(quiz.assignment_group_id)
       setShuffleAnswers(quiz.shuffle_answers)
-      setAllowMultipleAttempts(prev => {
-        if (quiz.allowed_attempts > 1) {
-          return true
-        }
-        else {
-          return false
-        }
-      })
-      setMultipleAttempts(quiz.allowed_attempts)
+      setAllowMultipleAttempts(quiz.attempts_number > 1)
+      setMultipleAttempts(quiz.attempts_number)
       setShowCorrectAnswers(quiz.show_correct_answers)
       setAccessCode(quiz.access_code)
       setWebcamRequired(false)
-      setHaveTimeLimit(prev => {
-        if (quiz.time_limit <= 0) {
-          return true
-        }
-        else {
-          return false
-        }
-      })
+      setHaveTimeLimit(quiz.time_limit > 0 )
       setTimeLimit(quiz.time_limit)
-      setShowTimeLimit(() => {
-        if (quiz.time_limit !== 0) {
-          return true;
-        }
-        else {
-          return false;
-        }
-      })
+      setShowTimeLimit(quiz.time_limit > 0)
       setOneQuestionAtATime(quiz.one_question_at_a_time)
       setCantGoBack(quiz.cant_go_back)
       setDueAt(quiz.due_at ? new Date(quiz.due_at) : null);
@@ -152,7 +131,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-    const fetchedId = onUpdateQuizDetails(quizDetails);
+    const fetchedId = await onUpdateQuizDetails(quizDetails);
     console.log("fetchedId:",fetchedId);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };

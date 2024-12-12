@@ -8,7 +8,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
 
     const [type, setType] = useState<string>("multiple_choice");
     const [description, setDescription] = useState<string>("");
-    const [points, setPoints] = useState<number>(0);
+    const [pts, setPts] = useState<number>(1);
     const [options, setOptions] = useState<any[]>([]);
     const [answer, setAnswer] = useState<boolean | undefined>(undefined);
 
@@ -16,14 +16,14 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
         const {
             question_type = "multiple_choice",
             question_text = "<p></p>",
-            points = 0,
+            pts = 1,
             options = [],
             answer = undefined,
         } = question;
 
         setType(question_type);
         setDescription(question_text);
-        setPoints(points);
+        setPts(pts);
         setOptions(options);
         setAnswer(answer);
 
@@ -34,7 +34,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
             ...question,
             question_type: type,
             question_text: description,
-            points: points,
+            pts: pts,
             options: options,
             answer: answer,
         };
@@ -97,6 +97,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
         if (value === "multiple_choice") {
             const updatedQuestion = {
                 ...question,
+                pts: pts,
                 question_type: value,
                 options: []
             };
@@ -104,6 +105,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
         } else if (value === "fill_in_blank") {
             const updatedQuestion = {
                 ...question,
+                pts: pts,
                 question_type: value,
                 options: []
             };
@@ -111,11 +113,11 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
         } else if (value === "true_false") {
             const updatedQuestion = {
                 ...question,
+                pts: pts,
                 question_type: value,
                 answer: true
             };
             onUpdate(updatedQuestion);
-
         }
     }
 
@@ -188,9 +190,12 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
                         type="number"
                         className="form-control"
                         style={{ width: "60px" }}
-                        value={points}
-                        name = "pts"
-                        onChange={(e) => { handleQuestionDetailsChange(e.target.name, e.target.value) }}
+                        value={pts}
+                        name="pts"
+                        onChange={(e) => {
+                            setPts(Number(e.target.value));
+                            handleQuestionDetailsChange(e.target.name, Number(e.target.value))
+                        }}
                     />
                 </div>
             </div>
@@ -199,7 +204,10 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
                 <h4>Question:</h4>
                 <QuillEditor
                     initialValue={description}
-                    onContentChange={(context) => handleQuestionDetailsChange("question_text", context)}
+                    onContentChange={(context) => {
+                        setDescription(context);
+                        handleQuestionDetailsChange("question_text", context)
+                    }}
                 />
             </div>
 
@@ -239,7 +247,10 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
                                 className="form-check me-3"
                                 type="checkbox"
                                 checked={answer === true}
-                                onChange={() => setAnswer(true)}
+                                onChange={() => {
+                                    setAnswer(true);
+                                    handleAnswerChange(true);
+                                }}
                             />
                         </div>
                         <div className="answer-selection-container">
@@ -252,7 +263,10 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
                                 className="form-check me-3"
                                 type="checkbox"
                                 checked={answer === false}
-                                onChange={(e) => handleAnswerChange(e.target.checked)}
+                                onChange={(e) => {
+                                    setAnswer(false);
+                                    handleAnswerChange(false);
+                                }}
                             />
                         </div>
                         <hr />
