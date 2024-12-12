@@ -9,7 +9,7 @@ export default function QuizControlButtons({ onEdit, onDelete, onPublish, onCopy
   const [menuOpen, setMenuOpen] = useState(false);
   const iconRef = useRef<HTMLDivElement>(null);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
-
+  
    // Retrieve the quiz
    const quiz = useSelector((state: any) =>
     state.quizzesReducer.quizzes.find((quiz: any) => quiz.id === quizId)

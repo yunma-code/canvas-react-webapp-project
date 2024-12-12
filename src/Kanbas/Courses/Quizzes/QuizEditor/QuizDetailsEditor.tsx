@@ -58,7 +58,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
   const formatDateWithOffset = (date: Date) => {
     if (!date) return null;
 
-    const offset = -date.getTimezoneOffset(); // 获取时区偏移（分钟）
+    const offset = -date.getTimezoneOffset();
     const sign = offset >= 0 ? "+" : "-";
     const hours = String(Math.floor(Math.abs(offset) / 60)).padStart(2, "0");
     const minutes = String(Math.abs(offset) % 60).padStart(2, "0");
@@ -112,9 +112,8 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
       setLockAt(quiz.lock_at ? new Date(quiz.lock_at) : null);
       setDescription(quiz.description)
       setTimeLimit(quiz.time_limit)
-      setIsPublished(quiz.is_published)
+      setIsPublished(!quiz.is_published);
     }
-
   }, []);
 
   const handleSave = async() => {
@@ -148,19 +147,51 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
     console.log('quizDetails:', quizDetails)
     if (qid) {
       console.log('have qid')
-
       dispatch(updateQuiz(quizDetails));
     } else {
       console.log('dont have qid', quizDetails)
       dispatch(addQuiz(quizDetails));
     }
-    const fetchedId =await onUpdateQuizDetails(quizDetails);
+    const fetchedId = onUpdateQuizDetails(quizDetails);
     console.log("fetchedId:",fetchedId);
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 
-  const handleSaveAndPublish = () => {
-    handleSave();
+  const handleSaveAndPublish = async () => {
+    const quizDetails = {
+      id,
+      course,
+      title,
+      description,
+      points_possible: pointsPossible,
+      quiz_type: quizType,
+      assignment_group_id: "",
+      assignment_group_type: assignmentGroup,
+      shuffle_answers: shuffleAnswers,
+      allowed_attempts: allowMultipleAttempts,
+      attempts_number: multipleAttempts,
+      show_correct_answers: showCorrectAnswers,
+      one_question_at_a_time: oneQuestionAtATime,
+      has_access_code: !!accessCode,
+      access_code: accessCode,
+      require_lockdown_browser: requireLockdownBrowser,
+      webcam_required: webcamRequired,
+      cant_go_back: cantGoBack,
+      due_at: dueAt ? formatDateWithOffset(dueAt) : null,
+      unlock_at: unlockAt ? formatDateWithOffset(unlockAt) : null,
+      lock_at: lockAt ? formatDateWithOffset(lockAt) : null,
+      time_limit: timeLimit,
+      is_published: true,
+      assign_to: assignTo,
+    };
+    if (qid) {
+      dispatch(updateQuiz(quizDetails));
+    } else {
+      dispatch(addQuiz(quizDetails));
+    }
+    const fetchedId = onUpdateQuizDetails(quizDetails);
+    console.log("Published quiz ID:", fetchedId);
+    navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
   };
 
   const handleAssignTo = (input: string) => {
@@ -271,7 +302,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
                 <input type="checkbox" id="timeLimit" checked={haveTimeLimit}
                   onChange={e => {
                     setHaveTimeLimit(e.target.checked);
-                    if (e.target.checked) setTimeLimit(10);
+                    if (e.target.checked) setTimeLimit(20);
                     else setTimeLimit(-1);
                   }} />
                 <label htmlFor="timeLimit" className="form-label m-1">Time Limit</label>
@@ -491,6 +522,7 @@ export default function QuizDetailsEditor({ quiz, onUpdateQuizDetails }: { quiz?
               <button onClick={handleSave} className="btn btn-danger me-2">Save</button>
             </>
           )}
+
           <button onClick={handleSaveAndPublish} className="btn btn-primary me-2">
             Save and Publish
           </button>
