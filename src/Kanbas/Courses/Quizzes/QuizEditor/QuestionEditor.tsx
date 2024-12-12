@@ -5,6 +5,7 @@ import { BiTrash } from "react-icons/bi";
 import "./questionEditor.css";
 
 export default function QuestionEditor({ question, onUpdate, onDelete }: { question?: any; onUpdate: (question: any) => void; onDelete: (id: string) => void }) {
+
     const [type, setType] = useState<string>("multiple_choice");
     const [description, setDescription] = useState<string>("");
     const [points, setPoints] = useState<number>(0);
@@ -84,6 +85,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
     };
 
     const handleAnswerChange = (value: boolean) => {
+
         const updatedQuestion = {
             ...question,
             answer: value
@@ -187,7 +189,7 @@ export default function QuestionEditor({ question, onUpdate, onDelete }: { quest
                         className="form-control"
                         style={{ width: "60px" }}
                         value={points}
-                        name="pts"
+                        name = "pts"
                         onChange={(e) => { handleQuestionDetailsChange(e.target.name, e.target.value) }}
                     />
                 </div>
