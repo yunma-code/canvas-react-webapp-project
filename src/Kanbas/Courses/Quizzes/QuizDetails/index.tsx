@@ -47,6 +47,8 @@ export default function Quizzes() {
       (quiz: Quiz) => quiz.course === cid
     )
   );
+
+  
   
   const handleEdit = (qid: string) => {
     console.log(`Editing Quiz ID: ${qid}`);
@@ -59,13 +61,18 @@ export default function Quizzes() {
     }
   };
 
-  const handlePublish = (qid: string) => {
+  const handlePublish = async (qid: string) => {
     const quiz = courseQuizzes.find((quiz: any) => quiz.id === qid);
     if (!quiz) {
       console.error(`Quiz with ID ${qid} not found.`);
       return;
     }
-    dispatch(publishQuiz(qid));
+    try {
+      await quizzesClient.togglePublishQuiz(qid, !quiz.is_published);
+      dispatch(publishQuiz(qid));
+    } catch (error) {
+      console.error("Error toggling publish state:", error);
+    }
   };
 
   const handleCopy = (qid: string) => {

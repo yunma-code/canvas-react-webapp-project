@@ -92,7 +92,7 @@ The Quiz Editor screen allows faculty to edit the meta data for a quiz. lmplemen
 - [ ] Can editQuiz Type- Graded Quiz (default), Practice Quiz, Graded Survey, Ungraded SurveyPoints - the sum of the points of all guestions in the quiz
 Assignment Group-Quizzes (default),Exams, Assignments, Project
 Shuffle Answers - Yes (default) / No
-Time Limit -20 Minutes (default)
+Time Limit - 20 Minutes (default)
 
 - [ ] Points shows sum of all the points of each question.
 - [ ] Clicking Cancel button dismisses the edits
