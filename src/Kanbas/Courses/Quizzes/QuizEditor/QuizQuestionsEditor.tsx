@@ -58,10 +58,10 @@ export default function QuizQuestionsEditor({
         onUpdateQuestionList([...questionList, newQuestion]);
     };
 
-    const handleSave = () => {
+    const handleSave = async() => {
         if (questionList && questionList.length > 0) {
-            const fetchedId = onUpdateQuestionList(questionList);
-            navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}`);
+            const fetchedId = await onUpdateQuestionList(questionList);
+            navigate(`/Kanbas/Courses/${cid}/Quizzes/${fetchedId}`);
         } else {
             console.error("No questions to save.");
         }
