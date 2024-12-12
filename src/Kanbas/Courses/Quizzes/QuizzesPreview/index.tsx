@@ -151,21 +151,6 @@ const QuizPreview = () => {
     navigate(`/Kanbas/Courses/${cid}/Quizzes/${qid}/Submit`, currentAttempt);
   };
 
-  const handleUpdateAttemptForMultipleChoice = (id: string, optionId: string, isSelected: boolean) => {
-    setCurrentAttempt((prev: any) => ({
-      ...prev,
-      answers: {
-        ...prev.answers,
-        [id]: {
-          ...prev.answers[id],
-          [optionId]: isSelected
-        }
-      }
-    }));
-  };
-
-
-
   return (
     <div>
       {isLoading ?
@@ -203,10 +188,9 @@ const QuizPreview = () => {
                         name={`question${currentQuestionIndex}`}
                         id={`option${option.id}`}
                         value={option.answer_text}
-                        checked={}
-                        onChange={}
+                        checked={currentAttempt.answers.findOne((a: any)=>a.id === currentQuestion.id).answer === option.id}
+                        onChange={() =>handleUpdateAttempt(currentQuestion.id, option.id)}
                       />
-
                       <label className="form-check-label" htmlFor={`option${option.id}`}>
                         {option.answer_text}
                       </label>
