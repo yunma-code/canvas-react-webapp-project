@@ -107,14 +107,14 @@ const QuizPreview = () => {
   //id: question id, means which question
   //answer: should be the answer of a specific question
   const handleUpdateAttempt = (id: string, answer: any) => {
-    console.log("attempt", attempt)
+    console.log("attempt", currentAttempt)
     // Create a new array to avoid mutating state directly
-    const updatedAnswers = attempt.answers.map((a: any) =>
+    const updatedAnswers = currentAttempt.answers.map((a: any) =>
       a.id === id ? { ...a, answer } : a
     );
 
     // Check if the id was found; if not, add the new answer
-    const isExisting = attempt.answers.some((a: any) => a.id === id);
+    const isExisting = currentAttempt.answers.some((a: any) => a.id === id);
     if (!isExisting) {
       updatedAnswers.push({ id, answer });
     }
@@ -210,8 +210,8 @@ const QuizPreview = () => {
                         name={currentQuestion.id}
                         id={`trueOption${currentQuestionIndex}`}
                         value="true"
-                        checked={currentAttempt.answers[currentQuestion.id] === true}
-                        onChange={(e) => handleUpdateAttempt(e.target.id, true)}
+                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === true}
+                        onChange={(e) => handleUpdateAttempt(e.target.name, true)}
                       />
                       <label className="form-check-label" htmlFor={`trueOption${currentQuestionIndex}`}>
                         True
@@ -224,8 +224,8 @@ const QuizPreview = () => {
                         name={currentQuestion.id}
                         id={`trueOption${currentQuestionIndex}`}
                         value="false"
-                        checked={currentAttempt.answers[currentQuestion.id] === false}
-                        onChange={(e) => handleUpdateAttempt(e.target.id, false)}
+                        checked={currentAttempt.answers.find((a: any) => a.id === currentQuestion.id).answer === false}
+                        onChange={(e) => handleUpdateAttempt(e.target.name, false)}
                       />
                       <label className="form-check-label" htmlFor={`falseOption${currentQuestionIndex}`}>
                         False
@@ -235,7 +235,14 @@ const QuizPreview = () => {
                 )}
                 {
                   currentQuestion?.question_type === "fill_in_blank" &&
-                  <p>coming soon</p>
+
+                  <input
+                        className="form-control"
+                        type="text"
+                        name={currentQuestion.id}
+                        value=""
+                        onChange={(e) => handleUpdateAttempt(e.target.name, e.target.value)}
+                      />
                 }
               </form>
             </div>
