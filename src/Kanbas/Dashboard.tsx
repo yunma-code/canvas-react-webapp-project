@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { enrollCourse, unenrollCourse } from "./reducer";
 import { useDispatch } from "react-redux";
@@ -40,15 +40,14 @@ export default function Dashboard({
 
   const enrolledCourseIds = useMemo(() => {
     return enrollments
-      // .filter((enrollment: any) => enrollment.user === currentUser._id)
+      .filter((enrollment: any) => enrollment.user === currentUser._id)
       .map((enrollment: any) => enrollment.course);
   }, [enrollments, currentUser._id]);
+
   const handleEnrollClick = async (courseId: string) => {
     try {
-      // console.log("Attempting to enroll in:", courseId);
       await enrollInCourse(currentUser._id, courseId);
       dispatch(enrollCourse({ user: currentUser._id, course: courseId }));
-      // console.log("Enrollment successful");
     } catch (err) {
       console.error("Failed to enroll:", err);
     }
@@ -56,30 +55,32 @@ export default function Dashboard({
 
   const handleUnenrollClick = async (courseId: string) => {
     try {
-      // console.log("Attempting to unenroll from:", courseId);
       await unenrollFromCourse(currentUser._id, courseId);
       dispatch(unenrollCourse({ user: currentUser._id, course: courseId }));
-      // console.log("Unenrollment successful");
     } catch (err) {
       console.error("Failed to unenroll:", err);
     }
   };
 
-  //display all courses
+  // display enrolled courses if is false
   const displayedCourses = useMemo(() => {
-    if(showAllCourses) {
+    if (showAllCourses) {
       return courses;
     }
     return courses.filter((course) => enrolledCourseIds.includes(course._id));
   }, [showAllCourses, courses, enrolledCourseIds]);
 
-
   return (
     <div id="wd-dashboard">
-      <h1 id="wd-dashboard-title">Dashboard
-      <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary" >
+      <h1 id="wd-dashboard-title">
+        Dashboard
+        {/* {isNotStudent &&
+        <>
+        <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary">
           {enrolling ? "My Courses" : "All Courses"}
         </button>
+        </>} */}
+        
       </h1>
       <hr />
       {isNotStudent && (
@@ -118,29 +119,34 @@ export default function Dashboard({
         </>
       )}
 
-      {isStudent && (
+     
         <button className="btn btn-primary float-end mb-3" onClick={toggleEnrollments}>
           {showAllCourses ? "Show Enrolled Courses" : "Show All Courses"}
         </button>
-      )}
+
 
       <div id="wd-dashboard-courses" className="row">
         <div className="row row-cols-1 row-cols-md-5 g-4">
-          {courses.map((course) => (
+          {displayedCourses.map((course) => (
             <div className="wd-dashboard-course col" style={{ width: "300px" }} key={course._id}>
               <div className="card rounded-3 overflow-hidden">
-                {/* Course Image and Details */}
                 <img src={course.img} alt={course.name} width="100%" height={160} />
                 <div className="card-body">
-                  <h5 className="wd-dashboard-course-title card-title">
-                  {enrolling && (
-                    <button  onClick={(event) => {
-                      event.preventDefault();
-                      updateEnrollment(course._id, !course.enrolled);
-                    }} className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
-                      {course.enrolled ? "Unenroll" : "Enroll"}
-                    </button>
-                  )}{course.name}</h5>
+                
+                  {/* <h5 className="wd-dashboard-course-title card-title">
+                    {enrolling && (
+                      <button
+                        onClick={(event) => {
+                          event.preventDefault();
+                          updateEnrollment(course._id, !course.enrolled);
+                        }}
+                        className={`btn ${course.enrolled ? "btn-danger" : "btn-success"} float-end`}
+                      >
+                        {course.enrolled ? "Unenroll" : "Enroll"}
+                      </button>
+                    )}
+                    {course.name}
+                  </h5> */}
                   <p
                     className="wd-dashboard-course-title card-text overflow-y-hidden"
                     style={{ maxHeight: 100 }}
@@ -148,7 +154,6 @@ export default function Dashboard({
                     {course.description}
                   </p>
 
-                  {/* Go Button */}
                   <Link
                     to={
                       isNotStudent || enrolledCourseIds.includes(course._id)
@@ -159,14 +164,13 @@ export default function Dashboard({
                     onClick={(e) => {
                       if (isStudent && !enrolledCourseIds.includes(course._id)) {
                         e.preventDefault();
-                        alert("must enroll to access");
+                        alert("Must enroll to access");
                       }
                     }}
                   >
                     Go
                   </Link>
 
-                  {/* Enrollment and Unenrollment Buttons */}
                   {isStudent && enrolledCourseIds.includes(course._id) ? (
                     <button
                       className="btn btn-danger float-end"
@@ -191,7 +195,6 @@ export default function Dashboard({
                     )
                   )}
 
-                  {/* Edit and Delete Buttons for Faculty */}
                   {isNotStudent && (
                     <>
                       <button
