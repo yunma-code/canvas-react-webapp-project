@@ -191,4 +191,23 @@
   }
   
 
+	.error-message-container {
+		background-color: #f8d7da; 
+		border: 1px solid #f5c6cb;
+		color: #721c24;
+		padding: 10px;
+		border-radius: 5px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.error-message {
+		font-size: 16px;
+		margin: 0;
+	}
+	
+	.error-message-container svg {
+		margin-right: 8px; 
+	}
   

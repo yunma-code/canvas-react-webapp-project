@@ -182,6 +182,13 @@ const SubmitScreen = () => {
           Keep Editing this quiz
         </Link>
       )}
+
+      {/* back to quiz detail */}
+      {currentUser.role === "STUDENT" && (
+        <Link to={`/Kanbas/Courses/${cid}/Quizzes/${qid}`} className="btn btn-primary mt-5">
+        Back to quiz
+        </Link>
+      )}
     </div>
   );
 };

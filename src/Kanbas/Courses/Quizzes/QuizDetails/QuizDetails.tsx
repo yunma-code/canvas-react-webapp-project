@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { fetchQuizById, fetchAttemptForQuiz, updateAttemptForQuiz } from "../client";
+import { fetchQuizById, fetchAttemptForQuiz } from "../client";
 import "./Quiz.css";
 
 type Attempt = {
@@ -27,7 +27,6 @@ const QuizDetails = () => {
   const [currentAttempt, setCurrentAttempt] = useState<Attempt | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const isNonStudent = !["STUDENT"].includes(currentUser?.role); // for attempt logic
 
   useEffect(() => {
     const currentQuiz = async () => {
@@ -155,7 +154,7 @@ const QuizDetails = () => {
           }
 
           <hr />
-          <div className="quiz-header-container">
+          {/* <div className="quiz-header-container">
             <h2 className="quiz-header-title">{quiz?.title || "Quiz Title"}</h2>
             {currentAttempt && currentAttempt.current_attempt > 0 && (
               <button
@@ -165,7 +164,7 @@ const QuizDetails = () => {
                 View Last Attempt
               </button>
             )}
-          </div>
+          </div> */}
 
           {/* <div className="quiz-header">
             <h2>{quiz?.title || "Quiz Title"}</h2>
@@ -242,30 +241,25 @@ const QuizDetails = () => {
                   Start Quiz
                 </button>
               ) : (
-                showErrorModal && (
-                  <div
-                    className="error-modal-overlay"
-                    onClick={handleCloseModal}
-                  >
-                    <div className="error-modal-content">
-                      <p className="error-modal-message">
-                        You have reached the maximum number of attempts for this quiz.
-                      </p>
-                    </div>
-                  </div>
-                )
+                <div className="error-message-container">
+                  <p className="error-message">
+                    You've reached the maximum number of attempts for this quiz. 
+                  </p>
+                 <hr/>
+                </div>
+
               )
             )}
 
 
             {/* show previous attempt results*/}
-            {/* {currentAttempt && currentAttempt.current_attempt > 0 && (
+            {currentAttempt && currentAttempt.current_attempt > 0 && (
               <div>
                 <button className="btn" onClick={handleViewLastAttempt}>
                   View last attempt
                 </button>
               </div>
-            )} */}
+            )}
 
           </div>
         </div>}
