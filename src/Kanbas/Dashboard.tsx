@@ -45,7 +45,7 @@ export default function Dashboard({
   }, [enrollments, currentUser._id]);
   const handleEnrollClick = async (courseId: string) => {
     try {
-      // console.log("Attempting to enroll in:", courseId);
+      //console.log("Attempting to enroll in:", courseId);
       await enrollInCourse(currentUser._id, courseId);
       dispatch(enrollCourse({ user: currentUser._id, course: courseId }));
       // console.log("Enrollment successful");
@@ -57,6 +57,7 @@ export default function Dashboard({
   const handleUnenrollClick = async (courseId: string) => {
     try {
       // console.log("Attempting to unenroll from:", courseId);
+      
       await unenrollFromCourse(currentUser._id, courseId);
       dispatch(unenrollCourse({ user: currentUser._id, course: courseId }));
       // console.log("Unenrollment successful");
@@ -66,12 +67,13 @@ export default function Dashboard({
   };
 
   //display all courses
-  const displayedCourses = useMemo(() => {
-    if(showAllCourses) {
-      return courses;
-    }
-    return courses.filter((course) => enrolledCourseIds.includes(course._id));
-  }, [showAllCourses, courses, enrolledCourseIds]);
+  // const displayedCourses = useMemo(() => {
+  //   if(showAllCourses) {
+  //     return courses;
+  //   }
+  //   console.log("curr user id: ", currentUser._id)
+  //   return courses.filter((course) => enrolledCourseIds.includes(course._id));
+  // }, [showAllCourses, courses, enrolledCourseIds]);
 
 
   return (
